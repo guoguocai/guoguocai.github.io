@@ -6,15 +6,29 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: sourceTree | GUOGUOCAI&#39;S BLOG</title>
+  <title>sourceTree 的账号问题 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:url" content="http://yoursite.com/tags/sourceTree/index.html">
+  <meta name="description" content="新入职一家公司，给你分配一台电脑，如果这台电脑上之前装过 sourceTree ，而且别人也使用过一段时间，那么就可能遇到下面这个问题。">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sourceTree 的账号问题">
+<meta property="og:url" content="http://yoursite.com/2018/09/23/sourceTree-的账号问题/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
+<meta property="og:description" content="新入职一家公司，给你分配一台电脑，如果这台电脑上之前装过 sourceTree ，而且别人也使用过一段时间，那么就可能遇到下面这个问题。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/2018-09-23/tool.png">
+<meta property="og:image" content="http://yoursite.com/images/2018-09-23/deletefail.png">
+<meta property="og:image" content="http://yoursite.com/images/2018-09-23/account.png">
+<meta property="og:image" content="http://yoursite.com/images/2018-09-23/manage.png">
+<meta property="og:image" content="http://yoursite.com/images/2018-09-23/windows.png">
+<meta property="og:image" content="http://yoursite.com/images/2018-09-23/delete.png">
+<meta property="og:image" content="http://yoursite.com/images/2018-09-23/add.png">
+<meta property="og:image" content="http://yoursite.com/images/2018-09-23/clone.png">
+<meta property="og:updated_time" content="2018-11-04T14:46:36.057Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GUOGUOCAI&#39;S BLOG">
+<meta name="twitter:title" content="sourceTree 的账号问题">
+<meta name="twitter:description" content="新入职一家公司，给你分配一台电脑，如果这台电脑上之前装过 sourceTree ，而且别人也使用过一段时间，那么就可能遇到下面这个问题。">
+<meta name="twitter:image" content="http://yoursite.com/images/2018-09-23/tool.png">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
   
@@ -150,44 +164,94 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-sourceTree-的账号问题" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/09/23/sourceTree-掉坑自救指南/" class="archive-article-date">
-  	<time datetime="2018-09-23T06:02:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-23</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/23/sourceTree-掉坑自救指南/">sourceTree 掉坑自救指南</a>
+    <h1 class="article-title" itemprop="name">
+      sourceTree 的账号问题
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/09/23/sourceTree-的账号问题/" class="archive-article-date">
+  	<time datetime="2018-09-23T06:02:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>新入职一家公司，给你分配一台电脑，如果这台电脑上之前装过 sourceTree ，而且别人也使用过一段时间，那么就可能遇到下面这个问题。</p>
+<a id="more"></a>
+<h2 id="如何删除已添加的账号密码"><a href="#如何删除已添加的账号密码" class="headerlink" title="如何删除已添加的账号密码"></a>如何删除已添加的账号密码</h2><h3 id="1-之前添加的账号密码无法删除"><a href="#1-之前添加的账号密码无法删除" class="headerlink" title="1 之前添加的账号密码无法删除"></a>1 之前添加的账号密码无法删除</h3><p>当我们成功安装 sourceTree 后（安装过程中需要输入某个账号那步是可以跳过的，解决办法可百度找到；除此之外，Mercurial 也可以不用装。另外，直接用 Git 命令不好么？），为了避免每次跟远程仓库交互时都要输入密码，我们需要将自己的密码保存在客户端上。</p>
+<p>然后当我一步步通过点击找到“验证”这个操作界面时，我发现下面已经有了三个保存着的密码，当然这些都不是我自己的密码，因为 sourceTree 是刚刚才装上去的，我还没有进行任何操作。</p>
+<p>答案是这三个密码是以前别人使用 sourceTree 的时候添加的，我们最好是删除它们然后添加上自己的密码。</p>
+<p>“验证”操作界面上有“删除”选项，但是不知道为什么点击之后并没起作用，于是想着干脆不删除，直接把我的账户密码添加上好了，然而也没有操作成功，这个是因为“验证”里添加账户时只能选添加 GitHub 的账号，而远程仓库是在 GitLab 上，我的账号也是 GitLab 的账号。</p>
+<center><br>    <img src="/images/2018-09-23/tool.png" width="60%"><br></center>
+
+<center><br>    <img src="/images/2018-09-23/deletefail.png" width="60%"><br></center>
+
+<p>然后经过各种删文件，各种重装 sourceTree，一顿疯狂操作之后，发现这个问题依然没有得到解决，哎，最后才知道是因为没有找到正确删账号的位置（乐瑟软件）。</p>
+<h3 id="2-删除凭据"><a href="#2-删除凭据" class="headerlink" title="2 删除凭据"></a>2 删除凭据</h3><p>原因是在 win10 系统中，Git 保存的用户信息保存在用户凭据里，通过“控制面板 -&gt; 用户账户 -&gt; 管理你的凭据 –&gt;  windows凭据 -&gt; 普通凭据”可以找到。</p>
+<center><br>    <img src="/images/2018-09-23/account.png" width="60%"><br></center>
+
+<center><br>    <img src="/images/2018-09-23/manage.png" width="60%"><br></center>
+
+<center><br>    <img src="/images/2018-09-23/windows.png" width="60%"><br></center>
+
+<p>通通删掉之前保存的密码即可！！！</p>
+<center><br>    <img src="/images/2018-09-23/delete.png" width="60%"><br></center>
+
+<h3 id="3-添加凭据"><a href="#3-添加凭据" class="headerlink" title="3 添加凭据"></a>3 添加凭据</h3><p>既然找对了位置，那么干脆也在这里添加一个自己的普通凭据吧。Internet 地址填 GitLab 的地址，都以 git: 开头（俺也不知道为啥）。</p>
+<center><br>    <img src="/images/2018-09-23/add.png" width="60%"><br></center>
+
+<p>然后就可以愉快的克隆项目了，欢乐。（如果显示 URL 无效，检查一下 Git 是否已指定，URL 格式是否正确）</p>
+<center><br>    <img src="/images/2018-09-23/clone.png" width="60%"><br></center>
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixinpay.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">sourceTree</a>
-        		</li>
-      		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Git</a>
         		</li>
@@ -195,19 +259,115 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/09/23/sourceTree-的账号问题/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2018/10/07/《末代皇帝》/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          《末代皇帝》
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2018/09/17/如何将程序打包成可以传参的Jar包/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">如何将程序打包成可以传参的Jar包</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -230,9 +390,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
@@ -300,11 +460,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">生活感悟</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">学习感悟</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -312,19 +468,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">实用技能</a>
+                <a href="javascript:void(0)" class="js-tag color5">记录生活</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">JAVA编程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">sourceTree</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
             
             <div class="clearfix"></div>
