@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>数字签名是什么？ | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="原文网址 1.     鲍勃有两把钥匙，一把是公钥，另一把是私钥。 2.     鲍勃把公钥送给他的朋友们—-帕蒂、道格、苏珊—-每人一把。 3.     苏珊要给鲍勃写一封保密的信。她写完后用鲍勃的公钥加密，就可以达到保密的效果。 4.     鲍勃收信后，用私钥解密，就看到了信件内容。这里要强调的是，只要鲍勃的私钥不泄露，这封信就是安全的，即使落在别人手里，也无法解密。 5.     鲍勃给苏">
+  <meta name="description" content="之前读到一篇好文章，它用图片通俗易懂地解释了「数字签名」（digital signature）和「数字证书」（digital certificate）到底是什么，今天记录一下。">
 <meta name="keywords" content="JAVA">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数字签名是什么？">
 <meta property="og:url" content="http://yoursite.com/2019/03/19/数字签名是什么？/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:description" content="原文网址 1.     鲍勃有两把钥匙，一把是公钥，另一把是私钥。 2.     鲍勃把公钥送给他的朋友们—-帕蒂、道格、苏珊—-每人一把。 3.     苏珊要给鲍勃写一封保密的信。她写完后用鲍勃的公钥加密，就可以达到保密的效果。 4.     鲍勃收信后，用私钥解密，就看到了信件内容。这里要强调的是，只要鲍勃的私钥不泄露，这封信就是安全的，即使落在别人手里，也无法解密。 5.     鲍勃给苏">
+<meta property="og:description" content="之前读到一篇好文章，它用图片通俗易懂地解释了「数字签名」（digital signature）和「数字证书」（digital certificate）到底是什么，今天记录一下。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080901.png">
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080902.png">
@@ -36,10 +36,10 @@
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080918.png">
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080919.jpg">
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080920.png">
-<meta property="og:updated_time" content="2019-03-19T15:22:44.608Z">
+<meta property="og:updated_time" content="2019-03-19T15:27:50.350Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数字签名是什么？">
-<meta name="twitter:description" content="原文网址 1.     鲍勃有两把钥匙，一把是公钥，另一把是私钥。 2.     鲍勃把公钥送给他的朋友们—-帕蒂、道格、苏珊—-每人一把。 3.     苏珊要给鲍勃写一封保密的信。她写完后用鲍勃的公钥加密，就可以达到保密的效果。 4.     鲍勃收信后，用私钥解密，就看到了信件内容。这里要强调的是，只要鲍勃的私钥不泄露，这封信就是安全的，即使落在别人手里，也无法解密。 5.     鲍勃给苏">
+<meta name="twitter:description" content="之前读到一篇好文章，它用图片通俗易懂地解释了「数字签名」（digital signature）和「数字证书」（digital certificate）到底是什么，今天记录一下。">
 <meta name="twitter:image" content="http://yoursite.com/images/2019-03-19/bg2011080901.png">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
@@ -196,7 +196,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href="http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html" target="_blank" rel="noopener">原文网址</a></p>
+        <p>之前读到一篇好文章，它用图片通俗易懂地解释了「数字签名」（digital signature）和「数字证书」（digital certificate）到底是什么，今天记录一下。</p>
+<a id="more"></a>
+<p><a href="http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html" target="_blank" rel="noopener">原文网址</a></p>
 <p>1.</p>
 <p><center><br>    <img src="/images/2019-03-19/bg2011080901.png" width="60%"><br></center><br>鲍勃有两把钥匙，一把是公钥，另一把是私钥。</p>
 <p>2.</p>
