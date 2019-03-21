@@ -25,7 +25,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2018-12-26/step7.png">
 <meta property="og:image" content="http://yoursite.com/images/2018-12-26/step8.png">
 <meta property="og:image" content="http://yoursite.com/images/2018-12-26/step9.png">
-<meta property="og:updated_time" content="2019-01-17T14:50:24.939Z">
+<meta property="og:updated_time" content="2019-03-21T14:22:09.242Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用 Eclipse 创建 WebService 服务端">
 <meta name="twitter:description" content="其实创建 WebService 服务端是很简单的，直接使用 @WebService 和相关的注解就能搞定，发布服务时也可以通过 Main 方法发布，网上有很多的例子可以参考。但这样的做法仅仅只适用于本地，如果新加的 WebService 服务需要依赖以前的 Web 项目发布，那么下面这种方法或许更好，可以参考一下。">
@@ -191,8 +191,26 @@
 <p>在此先贴上对外提供 WebService 服务的类的源码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.<span class="keyword">module</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewWSService</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">sayWord</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"Hello "</span> + name;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>操作步骤如下：<br>1.选中需要创建 WebService 服务的类，然后右键，如下图选择 Create Web Service 。</p>
-<p>&nbsp;</p>
-<center><br>    <img src="/images/2018-12-26/step1.png" width="60%"><br></center><br>&nbsp;<br><br>2.选择服务类及依赖的 Web 项目。<br><br>&nbsp;<br><center><br>    <img src="/images/2018-12-26/step2.png" width="60%"><br></center><br>&nbsp;<br><br>3.选择需要对外提供服务的方法。<br><br>&nbsp;<br><center><br>    <img src="/images/2018-12-26/step3.png" width="60%"><br></center><br>&nbsp;<br><br>4.创建完成后我们会发现 Web 项目中多了几个文件，项目升级时直接从本地复制粘贴这几个文件就好，当然有些地方需要做相应的改动，后面会提到。<br><br>&nbsp;<br><center><br>    <img src="/images/2018-12-26/step4.png" width="60%"><br></center><br>&nbsp;<br><br>5.除了新增的几个文件外，其实 web.xml 里面也新增了一些标签，这里很容易被忽视，项目升级时要注意检查。<br><br>&nbsp;<br><center><br>    <img src="/images/2018-12-26/step5.png" width="60%"><br></center><br>&nbsp;<br><br>6.在 NewWSService.wsdl 文件里可以看到服务发布的地址。<br><br>&nbsp;<br><center><br>    <img src="/images/2018-12-26/step6.png" width="100%"><br></center><br>&nbsp;<br><br>7.由于 Web 项目是部署在 Linux 上的，所以 server-config.wsdd 中的绝对路径一定要改，直接改为 value=”attachments” 即可。<br><br>&nbsp;<br><center><br>    <img src="/images/2018-12-26/step7.png" width="100%"><br></center><br>&nbsp;<br><br>8.然后本地启动 Web 项目，在浏览器中输入服务发布的地址，测试服务是否已发布成功。<br>别忘了在地址末尾加上 ?wsdl。例如：<br><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//localhost:8080/AloneOldWebProject/services/NewWSService?wsdl</span></span><br></pre></td></tr></table></figure><br><br>项目升级时 IP 和端口肯定是会作相应修改的。<br><br>&nbsp;<br><center><br>    <img src="/images/2018-12-26/step8.png" width="100%"><br></center><br>&nbsp;<br><br>9.用 soapUI 测试 WebService 服务接口。<br><br>&nbsp;<br><center><br>    <img src="/images/2018-12-26/step9.png" width="100%"><br></center>
+<p>&nbsp;<br>    <img src="/images/2018-12-26/step1.png" width="45%"><br>&nbsp;</p>
+<p>2.选择服务类及依赖的 Web 项目。</p>
+<p>&nbsp;<br>    <img src="/images/2018-12-26/step2.png" width="45%"><br>&nbsp;</p>
+<p>3.选择需要对外提供服务的方法。</p>
+<p>&nbsp;<br>    <img src="/images/2018-12-26/step3.png" width="45%"><br>&nbsp;</p>
+<p>4.创建完成后我们会发现 Web 项目中多了几个文件，项目升级时直接从本地复制粘贴这几个文件就好，当然有些地方需要做相应的改动，后面会提到。</p>
+<p>&nbsp;<br>    <img src="/images/2018-12-26/step4.png" width="45%"><br>&nbsp;</p>
+<p>5.除了新增的几个文件外，其实 web.xml 里面也新增了一些标签，这里很容易被忽视，项目升级时要注意检查。</p>
+<p>&nbsp;<br>    <img src="/images/2018-12-26/step5.png" width="45%"><br>&nbsp;</p>
+<p>6.在 NewWSService.wsdl 文件里可以看到服务发布的地址。</p>
+<p>&nbsp;<br>    <img src="/images/2018-12-26/step6.png" width="45%"><br>&nbsp;</p>
+<p>7.由于 Web 项目是部署在 Linux 上的，所以 server-config.wsdd 中的绝对路径一定要改，直接改为 value=”attachments” 即可。</p>
+<p>&nbsp;<br>    <img src="/images/2018-12-26/step7.png" width="45%"><br>&nbsp;</p>
+<p>8.然后本地启动 Web 项目，在浏览器中输入服务发布的地址，测试服务是否已发布成功。<br>别忘了在地址末尾加上 ?wsdl。例如：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//localhost:8080/AloneOldWebProject/services/NewWSService?wsdl</span></span><br></pre></td></tr></table></figure>
+<p>项目升级时 IP 和端口肯定是会作相应修改的。</p>
+<p>&nbsp;<br>    <img src="/images/2018-12-26/step8.png" width="45%"><br>&nbsp;</p>
+<p>9.用 soapUI 测试 WebService 服务接口。</p>
+<p>&nbsp;<br>    <img src="/images/2018-12-26/step9.png" width="45%"><br>&nbsp;</p>
+<p>（完）</p>
 
       
 
@@ -448,19 +466,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
             
             <div class="clearfix"></div>
