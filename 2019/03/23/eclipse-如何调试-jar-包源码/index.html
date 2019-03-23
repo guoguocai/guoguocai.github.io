@@ -6,15 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019/3 | GUOGUOCAI&#39;S BLOG</title>
+  <title>eclipse 如何调试 jar 包源码 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:url" content="http://yoursite.com/archives/2019/03/index.html">
+  <meta name="description" content="深入学习开源代码很多时候都需要去调试别人的 jar 包，当然如果你能拿别人的源码搭一个项目运行起来的话，这样就不需要再去调试 jar 文件了，但是这样既费时又费力，而且到最后也不一定能正常运行起来。接下来将介绍如果 Debug jar 包源码。">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eclipse 如何调试 jar 包源码">
+<meta property="og:url" content="http://yoursite.com/2019/03/23/eclipse-如何调试-jar-包源码/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
+<meta property="og:description" content="深入学习开源代码很多时候都需要去调试别人的 jar 包，当然如果你能拿别人的源码搭一个项目运行起来的话，这样就不需要再去调试 jar 文件了，但是这样既费时又费力，而且到最后也不一定能正常运行起来。接下来将介绍如果 Debug jar 包源码。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/2019-03-23/1.png">
+<meta property="og:image" content="http://yoursite.com/images/2019-03-23/2.png">
+<meta property="og:image" content="http://yoursite.com/images/2019-03-23/3.png">
+<meta property="og:image" content="http://yoursite.com/images/2019-03-23/4.png">
+<meta property="og:image" content="http://yoursite.com/images/2019-03-23/5.png">
+<meta property="og:image" content="http://yoursite.com/images/2019-03-23/6.png">
+<meta property="og:updated_time" content="2019-03-23T14:46:05.119Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GUOGUOCAI&#39;S BLOG">
+<meta name="twitter:title" content="eclipse 如何调试 jar 包源码">
+<meta name="twitter:description" content="深入学习开源代码很多时候都需要去调试别人的 jar 包，当然如果你能拿别人的源码搭一个项目运行起来的话，这样就不需要再去调试 jar 文件了，但是这样既费时又费力，而且到最后也不一定能正常运行起来。接下来将介绍如果 Debug jar 包源码。">
+<meta name="twitter:image" content="http://yoursite.com/images/2019-03-23/1.png">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
   
@@ -150,36 +162,84 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-eclipse-如何调试-jar-包源码" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/23/eclipse-如何调试-jar-包源码/" class="archive-article-date">
-  	<time datetime="2019-03-23T14:07:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/23/eclipse-如何调试-jar-包源码/">eclipse 如何调试 jar 包源码</a>
+    <h1 class="article-title" itemprop="name">
+      eclipse 如何调试 jar 包源码
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/03/23/eclipse-如何调试-jar-包源码/" class="archive-article-date">
+  	<time datetime="2019-03-23T14:07:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>深入学习开源代码很多时候都需要去调试别人的 jar 包，当然如果你能拿别人的源码搭一个项目运行起来的话，这样就不需要再去调试 jar 文件了，但是这样既费时又费力，而且到最后也不一定能正常运行起来。接下来将介绍如果 Debug jar 包源码。</p>
+<a id="more"></a>
+<p><a href="http://blog.csdn.net/niclascage/article/details/47451967" target="_blank" rel="noopener">原文网址</a></p>
+<p>这里以调试项目中搭好的 springMVC 框架中的 DispatcherServlet 为例，讲解如何 Debug 进入这个类的方法。</p>
+<ol>
+<li><p>下载对应框架版本的 src 源码，我这里是 spring3.2.4。</p>
+</li>
+<li><p>把源码引入 jar 文件中。<br>a、找到 DispatcherServlet 的 class 文件所属的 jar 文件，这里是 spring-webmvc-3.2.4.RELEASE.jar。<br> <img src="/images/2019-03-23/1.png" width="45%"></p>
+</li>
+</ol>
+<p>b、选中项目右键如下图。<br>    <img src="/images/2019-03-23/2.png" width="45%"></p>
+<p>c、在 Libraries 下找到 jar 文件，选中 Source Attachment，点击 Edit 按钮。<br>    <img src="/images/2019-03-23/3.png" width="45%"></p>
+<p>d、在 Source Attachment 中点击“引入文件夹”按钮，选中 jar 文件对应的文件夹。<br>    <img src="/images/2019-03-23/4.png" width="45%"></p>
+<p>e、点击OK，即可在 Source Attachment 中看到引入的源码文件夹，点击OK。<br>    <img src="/images/2019-03-23/5.png" width="45%"></p>
+<ol start="3">
+<li>进入调试。<br><strong>重启 Eclipse</strong>，进入 DispatcherServlet 类设置好断点，Debug 启动项目，然后访问断点。<br> <img src="/images/2019-03-23/6.png" width="45%"></li>
+</ol>
+<p>接下来，我们就可以进入 Debug 跟踪代码了。</p>
+<p>还有一种引入源码的方式是在 Eclipse 中打开我们要调试的 Java 类，把源码直接引入到这个 class类中，基本方式都一样。或者在 class 类所在的 jar 包上右键选择 properties，关联上 project 即可。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixinpay.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -191,57 +251,106 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/03/23/eclipse-如何调试-jar-包源码/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/19/数字签名是什么？/" class="archive-article-date">
-  	<time datetime="2019-03-19T13:25:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-19</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/19/数字签名是什么？/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">数字签名是什么？</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/19/数字签名是什么？/">数字签名是什么？</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -264,8 +373,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
