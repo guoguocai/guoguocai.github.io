@@ -16,10 +16,12 @@
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
 <meta property="og:description" content="csv 文件不同于 xls/xlsx 文件，虽然它也能被 Excel 软件打开，但其实它是一种纯文本格式，使用逗号分隔一系列值，跟记事本是类似的。基于这个特点，数据能够被不断添加到 csv 文件中，所以在一些大型项目中，用于存储数据的一个 csv 文件往往包含百万条甚至千万条级别的数据。这样一个庞大的数据文件在多数情况下都是打不开的，即使能打开，显示的数据也是不完整的，甚至还有可能损坏原文件。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-02T13:18:57.541Z">
+<meta property="og:image" content="http://yoursite.com/images/2019-04-02/cutResult.png">
+<meta property="og:updated_time" content="2019-04-02T13:37:22.990Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用 Python 对 csv 大文件进行切割">
 <meta name="twitter:description" content="csv 文件不同于 xls/xlsx 文件，虽然它也能被 Excel 软件打开，但其实它是一种纯文本格式，使用逗号分隔一系列值，跟记事本是类似的。基于这个特点，数据能够被不断添加到 csv 文件中，所以在一些大型项目中，用于存储数据的一个 csv 文件往往包含百万条甚至千万条级别的数据。这样一个庞大的数据文件在多数情况下都是打不开的，即使能打开，显示的数据也是不完整的，甚至还有可能损坏原文件。">
+<meta name="twitter:image" content="http://yoursite.com/images/2019-04-02/cutResult.png">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
   
@@ -179,8 +181,8 @@
 <a id="more"></a>
 <p>所以我们需要对它进行切割，将其分解成一个个小的 csv 文件，再处理起来就方便多了。下面是利用 Python 对 csv 文件进行切割的处理程序，简单记录以备后用。</p>
 <h3 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 源文件路径</span></span><br><span class="line">path = <span class="string">'E:/TestFile/账务明细总表.csv'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 分割后的子文件存储路径</span></span><br><span class="line">workspace = <span class="string">'E:/TestFile/workspace'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(path, <span class="string">'r'</span>, newline=<span class="string">''</span>) <span class="keyword">as</span> file:</span><br><span class="line">    csvreader = csv.reader(file)</span><br><span class="line">    a = next(csvreader)</span><br><span class="line">    <span class="comment">#print(a)</span></span><br><span class="line">    i = j = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> csvreader:</span><br><span class="line">        print(row)</span><br><span class="line">        <span class="comment"># 每 10000 个就 j 加 1，然后就有一个新的文件名。</span></span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">10000</span> == <span class="number">0</span>:</span><br><span class="line">            j += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        csv_path = os.path.join(workspace, <span class="string">'part_&#123;&#125;.csv'</span>.format(j))</span><br><span class="line"></span><br><span class="line">        print(csv_path)</span><br><span class="line">        <span class="comment"># 不存在此文件的时候，就创建</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(os.path.dirname(csv_path)):</span><br><span class="line">            os.makedirs(os.path.dirname(csv_path))</span><br><span class="line">            <span class="keyword">with</span> open(csv_path, <span class="string">'w'</span>, newline=<span class="string">''</span>) <span class="keyword">as</span> file:</span><br><span class="line"></span><br><span class="line">                csvwriter = csv.writer(file)</span><br><span class="line">                <span class="comment"># 表头为啥老是加不上呢 ？？？</span></span><br><span class="line">                <span class="comment"># csvwriter.writerow(['账务流水号', '业务流水号', '商户订单号', '商品名称', '发生时间', '对方账号', '收入金额（+元）'</span></span><br><span class="line">                <span class="comment"># , '支出金额（-元）', '账户余额（元）', '交易渠道', '业务类型', '备注'])</span></span><br><span class="line">                csvwriter.writerow(row)</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        <span class="comment"># 存在的时候就往里面添加</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">with</span> open(csv_path, <span class="string">'a'</span>, newline=<span class="string">''</span>) <span class="keyword">as</span> file:</span><br><span class="line">                csvwriter = csv.writer(file)</span><br><span class="line">                csvwriter.writerow(row)</span><br><span class="line">            i += <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h3 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h3><pre><code>&lt;img src=&quot;/images/2019-04-02/cutResult.png&quot; width=&quot;45%&quot; /&gt;
-</code></pre>
+<h3 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h3><p><img src="/images/2019-04-02/cutResult.png" width="45%"></p>
+
       
 
       
@@ -434,11 +436,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
               </li>
              
               <li class="article-tag-list-item">
