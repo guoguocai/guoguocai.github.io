@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
 <meta property="og:description" content="最近为了学习 Java 虚拟机底层的工作原理，我找了一些相关的书籍来看，阅读过程当中看到了一个例子，觉得很不错，在此记录一下，主要讲述的是虚拟机如何执行 main 方法中的第一条指令的。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-03T14:04:44.010Z">
+<meta property="og:updated_time" content="2019-05-03T14:17:50.275Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 虚拟机如何执行程序的 main 方法">
 <meta name="twitter:description" content="最近为了学习 Java 虚拟机底层的工作原理，我找了一些相关的书籍来看，阅读过程当中看到了一个例子，觉得很不错，在此记录一下，主要讲述的是虚拟机如何执行 main 方法中的第一条指令的。">
@@ -178,7 +178,7 @@
         <p>最近为了学习 Java 虚拟机底层的工作原理，我找了一些相关的书籍来看，阅读过程当中看到了一个例子，觉得很不错，在此记录一下，主要讲述的是虚拟机如何执行 main 方法中的第一条指令的。</p>
 <a id="more"></a>
 <p>要理解 Java 虚拟机，首先要意识到它可能指的是如下三种不同的东西：</p>
-<p>1.抽象规范。<br><br>2.一个具体的实现。<br><br>3.一个运行中的虚拟机实例。</p>
+<p>1.抽象规范。<br>2.一个具体的实现。<br>3.一个运行中的虚拟机实例。</p>
 <p>知道了这点小小的区别以后，我们再以下面这个简单的源程序为例进行说明。不过要特别提醒的是，下文所描述的执行 main 方法字节码中第一条指令的步骤，仅仅是虚拟机多种实现方式中的一种，不同的虚拟机实现可能会用完全不同的方法来操作。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		Lava lava = <span class="keyword">new</span> Lava();</span><br><span class="line">		lava.flow();</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Lava</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> speed = <span class="number">5</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">flow</span><span class="params">()</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"enter method: flow"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>下面看一下 Java 虚拟机是如何执行 Demo 程序中 main 方法的第一条指令的。</p>
@@ -194,8 +194,8 @@
 <p>当把新生成的 Lava 对象的引用压入栈中，main（） 方法的第一条指令也完成了。接下来的指令通过这个引用调用 Java 代码（该代码把 speed 变量初始化为正确初始值 5）。另外一条指令将用这个引用调用 Lava 对象的 flow（） 方法。</p>
 <p><br><br>PS：</p>
 <p>通过上面的讲解，我们也可以总结出类装载器子系统的一个基本工作顺序：</p>
-<p>1.装载：查找并装载类或接口的二进制数据。<br><br>2.连接：执行验证、准备，以及解析（可选）。<br></p>
-<p>验证：确保被导入类或接口的正确性。<br><br>准备：为类变量分配内存，并将其初始化为默认值。<br><br>解析：把类或接口中的符号引用转换为直接引用。<br></p>
+<p>1.装载：查找并装载类或接口的二进制数据。<br>2.连接：执行验证、准备，以及解析（可选）。  </p>
+<p>验证：确保被导入类或接口的正确性。<br>准备：为类变量分配内存，并将其初始化为默认值。<br>解析：把类或接口中的符号引用转换为直接引用。  </p>
 <p>3.初始化：把类变量初始化为正确的初始值。</p>
 <p>（完）</p>
 
