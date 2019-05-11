@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>GUOGUOCAI&#39;S BLOG</title>
+  <title>关于 Oracle 数据库的使用 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="Oracle 数据库包括服务端和客户端，安装的客户端为 SQL Plus，为命令行界面，一般由数据库管理员使用，但对于广大的普通单身程序员来说，用图形化的 PL/SQL Developer 工具作为客户端会更加得心应手。">
+<meta name="keywords" content="JAVA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于 Oracle 数据库的使用">
+<meta property="og:url" content="http://yoursite.com/2019/05/11/关于-Oracle-数据库的使用/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
+<meta property="og:description" content="Oracle 数据库包括服务端和客户端，安装的客户端为 SQL Plus，为命令行界面，一般由数据库管理员使用，但对于广大的普通单身程序员来说，用图形化的 PL/SQL Developer 工具作为客户端会更加得心应手。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/2019-05-11/oci.png">
+<meta property="og:updated_time" content="2019-05-11T16:23:33.169Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GUOGUOCAI&#39;S BLOG">
+<meta name="twitter:title" content="关于 Oracle 数据库的使用">
+<meta name="twitter:description" content="Oracle 数据库包括服务端和客户端，安装的客户端为 SQL Plus，为命令行界面，一般由数据库管理员使用，但对于广大的普通单身程序员来说，用图形化的 PL/SQL Developer 工具作为客户端会更加得心应手。">
+<meta name="twitter:image" content="http://yoursite.com/images/2019-05-11/oci.png">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
   
@@ -150,16 +157,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-关于-Oracle-数据库的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-关于-Oracle-数据库的使用" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/11/关于-Oracle-数据库的使用/">关于 Oracle 数据库的使用</a>
+    <h1 class="article-title" itemprop="name">
+      关于 Oracle 数据库的使用
     </h1>
   
 
@@ -173,9 +178,18 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>Oracle 数据库包括服务端和客户端，安装的客户端为 SQL Plus，为命令行界面，一般由数据库管理员使用，但对于广大的普通单身程序员来说，用图形化的 PL/SQL Developer 工具作为客户端会更加得心应手。</p>
-        
-          <a class="article-more-a" href="/2019/05/11/关于-Oracle-数据库的使用/#more">more >></a>
-        
+<a id="more"></a>
+<p>在这里要说明的是，SQL Plus 是 Oracle 原装客户端， PL/SQL Developer 是用于连接数据库的第三方工具，它们在连接 Oracle 数据库时读取的配置文件是同一个，都是 tnsnames.ora。</p>
+<p>除了 SQL Plus 这种需要安装的客户端以外，还有一种不需要安装即可使用的即时客户端（instant client），要注意使用时即时客户端要和 PL/SQL Developer 的位数相同。</p>
+<p>使用 Oracle 即时客户端需要配置，具体步骤如下：</p>
+<h3 id="Step-1"><a href="#Step-1" class="headerlink" title="Step 1"></a>Step 1</h3><p>配置环境变量:  </p>
+<p>变量名：ORACLE_HOME<br>变量值：D:\Program Files\instantclient_12_2<br>变量名：TNS_ADMIN<br>变量值：D:\Program Files\instantclient_12_2<br>变量名：NLS_LANG<br>变量值：SIMPLIFIED CHINESE_CHINA.ZHS16GBK<br>修改Path变量，在后面添加 D:\Program Files\instantclient_12_2</p>
+<h3 id="Step-2"><a href="#Step-2" class="headerlink" title="Step 2"></a>Step 2</h3><p>在D:\Program Files\instantclient_12_2中新建文件 tnsnames.ora</p>
+<p>添加内容：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// orcl 可以自定义替换 </span><br><span class="line">// HOST 为 Oracle Server 地址 </span><br><span class="line">// SERVICE_NAME 为 Oracle 实例名</span><br><span class="line">orcl = </span><br><span class="line">      (DESCRIPTION = </span><br><span class="line">        (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.1.15)(PORT = 1521)) </span><br><span class="line">        (CONNECT_DATA = </span><br><span class="line">          (SERVER = DEDICATED) </span><br><span class="line">          (SERVICE_NAME = orcl) </span><br><span class="line">        ) </span><br><span class="line">      )</span><br></pre></td></tr></table></figure></p>
+<h3 id="Step-3"><a href="#Step-3" class="headerlink" title="Step 3"></a>Step 3</h3><p>启动 PL/SQL，因为还没配置好，所以不用输入用户名和密码，直接点 cancel 按钮进入主界面，选择「工具-首选项」，在 Connection 操作界面上选择即时客户端的 Oracle Home 目录和 OCI library 后即配置完成，apply 后重启 PL/SQL。</p>
+<p>&nbsp;<br>    <img src="/images/2019-05-11/oci.png" width="45%"><br>&nbsp;</p>
+<p>现在重点来了，如果以后 Oracle 数据库服务端的版本改变，例如项目使用的数据库需要从 11g 改为 19c ，那么此时直接替换掉即时客户端中的 tnsnames.ora 文件，用 PL/SQL Developer 就能直接连上。</p>
+
       
 
       
@@ -199,10 +213,73 @@
       
 
       
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/05/11/关于-Oracle-数据库的使用/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/09/同时使用两个-Tomcat-时如何解决端口冲突/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">同时使用两个 Tomcat 时如何解决端口冲突</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -222,660 +299,14 @@
 
 
 
-
-  
-    <article id="post-同时使用两个-Tomcat-时如何解决端口冲突" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/09/同时使用两个-Tomcat-时如何解决端口冲突/">同时使用两个 Tomcat 时如何解决端口冲突</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/09/同时使用两个-Tomcat-时如何解决端口冲突/" class="archive-article-date">
-  	<time datetime="2019-05-09T13:45:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在 Linux 环境下部署项目到 Tomcat 中时，为了避免端口发生冲突，往往我们会将下列这段配置中的端口改掉。</p>
-        
-          <a class="article-more-a" href="/2019/05/09/同时使用两个-Tomcat-时如何解决端口冲突/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java-虚拟机如何执行程序的-main-方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/03/Java-虚拟机如何执行程序的-main-方法/">Java 虚拟机如何执行程序的 main 方法</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/03/Java-虚拟机如何执行程序的-main-方法/" class="archive-article-date">
-  	<time datetime="2019-05-03T06:28:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近为了学习 Java 虚拟机底层的工作原理，我找了一些相关的书籍来看，阅读过程当中看到了一个例子，觉得很不错，在此记录一下，主要讲述的是虚拟机如何执行 main 方法中的第一条指令的。</p>
-        
-          <a class="article-more-a" href="/2019/05/03/Java-虚拟机如何执行程序的-main-方法/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-如何查看-Linux-系统中大小为-10G-的日志" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/13/如何查看-Linux-系统中大小为-10G-的日志/">如何查看 Linux 系统中大小为 10G 的日志</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/13/如何查看-Linux-系统中大小为-10G-的日志/" class="archive-article-date">
-  	<time datetime="2019-04-13T07:14:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在 Linux 环境下查看日志是很频繁的操作，熟练的掌握查看日志的技巧能提高我们的工作效率，帮助我们更快更准确地定位问题。一般来说，在一个好的日志管理系统下，一个日志文件不会很大，不管是下载文件还是打开文件都很快。但是如果我们面对的是一个没有任何日志管理，所有系统日志都打印在一个文件中的时候该怎么办呢？</p>
-        
-          <a class="article-more-a" href="/2019/04/13/如何查看-Linux-系统中大小为-10G-的日志/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-用-Python-对-csv-大文件进行切割" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/02/用-Python-对-csv-大文件进行切割/">用 Python 对 csv 大文件进行切割</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/02/用-Python-对-csv-大文件进行切割/" class="archive-article-date">
-  	<time datetime="2019-04-02T13:08:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>csv 文件不同于 xls/xlsx 文件，虽然它也能被 Excel 软件打开，但其实它是一种纯文本格式，使用逗号分隔一系列值，跟记事本是类似的。基于这个特点，数据能够被不断添加到 csv 文件中，所以在一些大型项目中，用于存储数据的一个 csv 文件往往包含百万条甚至千万条级别的数据。这样一个庞大的数据文件在多数情况下都是打不开的，即使能打开，显示的数据也是不完整的，甚至还有可能损坏原文件。</p>
-        
-          <a class="article-more-a" href="/2019/04/02/用-Python-对-csv-大文件进行切割/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java-反射学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/24/Java-反射学习笔记/">Java 反射学习笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/24/Java-反射学习笔记/" class="archive-article-date">
-  	<time datetime="2019-03-24T08:42:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这篇文章主要介绍的是 Java 反射，包含反射的基本知识，对反射原理不了解的可以瞄一眼。</p>
-        
-          <a class="article-more-a" href="/2019/03/24/Java-反射学习笔记/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-eclipse-如何调试-jar-包源码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/23/eclipse-如何调试-jar-包源码/">eclipse 如何调试 jar 包源码</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/23/eclipse-如何调试-jar-包源码/" class="archive-article-date">
-  	<time datetime="2019-03-23T14:07:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>深入学习开源代码很多时候都需要去调试别人的 jar 包，当然如果你能拿别人的源码搭一个项目运行起来的话，这样就不需要再去调试 jar 文件了，但是这样既费时又费力，而且到最后也不一定能正常运行起来。接下来将介绍如果 Debug jar 包源码。</p>
-        
-          <a class="article-more-a" href="/2019/03/23/eclipse-如何调试-jar-包源码/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-数字签名是什么？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/19/数字签名是什么？/">数字签名是什么？</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/19/数字签名是什么？/" class="archive-article-date">
-  	<time datetime="2019-03-19T13:25:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>之前读到一篇好文章，它用图片通俗易懂地解释了「数字签名」（digital signature）和「数字证书」（digital certificate）到底是什么，今天记录一下。</p>
-        
-          <a class="article-more-a" href="/2019/03/19/数字签名是什么？/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-WebService-客户端小栗子" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/10/WebService-客户端小栗子/">WebService 客户端小栗子</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/10/WebService-客户端小栗子/" class="archive-article-date">
-  	<time datetime="2019-01-10T14:20:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是一个 WebService 客户端调用服务接口的小栗子，仅供参考，不可照搬，不同的情况下可能有些细节的地方是不同的。</p>
-        
-          <a class="article-more-a" href="/2019/01/10/WebService-客户端小栗子/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-用-Eclipse-创建-WebService-服务端" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/26/用-Eclipse-创建-WebService-服务端/">用 Eclipse 创建 WebService 服务端</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/26/用-Eclipse-创建-WebService-服务端/" class="archive-article-date">
-  	<time datetime="2018-12-26T13:42:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>其实创建 WebService 服务端是很简单的，直接使用 @WebService 和相关的注解就能搞定，发布服务时也可以通过 Main 方法发布，网上有很多的例子可以参考。但这样的做法仅仅只适用于本地，如果新加的 WebService 服务需要依赖以前的 Web 项目发布，那么下面这种方法或许更好，可以参考一下。</p>
-        
-          <a class="article-more-a" href="/2018/12/26/用-Eclipse-创建-WebService-服务端/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -898,8 +329,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
