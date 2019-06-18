@@ -6,15 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2018/10 | GUOGUOCAI&#39;S BLOG</title>
+  <title>JVM 垃圾收集算法及收集器 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:url" content="http://yoursite.com/archives/2018/10/index.html">
+  <meta name="description" content="本篇文章主要介绍垃圾收集算法，但是由于各个平台的虚拟机实现方法各不相同，因此这里只介绍几种常见算法的思想。（以堆内存的回收为例讲解这几个算法）">
+<meta name="keywords" content="JAVA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM 垃圾收集算法及收集器">
+<meta property="og:url" content="http://yoursite.com/2019/06/18/JVM-垃圾收集算法及收集器/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
+<meta property="og:description" content="本篇文章主要介绍垃圾收集算法，但是由于各个平台的虚拟机实现方法各不相同，因此这里只介绍几种常见算法的思想。（以堆内存的回收为例讲解这几个算法）">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/2019-06-18/markClear.jpg">
+<meta property="og:image" content="http://yoursite.com/images/2019-06-18/copy.jpg">
+<meta property="og:image" content="http://yoursite.com/images/2019-06-18/markSweep.jpg">
+<meta property="og:image" content="http://yoursite.com/images/2019-06-18/garbageCollection.jpg">
+<meta property="og:updated_time" content="2019-06-18T15:11:24.899Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GUOGUOCAI&#39;S BLOG">
+<meta name="twitter:title" content="JVM 垃圾收集算法及收集器">
+<meta name="twitter:description" content="本篇文章主要介绍垃圾收集算法，但是由于各个平台的虚拟机实现方法各不相同，因此这里只介绍几种常见算法的思想。（以堆内存的回收为例讲解这几个算法）">
+<meta name="twitter:image" content="http://yoursite.com/images/2019-06-18/markClear.jpg">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
   
@@ -150,98 +160,172 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-JVM-垃圾收集算法及收集器" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/10/22/《起风了》/" class="archive-article-date">
-  	<time datetime="2018-10-22T13:13:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-22</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/10/22/《起风了》/">《起风了》</a>
+    <h1 class="article-title" itemprop="name">
+      JVM 垃圾收集算法及收集器
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/06/18/JVM-垃圾收集算法及收集器/" class="archive-article-date">
+  	<time datetime="2019-06-18T14:57:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本篇文章主要介绍垃圾收集算法，但是由于各个平台的虚拟机实现方法各不相同，因此这里只介绍几种常见算法的思想。（以堆内存的回收为例讲解这几个算法）</p>
+<a id="more"></a>
+<h3 id="1-标记-清除算法"><a href="#1-标记-清除算法" class="headerlink" title="1 标记-清除算法"></a>1 标记-清除算法</h3><p>最基础的收集算法，后续的收集算法都是基于这种思路并对其不足进行改进后才得到的。</p>
+<p>实现思想：<br>从名字就可以看出，此算法分为「标记」和「清除」两个阶段：首先标记出所有需要回收的对象，然后在完成后统一回收已标记的对象。</p>
+<p>&nbsp;<br>    <img src="/images/2019-06-18/markClear.jpg" width="45%"><br>&nbsp;</p>
+<p>不足之处：<br>1.1 标记和清除两个过程的效率都不高；<br>1.2 清除之后会产生大量不连续的内存碎片。空间碎片太多可能会导致以后在程序运行过程中需要分配较大对象时，无法找到足够的连续内存而不得不提前触发另一次垃圾收集动作。</p>
+<h3 id="2-复制算法"><a href="#2-复制算法" class="headerlink" title="2 复制算法"></a>2 复制算法</h3><p>适用于：<br>解决标记-清除算法的效率问题，适用于堆的新生代区域的回收。<br>（<strong>一般会将堆内存分为新生代和老年代。</strong>不分代其实也可以，分代的唯一理由就是优化 GC 性能。可以想象如果没有分代，那我们所有的对象都在一块，GC 的时候会为了去找到哪些对象没用而对堆的所有区域进行扫描，但事实上很多对象都是朝生夕死的，每次都全局扫描的话效率非常低。有了分代以后我们就能根据每个年代的特点针对性的回收。）</p>
+<p>实现思想：<br>将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当这一块的内存用完了，就将还存活着的对象复制到另外一块上面，然后再把已使用过的内存空间一次性清理掉。</p>
+<p>&nbsp;<br>    <img src="/images/2019-06-18/copy.jpg" width="45%"><br>&nbsp;</p>
+<p>优点：<br>由于每次都是对整个半区进行内存回收，因此分配时就不用考虑内存碎片等情况，只要移动堆顶指针，按顺序分配内存即可，实现简单，运行高效。</p>
+<p>缺点：<br>将内存缩小为了原来的一半，代价太高了一点。</p>
+<p>扩展：<br>现在的商业虚拟机都采用这种收集算法来回收新生代，IBM 公司有研究表明，新生代中的对象有 98% 都是「朝生夕死」的，所以并不需要按照 1：1 的比例来划分内存空间。</p>
+<p>一般会把新生代分为一块较大的 Eden 空间和两块较小的 Survivor 空间，每次使用 Eden 和其中一块 Survivor 。当回收时，将 Eden 和 Survivor 中还存活着的对象一次性地复制到另外一块 Survivor 空间上，最后清理掉 Eden 和刚才用过的 Survivor 空间。</p>
+<p>HotSpot 虚拟机默认 Eden 和 Survivor 的大小比例是 8：1，也就是每次新生代中可用内存空间为整个新生代容量的 90%，只有 10% 的内存会被「浪费」。当然，98% 只是一般场景下的数据，我们没有办法保证每次回收都只有不多于 10% 的对象存活，当 Survivor 空间不够用时，需要依赖其他内存（这里指老年代）进行分配担保（Handle Promotion）。</p>
+<p>内存的分配担保就好比我们去银行借款，如果我们信誉很好，在 98% 的情况下都能按时偿还，于是银行可能会默认我们下一次也会按时按量偿还，只需要有一个担保人能保证如果我不能还款时，可以从他的账户扣钱，那银行就认为没有风险了。</p>
+<p>内存的分配担保也一样，如果另外一块 Survivor 空间没有足够空间存放上一次新生代收集下来的存活对象时，这些对象将直接通过分配担保机制进入老年代。</p>
+<h3 id="3-标记-整理算法"><a href="#3-标记-整理算法" class="headerlink" title="3 标记-整理算法"></a>3 标记-整理算法</h3><p>适用于：<br>解决复制算法在对象存活率较高时的效率低下问题，并且复制算法也需要额外足够的空间来做分配担保，以应对所有对象都 100% 存活的极端情况，所以在老年代一般不使用复制算法，而是用标记-整理算法。</p>
+<p>实现思想：<br>分为「标记」和「整理」两个阶段，标记过程仍然与标记-清除算法一样，整理过程是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存。</p>
+<p>&nbsp;<br>    <img src="/images/2019-06-18/markSweep.jpg" width="45%"><br>&nbsp;</p>
+<h3 id="4-分代收集算法"><a href="#4-分代收集算法" class="headerlink" title="4 分代收集算法"></a>4 分代收集算法</h3><p>实现思想：<br>根据对象存活周期的不同将内存划分为几块。一般是将 Java 堆分为新生代和老年代，然后各自采用最适当的算法进行回收。</p>
+<p>新生代：复制算法。<br>老年代：标记-清理算法或者标记-整理算法。</p>
+<h3 id="认识-HotSpot-虚拟机的垃圾收集器"><a href="#认识-HotSpot-虚拟机的垃圾收集器" class="headerlink" title="* 认识 HotSpot 虚拟机的垃圾收集器"></a>* 认识 HotSpot 虚拟机的垃圾收集器</h3><p>如果说收集算法是内存回收的方法论，那么垃圾收集器就是内存回收的具体实现。不同厂商、不同版本的虚拟机所提供的垃圾收集器都可能会有很大差别。</p>
+<p>下图展示了作用于不同分代的收集器，如果两个收集器之间存在连线，就说明它们可以搭配使用。虚拟机所在的区域，则表示它是属于新生代收集器还是老年代收集器。另外要清楚的一点是，没有万能的完美收集器存在，而只有在某个场景下最合适的收集器。</p>
+<p>&nbsp;<br>    <img src="/images/2019-06-18/garbageCollection.jpg" width="45%"><br>&nbsp;</p>
+<h3 id="一个对象的这一辈子"><a href="#一个对象的这一辈子" class="headerlink" title="* 一个对象的这一辈子"></a>* 一个对象的这一辈子</h3><p>我是一个普通的 Java 对象，我出生在 Eden 区，在 Eden 区我还看到和我长得很像的小兄弟，我们在 Eden 区中玩了挺长时间。</p>
+<p>有一天 Eden 区中的人实在是太多了，我就被迫去了 Survivor 区的「From」区，自从去了 Survivor 区，我就开始漂了，有时候在 Survivor 的「From」区，有时候在 Survivor 的「To」区，居无定所。</p>
+<p>直到我 18 岁的时候，爸爸说我成人了，该去社会上闯闯了。于是我就去了老年代那边，老年代里，人很多，并且年龄都挺大的，我在这里也认识了很多人。在老年代里，我生活了 20 年(每 GC 一次加一岁)，然后被回收。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">一个人的电影史</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/06/18/JVM-垃圾收集算法及收集器/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/10/07/《末代皇帝》/" class="archive-article-date">
-  	<time datetime="2018-10-07T13:50:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-07</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/06/13/JVM运行时数据区及内存溢出异常/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JVM运行时数据区及内存溢出异常</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/10/07/《末代皇帝》/">《末代皇帝》</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">一个人的电影史</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -264,8 +348,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
