@@ -20,7 +20,9 @@
 <meta property="og:image" content="http://yoursite.com/images/2019-06-18/copy.jpg">
 <meta property="og:image" content="http://yoursite.com/images/2019-06-18/markSweep.jpg">
 <meta property="og:image" content="http://yoursite.com/images/2019-06-18/garbageCollection.jpg">
-<meta property="og:updated_time" content="2019-06-18T15:11:24.899Z">
+<meta property="og:image" content="http://yoursite.com/images/2019-06-18/improve.jpg">
+<meta property="og:image" content="http://yoursite.com/images/2019-06-18/features.jpg">
+<meta property="og:updated_time" content="2019-07-09T14:40:57.248Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM 垃圾收集算法及收集器">
 <meta name="twitter:description" content="本篇文章主要介绍垃圾收集算法，但是由于各个平台的虚拟机实现方法各不相同，因此这里只介绍几种常见算法的思想。（以堆内存的回收为例讲解这几个算法）">
@@ -179,9 +181,14 @@
 <p>&nbsp;<br>    <img src="/images/2019-06-18/markSweep.jpg" width="45%"><br>&nbsp;</p>
 <h3 id="4-分代收集算法"><a href="#4-分代收集算法" class="headerlink" title="4 分代收集算法"></a>4 分代收集算法</h3><p>实现思想：<br>根据对象存活周期的不同将内存划分为几块。一般是将 Java 堆分为新生代和老年代，然后各自采用最适当的算法进行回收。</p>
 <p>新生代：复制算法。<br>老年代：标记-清理算法或者标记-整理算法。</p>
+<h3 id="4-串行收集-并行收集-并发收集"><a href="#4-串行收集-并行收集-并发收集" class="headerlink" title="* 4 串行收集 并行收集 并发收集"></a>* 4 串行收集 并行收集 并发收集</h3><h4 id="4-1-串行收集"><a href="#4-1-串行收集" class="headerlink" title="* 4.1 串行收集"></a>* 4.1 串行收集</h4><p>使用单线程处理垃圾回收工作，实现容易，效率较高。<br>不足之处：需要暂停用户线程，且无法发挥多处理器的优势。</p>
+<h4 id="4-2-并行收集"><a href="#4-2-并行收集" class="headerlink" title="* 4.2 并行收集"></a>* 4.2 并行收集</h4><p>使用多线程处理垃圾回收工作，速度快，效率高。理论上 CPU 数目越多，越能体现出并行收集器的优势。<br>不足之处：需要暂停用户线程。</p>
+<h4 id="4-3-并发收集"><a href="#4-3-并发收集" class="headerlink" title="* 4.3 并发收集"></a>* 4.3 并发收集</h4><p>垃圾线程和用户线程同时工作，系统在垃圾回收时不需要暂停用户线程。</p>
 <h3 id="认识-HotSpot-虚拟机的垃圾收集器"><a href="#认识-HotSpot-虚拟机的垃圾收集器" class="headerlink" title="* 认识 HotSpot 虚拟机的垃圾收集器"></a>* 认识 HotSpot 虚拟机的垃圾收集器</h3><p>如果说收集算法是内存回收的方法论，那么垃圾收集器就是内存回收的具体实现。不同厂商、不同版本的虚拟机所提供的垃圾收集器都可能会有很大差别。</p>
 <p>下图展示了作用于不同分代的收集器，如果两个收集器之间存在连线，就说明它们可以搭配使用。虚拟机所在的区域，则表示它是属于新生代收集器还是老年代收集器。另外要清楚的一点是，没有万能的完美收集器存在，而只有在某个场景下最合适的收集器。</p>
-<p>&nbsp;<br>    <img src="/images/2019-06-18/garbageCollection.jpg" width="45%"><br>&nbsp;</p>
+<p>&nbsp;<br>    <img src="/images/2019-06-18/garbageCollection.jpg" width="45%"><br>&nbsp;<br>    <img src="/images/2019-06-18/improve.jpg" width="45%"><br>&nbsp;</p>
+<p><strong>JVM 优化思维导图：</strong>  </p>
+<p>&nbsp;<br>    <img src="/images/2019-06-18/features.jpg" width="45%"><br>&nbsp;</p>
 <h3 id="一个对象的这一辈子"><a href="#一个对象的这一辈子" class="headerlink" title="* 一个对象的这一辈子"></a>* 一个对象的这一辈子</h3><p>我是一个普通的 Java 对象，我出生在 Eden 区，在 Eden 区我还看到和我长得很像的小兄弟，我们在 Eden 区中玩了挺长时间。</p>
 <p>有一天 Eden 区中的人实在是太多了，我就被迫去了 Survivor 区的「From」区，自从去了 Survivor 区，我就开始漂了，有时候在 Survivor 的「From」区，有时候在 Survivor 的「To」区，居无定所。</p>
 <p>直到我 18 岁的时候，爸爸说我成人了，该去社会上闯闯了。于是我就去了老年代那边，老年代里，人很多，并且年龄都挺大的，我在这里也认识了很多人。在老年代里，我生活了 20 年(每 GC 一次加一岁)，然后被回收。</p>
@@ -409,10 +416,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">记录生活</a>
               </li>
              
@@ -421,11 +424,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
