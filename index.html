@@ -130,6 +130,78 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-使用-log4jdbc-记录-SQL-日志" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/14/使用-log4jdbc-记录-SQL-日志/">使用 log4jdbc 记录 SQL 日志</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/14/使用-log4jdbc-记录-SQL-日志/" class="archive-article-date">
+  	<time datetime="2019-08-14T15:28:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>平时开发使用的 Ibatis，Hibernate，Spring jdbc 的 SQL 日志信息，有一个缺点是<strong>占位符与参数是分开打印</strong>的，如果想要拷贝 SQL 语句至 PLSQL Developer 客户端直接执行，需要自己拼凑完整的 SQL。如果程序用的是原始的 jdbc 和 PreparedStatement 的话，甚至都不会有 SQL 日志打印出来，这给我们在调试程序的时候带来了很大的不便。</p>
+        
+          <a class="article-more-a" href="/2019/08/14/使用-log4jdbc-记录-SQL-日志/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">JAVA</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-HTTP之大明邮差" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -780,78 +852,6 @@
 
 
   
-    <article id="post-如何查看-Linux-系统中大小为-10G-的日志" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/13/如何查看-Linux-系统中大小为-10G-的日志/">如何查看 Linux 系统中大小为 10G 的日志</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/13/如何查看-Linux-系统中大小为-10G-的日志/" class="archive-article-date">
-  	<time datetime="2019-04-13T07:14:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在 Linux 环境下查看日志是很频繁的操作，熟练的掌握查看日志的技巧能提高我们的工作效率，帮助我们更快更准确地定位问题。一般来说，在一个好的日志管理系统下，一个日志文件不会很大，不管是下载文件还是打开文件都很快。但是如果我们面对的是一个没有任何日志管理，所有系统日志都打印在一个文件中的时候该怎么办呢？</p>
-        
-          <a class="article-more-a" href="/2019/04/13/如何查看-Linux-系统中大小为-10G-的日志/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -957,10 +957,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">记录生活</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
@@ -970,6 +966,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">记录生活</a>
               </li>
              
               <li class="article-tag-list-item">
