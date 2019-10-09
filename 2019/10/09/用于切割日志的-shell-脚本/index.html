@@ -17,7 +17,7 @@
 <meta property="og:description" content="在 Linux 上找项目产生 Bug 的原因一直是一件麻烦事，我们唯一能够依靠的只有项目的日志文件，而如果我们不对日志文件进行任何处理，只是一味地将日志追加打印出来，那么随着时间的流逝，这份日志文件所起的作用会越来越小。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/2019-10-09/timeMission.png">
-<meta property="og:updated_time" content="2019-10-09T15:02:08.232Z">
+<meta property="og:updated_time" content="2019-10-09T15:09:21.292Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用于切割日志的 shell 脚本">
 <meta name="twitter:description" content="在 Linux 上找项目产生 Bug 的原因一直是一件麻烦事，我们唯一能够依靠的只有项目的日志文件，而如果我们不对日志文件进行任何处理，只是一味地将日志追加打印出来，那么随着时间的流逝，这份日志文件所起的作用会越来越小。">
@@ -162,8 +162,10 @@
 <p>首先来看一下 Linux 上设置好的自动任务：</p>
 <p><img src="/images/2019-10-09/timeMission.png" width="45%"></p>
 <p>自动任务中设置的两个脚本内容如下：</p>
-<h4 id="createFloder-sh"><a href="#createFloder-sh" class="headerlink" title="createFloder.sh"></a>createFloder.sh</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">path='/bea/user_projects/domains/BIS4Bank_domain/bin'</span><br><span class="line">mkdir -p $path/log/$(date "+%Y")/$(date "+%m-%d")</span><br></pre></td></tr></table></figure>
-<h4 id="cutting-log-sh"><a href="#cutting-log-sh" class="headerlink" title="cutting_log.sh"></a>cutting_log.sh</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">sleep 1</span><br><span class="line">path='/bea/user_projects/domains/BIS4Bank_domain/bin'</span><br><span class="line">if [ -f "$path/nohup.out" ]; then</span><br><span class="line">	cp $path/nohup.out $path/log/$(date "+%Y")/$(date "+%m-%d")/$(date "+%H%M").log</span><br><span class="line">	echo "" &gt; $path/nohup.out</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p><strong>createFloder.sh</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">path='/bea/user_projects/domains/BIS4Bank_domain/bin'</span><br><span class="line">mkdir -p $path/log/$(date "+%Y")/$(date "+%m-%d")</span><br></pre></td></tr></table></figure>
+<p><strong>cutting_log.sh</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">sleep 1</span><br><span class="line">path='/bea/user_projects/domains/BIS4Bank_domain/bin'</span><br><span class="line">if [ -f "$path/nohup.out" ]; then</span><br><span class="line">	cp $path/nohup.out $path/log/$(date "+%Y")/$(date "+%m-%d")/$(date "+%H%M").log</span><br><span class="line">	echo "" &gt; $path/nohup.out</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
 <p>补充说明：<br>nohup.out 文件是项目部署到 weblogic 中后，默认的日志输出位置，因此这里的做法是：每隔一个小时，就将 nohup.out 文件拷贝到另一个新的以时间命名的日志文件中，拷贝完成后，清空 nohup.out 文件中的内容。</p>
 <p>（完）</p>
 
@@ -381,11 +383,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
+                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -401,11 +403,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
