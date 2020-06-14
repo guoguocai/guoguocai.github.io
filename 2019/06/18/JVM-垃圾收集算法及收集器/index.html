@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2019-06-18/garbageCollection.jpg">
 <meta property="og:image" content="http://yoursite.com/images/2019-06-18/features.jpg">
 <meta property="og:image" content="http://yoursite.com/images/2019-06-18/improve.jpg">
-<meta property="og:updated_time" content="2019-07-09T15:29:27.681Z">
+<meta property="og:updated_time" content="2020-06-14T09:00:40.217Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM 垃圾收集算法及收集器">
 <meta name="twitter:description" content="本篇文章主要介绍垃圾收集算法，但是由于各个平台的虚拟机实现方法各不相同，因此这里只介绍几种常见算法的思想。（以堆内存的回收为例讲解这几个算法）">
@@ -162,6 +162,14 @@
       
         <p>本篇文章主要介绍垃圾收集算法，但是由于各个平台的虚拟机实现方法各不相同，因此这里只介绍几种常见算法的思想。（以堆内存的回收为例讲解这几个算法）</p>
 <a id="more"></a>
+<p>顺带先提一下，我们在判断一个对象是否应该被回收的时候，用的是可达性分析法，就是凡是从 GC roots 出发所引用到的对象都不能回收，那么哪些对象可以作为 GC roots 呢？GC 管理的主要区域是 Java 堆，方法区、栈和本地方法区不被 GC 所管理，因而可以选择这些区域内的对象作为 GC roots。大致包括这几类：</p>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中引用的对象；</li>
+<li>方法区中的类静态属性引用的对象；</li>
+<li>方法区中的常量引用的对象；</li>
+<li>本地方法栈中 JNI 引用的对象。</li>
+</ul>
+<p>下面正式开始介绍垃圾收集算法：</p>
 <h3 id="1-标记-清除算法"><a href="#1-标记-清除算法" class="headerlink" title="1 标记-清除算法"></a>1 标记-清除算法</h3><p>最基础的收集算法，后续的收集算法都是基于这种思路并对其不足进行改进后才得到的。</p>
 <p>实现思想：<br>从名字就可以看出，此算法分为「标记」和「清除」两个阶段：首先标记出所有需要回收的对象，然后在完成后统一回收已标记的对象。</p>
 <p>&nbsp;<br>    <img src="/images/2019-06-18/markClear.jpg" width="45%"><br>&nbsp;</p>
@@ -412,19 +420,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">JAVA</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -436,11 +440,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
               </li>
              
               <li class="article-tag-list-item">
