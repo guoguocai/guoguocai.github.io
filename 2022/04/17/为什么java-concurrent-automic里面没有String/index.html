@@ -9,17 +9,17 @@
   <title>为什么java.concurrent.automic里面没有String | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="首先说结论，String 是线程安全的，不会造成多线程读写冲突问题。">
-<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="为什么java.concurrent.automic里面没有String">
-<meta property="og:url" content="http://yoursite.com/2022/04/17/为什么java-concurrent-automic里面没有String/index.html">
+<meta property="og:url" content="http://yoursite.com/2022/04/17/%E4%B8%BA%E4%BB%80%E4%B9%88java-concurrent-automic%E9%87%8C%E9%9D%A2%E6%B2%A1%E6%9C%89String/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
 <meta property="og:description" content="首先说结论，String 是线程安全的，不会造成多线程读写冲突问题。">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-04-17T09:28:21.198Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-04-17T01:54:10.000Z">
+<meta property="article:modified_time" content="2022-04-17T09:28:21.198Z">
+<meta property="article:author" content="guoguocai">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="为什么java.concurrent.automic里面没有String">
-<meta name="twitter:description" content="首先说结论，String 是线程安全的，不会造成多线程读写冲突问题。">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
   
@@ -37,7 +37,7 @@
 
   
 
-</head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -51,7 +51,7 @@
 			<img src="/img/ge.jpg" class="js-avatar">
 		</a>
 		<hgroup>
-		  <h1 class="header-author"><a href="/">guoguocai</a></h1>
+		  <h1 class="header-author"><a href="/"></a></h1>
 		</hgroup>
 		
 
@@ -99,7 +99,7 @@
 				<img src="/img/ge.jpg" class="js-avatar">
 			</div>
 			<hgroup>
-			  <h1 class="header-author js-header-author">guoguocai</h1>
+			  <h1 class="header-author js-header-author"></h1>
 			</hgroup>
 			
 			
@@ -145,7 +145,7 @@
   
 
         
-        <a href="/2022/04/17/为什么java-concurrent-automic里面没有String/" class="archive-article-date">
+        <a href="/2022/04/17/%E4%B8%BA%E4%BB%80%E4%B9%88java-concurrent-automic%E9%87%8C%E9%9D%A2%E6%B2%A1%E6%9C%89String/" class="archive-article-date">
   	<time datetime="2022-04-17T01:54:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-17</time>
 </a>
         
@@ -154,11 +154,13 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>首先说结论，String 是线程安全的，不会造成多线程读写冲突问题。</p>
-<a id="more"></a>
+<span id="more"></span>
+
 <p>原因如下：String 不是基础类型，而是对象，且是个不可变对象。我们无法改变一个 String 对象的内容，而只能用另一个 String 的对象来替换原有的引用。atomic 包是一个工具包，并不能替代原来的基础类型和对象的使用，因此用 atomic 去封装 String 没有任何用处。</p>
 <p>顺带提一句，Atomic 原子类用的不是传统的锁机制，它是用的无锁化的 CAS 机制，通过 CAS 机制保证多线程修改个数值的安全性，CAS的全称是：Compare and Set，也就是先比较再设置的意思。</p>
 <h3 id="1-String-的不可变特性"><a href="#1-String-的不可变特性" class="headerlink" title="1.String 的不可变特性"></a>1.String 的不可变特性</h3><p>String 是被 final 修饰的，无论调用 String 的什么方法，均无法修改 this 对象的状态。当确实需要修改 String 的值时，String 方法的实现是构造一个新的 String 返回。与可以直接改变原值的基础类型大不相同。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String origin = <span class="string">"Test"</span>;</span><br><span class="line">    String target = origin.replace(<span class="string">"T"</span>, <span class="string">"t"</span>);<span class="comment">//replace不会改变this对象（即origin对象）的任何状态</span></span><br><span class="line">    System.out.println(origin);<span class="comment">//输出“Test”</span></span><br><span class="line">    System.out.println(target);<span class="comment">//输出“test”</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    i++;<span class="comment">//会直接改变原来的 i 的值</span></span><br><span class="line">    String s = <span class="string">"geding"</span>;</span><br><span class="line">    s = <span class="string">"cai"</span>;<span class="comment">//这里并没有改变 s 原来的值，而是赋予了新的引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">origin</span> <span class="operator">=</span> <span class="string">&quot;Test&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">target</span> <span class="operator">=</span> origin.replace(<span class="string">&quot;T&quot;</span>, <span class="string">&quot;t&quot;</span>);<span class="comment">//replace不会改变this对象（即origin对象）的任何状态</span></span><br><span class="line">    System.out.println(origin);<span class="comment">//输出“Test”</span></span><br><span class="line">    System.out.println(target);<span class="comment">//输出“test”</span></span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    i++;<span class="comment">//会直接改变原来的 i 的值</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;geding&quot;</span>;</span><br><span class="line">    s = <span class="string">&quot;cai&quot;</span>;<span class="comment">//这里并没有改变 s 原来的值，而是赋予了新的引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>其实不光是 String 对象，Java 中的很多对象都符合上述不可变状态的特性。简而言之，当一个对象构造完成后，其状态就不再变化，我们称这样的对象为不可变对象（Immutable Object），这些对象关联的类为不可变类（Immutable Class）。</p>
 <p>比如 Java 中的 Integer、Double、Long 等所有原生类型的包装器类型，也都是不可变的。那么明明可以直接修改 this 对象，为何还要大费周章地构造一个全新的对象返回呢？</p>
 <h3 id="2-不可变对象的优点"><a href="#2-不可变对象的优点" class="headerlink" title="2.不可变对象的优点"></a>2.不可变对象的优点</h3><h4 id="2-1-对并发友好"><a href="#2-1-对并发友好" class="headerlink" title="2.1 对并发友好"></a>2.1 对并发友好</h4><p>提到多线程并发，最让人苦恼的莫过于线程间共享资源的访问冲突。多线程错误不能像编译错误一样被自动发现，Java 不负责检测，因此不容易解决，对最有经验的程序员而言也需瞻前顾后，反复思量。目前大多数语言中，面对多线程冲突问题，都是采用序列化访问共享资源的方案，比如 Java 中的 synchronized 关键字和 Lock 锁对象等机制。此类方案最大的弊端在于：能不能保证多线程间没有冲突，完全取决于程序员对共享资源加锁和解锁的时机对不对。</p>
@@ -166,7 +168,8 @@
 <p>如果完全没有共享资源，多线程问题就天然不存在了，比如 Java 中的 ThreadLocal 机制就是利用了这一理念。但是大多数时候，线程间是需要使用共享资源互通信息的。此时，如果该共享资源诞生之后就完全不再变更（犹如一个变量），多线程间并发读取该共享资源是不会冲突的，所有线程无论何时读取，总能获取到一致、完整的资源状态。不可变对象就是这样一种诞生之后就完全不再变更的对象，该类对象天生支持多线程间共享。</p>
 <p>某个线程想要修改共享资源 A 的状态时，不去直接修改 A 本身的状态，而是先在本线程中构造一个新状态的共享资源 B，待 B 构造完整后，再用 B 去直接替换 A，由于对引用赋值这个操作是原子性的，所以不会造成线程冲突问题。</p>
 <p>但是需要注意可见性问题，如果想要 B 替换 A 之后，其他所有线程实时感知到此变化，需要使用 volatile 关键字保证可见性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> String shared = <span class="string">"shared"</span>;<span class="comment">//volatile保证可见性</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            String newValue = shared.replace(<span class="string">"s"</span>, <span class="string">"S"</span>);<span class="comment">//构建一个新String</span></span><br><span class="line">            shared = newValue;<span class="comment">//用新String替换共享资源，引用的赋值是原子性的</span></span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">String</span> <span class="variable">shared</span> <span class="operator">=</span> <span class="string">&quot;shared&quot;</span>;<span class="comment">//volatile保证可见性</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">newValue</span> <span class="operator">=</span> shared.replace(<span class="string">&quot;s&quot;</span>, <span class="string">&quot;S&quot;</span>);<span class="comment">//构建一个新String</span></span><br><span class="line">            shared = newValue;<span class="comment">//用新String替换共享资源，引用的赋值是原子性的</span></span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>值得注意的是，线程安全需同时考虑原子性和可见性问题，所以网上常说的不可变对象是线程安全的，其实是不严谨的。</p>
 <p>其实，所有的函数式编程语言 Lisp、Erlang 等，都从语法层面保证你只能使用不可变对象，所以所有函数编程语言是天生对并发友好的，这也是在一些高并发场景中，函数式编程语言更受青睐的原因。</p>
 <h4 id="2-2-易于在进程内缓存"><a href="#2-2-易于在进程内缓存" class="headerlink" title="2.2 易于在进程内缓存"></a>2.2 易于在进程内缓存</h4><p>当一个对象被频繁访问，而生成该对象的开销较大时，经常需要进行进程内缓存，即将频繁访问的对象存入一个缓存集合中（比如 Map），当需要使用该对象时，优先从缓存中提取。</p>
@@ -178,7 +181,7 @@
 <h4 id="3-2-性能上的额外开销"><a href="#3-2-性能上的额外开销" class="headerlink" title="3.2 性能上的额外开销"></a>3.2 性能上的额外开销</h4><p>由于不可变对象需要复制一份状态用于修改后返回新的对象，如果设计和使用不当的话，可能因此形成性能瓶颈点。有人可能就想到了用 StringBuffer（线程安全）或 StringBuilder（线程不安全）来解决这个问题，这两个类都是对对象本身直接进行操作，不会生成新的对象。</p>
 <p>但是不必过于担心性能问题，一方面内存拷贝速度极快，另外也并非所有额外的性能开销都是不可容忍的，代码性能测试时，你可能会发现很多各式各样的性能瓶颈点，大部分可能都是你意想不到的，所以过早考虑性能而放弃编码安全是不可取的。就好比汇编效率最高，但是也不会因此所有代码都直接汇编编程，遇到真正的性能瓶颈时，有针对性的做汇编层面的调优才是上策。</p>
 <h3 id="4-建议"><a href="#4-建议" class="headerlink" title="4.建议"></a>4.建议</h3><p>在自己能力范围内，尽量优先考虑使用不可变对象的设计。性能问题可以不必过于担心，如果引发了性能瓶颈，再有针对性地做出调整。</p>
-<p>参考文章：<a href="https://www.cnblogs.com/itZhy/p/7669951.html" target="_blank" rel="noopener">Java进阶知识点4：不可变对象与并发 - 从String说起</a></p>
+<p>参考文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/itZhy/p/7669951.html">Java进阶知识点4：不可变对象与并发 - 从String说起</a></p>
 <p>（完）</p>
 
       
@@ -249,7 +252,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2022/04/17/为什么java-concurrent-automic里面没有String/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2022/04/17/%E4%B8%BA%E4%BB%80%E4%B9%88java-concurrent-automic%E9%87%8C%E9%9D%A2%E6%B2%A1%E6%9C%89String/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -263,8 +266,17 @@
   
 <nav id="article-nav">
   
+    <a href="/2022/05/02/Spring-Boot-%E5%A6%82%E4%BD%95%E6%9B%B4%E5%A5%BD%E5%9C%B0%E8%AE%B0%E5%BD%95%E6%97%A5%E5%BF%97/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Spring Boot 如何更好地记录日志
+        
+      </div>
+    </a>
   
-    <a href="/2022/04/10/读-Yaml-配置文件工具类/" id="article-nav-older" class="article-nav-link-wrap">
+  
+    <a href="/2022/04/10/%E8%AF%BB-Yaml-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B7%A5%E5%85%B7%E7%B1%BB/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">读 Yaml 配置文件工具类</div>
       <i class="icon-circle-right"></i>
     </a>
@@ -395,19 +407,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">记录生活</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">

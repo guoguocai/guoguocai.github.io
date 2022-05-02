@@ -9,13 +9,12 @@
   <title>如何将程序打包成可以传参的Jar包 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="不管是开发自己的小程序，还是跟着公司的项目组做项目，一个功能完成之后，测试都是必不可少的，而不管是自测还是他测，这都是一件十分耗费时间的工作。相信很多人都希望自测时能快点完成（不测最好），省出时间来做做其他事情。相信下面这波操作多多少少会帮到我们一丢丢。">
-<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何将程序打包成可以传参的Jar包">
-<meta property="og:url" content="http://yoursite.com/2018/09/17/如何将程序打包成可以传参的Jar包/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/09/17/%E5%A6%82%E4%BD%95%E5%B0%86%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90%E5%8F%AF%E4%BB%A5%E4%BC%A0%E5%8F%82%E7%9A%84Jar%E5%8C%85/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
 <meta property="og:description" content="不管是开发自己的小程序，还是跟着公司的项目组做项目，一个功能完成之后，测试都是必不可少的，而不管是自测还是他测，这都是一件十分耗费时间的工作。相信很多人都希望自测时能快点完成（不测最好），省出时间来做做其他事情。相信下面这波操作多多少少会帮到我们一丢丢。">
-<meta property="og:locale" content="zh-Hans">
+<meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2018-09-17/runconfig.png">
 <meta property="og:image" content="http://yoursite.com/images/2018-09-17/inputargument.png">
 <meta property="og:image" content="http://yoursite.com/images/2018-09-17/result.png">
@@ -23,10 +22,11 @@
 <meta property="og:image" content="http://yoursite.com/images/2018-09-17/runnable.png">
 <meta property="og:image" content="http://yoursite.com/images/2018-09-17/jarconfig.png">
 <meta property="og:image" content="http://yoursite.com/images/2018-09-17/runjar.png">
-<meta property="og:updated_time" content="2022-04-17T02:04:07.637Z">
+<meta property="article:published_time" content="2018-09-17T14:55:28.000Z">
+<meta property="article:modified_time" content="2022-04-17T02:04:07.637Z">
+<meta property="article:author" content="guoguocai">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何将程序打包成可以传参的Jar包">
-<meta name="twitter:description" content="不管是开发自己的小程序，还是跟着公司的项目组做项目，一个功能完成之后，测试都是必不可少的，而不管是自测还是他测，这都是一件十分耗费时间的工作。相信很多人都希望自测时能快点完成（不测最好），省出时间来做做其他事情。相信下面这波操作多多少少会帮到我们一丢丢。">
 <meta name="twitter:image" content="http://yoursite.com/images/2018-09-17/runconfig.png">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
@@ -45,7 +45,7 @@
 
   
 
-</head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -59,7 +59,7 @@
 			<img src="/img/ge.jpg" class="js-avatar">
 		</a>
 		<hgroup>
-		  <h1 class="header-author"><a href="/">guoguocai</a></h1>
+		  <h1 class="header-author"><a href="/"></a></h1>
 		</hgroup>
 		
 
@@ -107,7 +107,7 @@
 				<img src="/img/ge.jpg" class="js-avatar">
 			</div>
 			<hgroup>
-			  <h1 class="header-author js-header-author">guoguocai</h1>
+			  <h1 class="header-author js-header-author"></h1>
 			</hgroup>
 			
 			
@@ -153,7 +153,7 @@
   
 
         
-        <a href="/2018/09/17/如何将程序打包成可以传参的Jar包/" class="archive-article-date">
+        <a href="/2018/09/17/%E5%A6%82%E4%BD%95%E5%B0%86%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90%E5%8F%AF%E4%BB%A5%E4%BC%A0%E5%8F%82%E7%9A%84Jar%E5%8C%85/" class="archive-article-date">
   	<time datetime="2018-09-17T14:55:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
 </a>
         
@@ -162,15 +162,17 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>不管是开发自己的小程序，还是跟着公司的项目组做项目，一个功能完成之后，测试都是必不可少的，而不管是自测还是他测，这都是一件十分耗费时间的工作。相信很多人都希望自测时能快点完成（不测最好），省出时间来做做其他事情。相信下面这波操作多多少少会帮到我们一丢丢。</p>
-<a id="more"></a>
-<h2 id="一个在编程中可能会用到的小技能"><a href="#一个在编程中可能会用到的小技能" class="headerlink" title="一个在编程中可能会用到的小技能"></a>一个在编程中可能会用到的小技能</h2><h3 id="源程序"><a href="#源程序" class="headerlink" title="源程序"></a>源程序</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExeJarWithParams</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		String inputOne = args[<span class="number">0</span>];</span><br><span class="line">		String inputTwo = args[<span class="number">1</span>];</span><br><span class="line">		System.out.println(getParams(inputOne, inputTwo));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getParams</span><span class="params">(String dataOne, String dataTwo)</span> </span>&#123;</span><br><span class="line">		String result = <span class="string">"OK"</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">		</span><br><span class="line">			System.out.println(<span class="string">"inputDataOne: "</span> + dataOne);</span><br><span class="line">			System.out.println(<span class="string">"inputDataTwo: "</span> + Integer.parseInt(dataTwo));</span><br><span class="line">		</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			result = e.toString();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="step-1"><a href="#step-1" class="headerlink" title="step 1"></a>step 1</h3><p>首先要在 IDE 里面成功运行一次源程序，对于运行时要传参数的程序，要先选择 Run Configuration 进行传参，如下图。<br>&nbsp;<br>    <img src="/images/2018-09-17/runconfig.png" width="45%"><br>&nbsp;<br>    <img src="/images/2018-09-17/inputargument.png" width="45%"><br>&nbsp;</p>
+<span id="more"></span>
+
+<h2 id="一个在编程中可能会用到的小技能"><a href="#一个在编程中可能会用到的小技能" class="headerlink" title="一个在编程中可能会用到的小技能"></a>一个在编程中可能会用到的小技能</h2><h3 id="源程序"><a href="#源程序" class="headerlink" title="源程序"></a>源程序</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ExeJarWithParams</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">		<span class="type">String</span> <span class="variable">inputOne</span> <span class="operator">=</span> args[<span class="number">0</span>];</span><br><span class="line">		<span class="type">String</span> <span class="variable">inputTwo</span> <span class="operator">=</span> args[<span class="number">1</span>];</span><br><span class="line">		System.out.println(getParams(inputOne, inputTwo));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">getParams</span><span class="params">(String dataOne, String dataTwo)</span> &#123;</span><br><span class="line">		<span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> <span class="string">&quot;OK&quot;</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">		</span><br><span class="line">			System.out.println(<span class="string">&quot;inputDataOne: &quot;</span> + dataOne);</span><br><span class="line">			System.out.println(<span class="string">&quot;inputDataTwo: &quot;</span> + Integer.parseInt(dataTwo));</span><br><span class="line">		</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			result = e.toString();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> result;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="step-1"><a href="#step-1" class="headerlink" title="step 1"></a>step 1</h3><p>首先要在 IDE 里面成功运行一次源程序，对于运行时要传参数的程序，要先选择 Run Configuration 进行传参，如下图。<br>&amp;nbsp;<br>    <img src="/images/2018-09-17/runconfig.png" width="45%" /><br>&amp;nbsp;<br>    <img src="/images/2018-09-17/inputargument.png" width="45%" /><br>&amp;nbsp;</p>
 <p>运行结果如下。</p>
-<p>&nbsp;<br>    <img src="/images/2018-09-17/result.png" width="45%"><br>&nbsp;</p>
-<h3 id="step-2"><a href="#step-2" class="headerlink" title="step 2"></a>step 2</h3><p>然后导出程序为 Runnable Jar，具体操作步骤如下。<br>&nbsp;<br>    <img src="/images/2018-09-17/export.png" width="45%"><br>&nbsp;<br>    <img src="/images/2018-09-17/runnable.png" width="45%"><br>&nbsp;<br>    <img src="/images/2018-09-17/jarconfig.png" width="45%"><br>&nbsp;</p>
+<p>&amp;nbsp;<br>    <img src="/images/2018-09-17/result.png" width="45%" /><br>&amp;nbsp;</p>
+<h3 id="step-2"><a href="#step-2" class="headerlink" title="step 2"></a>step 2</h3><p>然后导出程序为 Runnable Jar，具体操作步骤如下。<br>&amp;nbsp;<br>    <img src="/images/2018-09-17/export.png" width="45%" /><br>&amp;nbsp;<br>    <img src="/images/2018-09-17/runnable.png" width="45%" /><br>&amp;nbsp;<br>    <img src="/images/2018-09-17/jarconfig.png" width="45%" /><br>&amp;nbsp;</p>
 <h3 id="step-3"><a href="#step-3" class="headerlink" title="step 3"></a>step 3</h3><p>最后就可以利用 cmd 用命令行来运行程序了，传参也很简单。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java -jar &lt;name&gt; &lt;param1&gt; &lt;param2&gt;</span><br></pre></td></tr></table></figure>
-<p>&nbsp;<br>    <img src="/images/2018-09-17/runjar.png" width="45%"><br>&nbsp;</p>
+<p>&amp;nbsp;<br>    <img src="/images/2018-09-17/runjar.png" width="45%" /><br>&amp;nbsp;</p>
 
       
 
@@ -240,7 +242,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/09/17/如何将程序打包成可以传参的Jar包/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/09/17/%E5%A6%82%E4%BD%95%E5%B0%86%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90%E5%8F%AF%E4%BB%A5%E4%BC%A0%E5%8F%82%E7%9A%84Jar%E5%8C%85/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -254,7 +256,7 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/09/23/sourceTree-的账号问题/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/09/23/sourceTree-%E7%9A%84%E8%B4%A6%E5%8F%B7%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
@@ -395,19 +397,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">记录生活</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">

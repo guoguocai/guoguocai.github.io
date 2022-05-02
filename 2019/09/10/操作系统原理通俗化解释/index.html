@@ -9,17 +9,17 @@
   <title>操作系统原理通俗化解释 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="我们每天都在和操作系统打交道，所以了解一些操作系统的基本知识非常有必要，本文用通俗易懂的语言讲解了一些基本原理，没有晦涩的专业解释，只有一看就懂的大白话。">
-<meta name="keywords" content="操作系统">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统原理通俗化解释">
-<meta property="og:url" content="http://yoursite.com/2019/09/10/操作系统原理通俗化解释/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/09/10/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E9%80%9A%E4%BF%97%E5%8C%96%E8%A7%A3%E9%87%8A/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
 <meta property="og:description" content="我们每天都在和操作系统打交道，所以了解一些操作系统的基本知识非常有必要，本文用通俗易懂的语言讲解了一些基本原理，没有晦涩的专业解释，只有一看就懂的大白话。">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-10T14:42:15.036Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-09-10T13:26:08.000Z">
+<meta property="article:modified_time" content="2019-09-10T14:42:15.036Z">
+<meta property="article:author" content="guoguocai">
+<meta property="article:tag" content="操作系统">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="操作系统原理通俗化解释">
-<meta name="twitter:description" content="我们每天都在和操作系统打交道，所以了解一些操作系统的基本知识非常有必要，本文用通俗易懂的语言讲解了一些基本原理，没有晦涩的专业解释，只有一看就懂的大白话。">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
   
@@ -37,7 +37,7 @@
 
   
 
-</head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -51,7 +51,7 @@
 			<img src="/img/ge.jpg" class="js-avatar">
 		</a>
 		<hgroup>
-		  <h1 class="header-author"><a href="/">guoguocai</a></h1>
+		  <h1 class="header-author"><a href="/"></a></h1>
 		</hgroup>
 		
 
@@ -99,7 +99,7 @@
 				<img src="/img/ge.jpg" class="js-avatar">
 			</div>
 			<hgroup>
-			  <h1 class="header-author js-header-author">guoguocai</h1>
+			  <h1 class="header-author js-header-author"></h1>
 			</hgroup>
 			
 			
@@ -145,7 +145,7 @@
   
 
         
-        <a href="/2019/09/10/操作系统原理通俗化解释/" class="archive-article-date">
+        <a href="/2019/09/10/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E9%80%9A%E4%BF%97%E5%8C%96%E8%A7%A3%E9%87%8A/" class="archive-article-date">
   	<time datetime="2019-09-10T13:26:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-10</time>
 </a>
         
@@ -154,7 +154,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>我们每天都在和操作系统打交道，所以了解一些操作系统的基本知识非常有必要，本文用通俗易懂的语言讲解了一些基本原理，没有晦涩的专业解释，只有一看就懂的大白话。</p>
-<a id="more"></a>
+<span id="more"></span>
+
 <h3 id="1-为什么要有操作系统"><a href="#1-为什么要有操作系统" class="headerlink" title="1 为什么要有操作系统"></a>1 为什么要有操作系统</h3><p>操作系统在计算机中起着重要的作用，它为所有的应用程序提供一个运行的环境，并将应用程序同具体硬件隔离。比如在机器中换一块声卡，只需要重新安装一下声卡驱动程序就完事了。但如果没有操作系统，你就必须为这块新的声卡重新购买所有的应用程序，以便这些应用程序能够认识这块声卡并能够使用它。</p>
 <p>操作系统就象计算机的大管家，管理着计算机的各种资源，比如内存、磁盘、CPU 等，应用程序想使用这些资源，都必须经过操作系统同意（资源申请），并且由操作系统统一安排使用时间（资源分配），应用程序用完后必须将资源还给操作系统（资源回收），以便其他应用程序使用。这样，计算机系统在操作系统的管理下以尽可能高的效率有条不紊地工作着。</p>
 <h3 id="2-什么是进程"><a href="#2-什么是进程" class="headerlink" title="2 什么是进程"></a>2 什么是进程</h3><p>进程是程序在计算机上的一次执行活动。当你运行一个程序时，你就启动了一个进程。显然，程序是死的（静态的），进程是活的（动态的）。</p>
@@ -179,13 +180,13 @@
 <p>在操作系统的管理下，所有正在运行的进程轮流使用 CPU，每个进程允许占用 CPU 的时间非常短（比如 10 毫秒），这样用户根本感觉不出来 CPU 是在轮流为多个进程服务，就好象所有的进程都在不间断地运行一样。但实际上在任何一个时间内有且仅有一个进程占有 CPU。</p>
 <p>如果一台计算机有多个 CPU，情况就不同了，如果进程数小于 CPU 数，则不同的进程可以分配给不同的 CPU 来运行，这样，多个进程就是真正同时运行的，这便是并行。但如果进程数大于 CPU 数，则仍然需要使用并发技术。在 Windows 中，进行 CPU 分配是以线程为单位的，一个进程可能由多个线程组成，这时情况更加复杂，但简单地说，有如下关系： </p>
 <ul>
-<li>总线程数 &lt;= CPU数量：并行运行</li>
+<li>总线程数 &lt;&#x3D; CPU数量：并行运行</li>
 <li>总线程数 &gt; CPU数量：并发运行</li>
 </ul>
 <p>并行运行的效率显然高于并发运行，所以在多 CPU 的计算机中，多任务的效率比较高。但是，如果在多 CPU 计算机中只运行一个进程（线程），就不能发挥多 CPU 的优势，会造成资源的浪费。</p>
 <h3 id="7-可抢占式多任务"><a href="#7-可抢占式多任务" class="headerlink" title="7  可抢占式多任务"></a>7  可抢占式多任务</h3><p>进程是有优先级的。如果即将被运行的进程的优先级比正在运行的进程的优先级高，则系统可以强行剥夺正在运行的进程的 CPU，让优先级高的进程先运行。可见，人类社会的特权思想在计算机世界中表现得多么淋漓尽致。</p>
 <p>实际的操作系统一般将时间片思想同可强占思想结合起来进行 CPU 分配。可抢占式多任务的好处是很多的，比如当一个进程发生意外无法运行时，如果不能强行剥夺其 CPU 占有权，则整个系统都得瘫痪。</p>
-<h3 id="8-多个进程在并发-并行运行过程中会产生冲突吗"><a href="#8-多个进程在并发-并行运行过程中会产生冲突吗" class="headerlink" title="8 多个进程在并发/并行运行过程中会产生冲突吗"></a>8 多个进程在并发/并行运行过程中会产生冲突吗</h3><p>如果没有任何保护机制，肯定是会的。这种冲突一般发生在对资源的争夺上。显然，如果一条马路窄到只能通过一辆马车，则当有两辆马车想同时通过时，某个马车夫就必须发扬风格，先让一让，否则结果肯定是人仰马翻。操作系统细心地管理着这一切，以避免进程间的冲突，程序员们也常常需要细心地按照某种既定规则编写程序，以便操作系统管理。</p>
+<h3 id="8-多个进程在并发-x2F-并行运行过程中会产生冲突吗"><a href="#8-多个进程在并发-x2F-并行运行过程中会产生冲突吗" class="headerlink" title="8 多个进程在并发&#x2F;并行运行过程中会产生冲突吗"></a>8 多个进程在并发&#x2F;并行运行过程中会产生冲突吗</h3><p>如果没有任何保护机制，肯定是会的。这种冲突一般发生在对资源的争夺上。显然，如果一条马路窄到只能通过一辆马车，则当有两辆马车想同时通过时，某个马车夫就必须发扬风格，先让一让，否则结果肯定是人仰马翻。操作系统细心地管理着这一切，以避免进程间的冲突，程序员们也常常需要细心地按照某种既定规则编写程序，以便操作系统管理。</p>
 <h3 id="9-什么是虚拟存储器"><a href="#9-什么是虚拟存储器" class="headerlink" title="9 什么是虚拟存储器"></a>9 什么是虚拟存储器</h3><p>虚拟存储技术是非常重要的存储管理技术，它的核心思想是利用巨大的硬盘空间来弥补不足的实际内存空间。在虚拟内存管理下，应用程序可以使用的存储空间远远大于实际的内存大小。我们将一台计算机实际安装的内存称为物理存储器，将通过虚拟存储技术得到的比实际内存空间大得多的存储空间称为虚拟存储器。虚拟存储技术的实现也是非常复杂，这里只提一提最简单的思想。</p>
 <p>内存单元在计算机中是有编号的，叫内存地址。如果你的计算机中有 1M 物理内存，则物理内存的地址范围为 0 到 1048575（1024 x 1024 ）。如果想访问地址为 1048576的单元，显然是不可以的，因为最大只到 1048575 了 。但是，如果这时我将物理内存中所有的东西先保存到硬盘上，然后通过某种方法将 1048576 映射到地址为 0 的物理内存单元上，我不就又得到另外整整一个 M 的存储空间了吗，当程序要访问地址为 0 的单元时，我把原先存储在硬盘上的内容调回物理内存中就可以了。</p>
 <p>这个想法够巧妙吧，它就是虚拟存储技术的核心思想。于是我就可以得到 n 个 1M 空间了。真正的虚拟存储管理比上面我所提的还要复杂、巧妙得多，它能够实现让不同的进程在不同的地址空间上运行（即让每个进程认为自己占有所有的存储空间，可以任意使用，不必在乎系统中的其他进程是如何使用存储空间的。这犹如让不同的进程运行在不同的计算机上），并且要考虑最优的内存使用效率。</p>
@@ -197,12 +198,12 @@
 <h3 id="13-什么是活动分区"><a href="#13-什么是活动分区" class="headerlink" title="13 什么是活动分区"></a>13 什么是活动分区</h3><p>活动分区是在系统加电后具有自举（引导系统）能力的分区，在活动分区上的主引导记录中有一段主引导程序，每当系统启动后，这段程序被调入内存运行，以引导（启动）保存在硬盘上的操作系统。不同的操作系统引导的方法是不同的，所以这段主引导程序随着系统上安装的操作系统的不同而不同。</p>
 <h3 id="14-Windows-是怎样储存磁盘文件的"><a href="#14-Windows-是怎样储存磁盘文件的" class="headerlink" title="14 Windows 是怎样储存磁盘文件的"></a>14 Windows 是怎样储存磁盘文件的</h3><p>首先，Windows 以「簇」为单位使用硬盘上的空间。根据硬盘空间的大小，一个簇的大小是不一样的。一般说，簇越小，硬盘空间的利用率越大，簇越大，存储速度越快。每个文件必须被分成以簇的大小为单位的多个块，然后储存在硬盘上。为此，需要一个表格来记录一个文件被分成的块都储存在硬盘的哪些簇上，这个表格在 Win9x 中就是 FAT 表。FAT 表也储存在硬盘上。所以，FAT 表是文件系统的命根子，破坏了它，一个磁盘所有的文件就玩完了。于是，Windows 除了使用一个 FAT 表外，还会备份一个。</p>
 <h3 id="15-什么是文件目录表"><a href="#15-什么是文件目录表" class="headerlink" title="15 什么是文件目录表"></a>15 什么是文件目录表</h3><p>文件目录表同 FAT 表一样是非常重要的，它记录着所有文件的文件名、属性和在 FAT 表中的起始位置。当你需要读写一个文件时，Windows 就从文件目录表中找这个文件，如果找到，按照文件目录表中所指示的该文件在 FAT 表中的起始位置读出 FAT 表中与这个文件有关的存储信息，就可以读写这个文件了。</p>
-<h3 id="16-什么叫虚拟设备"><a href="#16-什么叫虚拟设备" class="headerlink" title="16 什么叫虚拟设备"></a>16 什么叫虚拟设备</h3><p>不同的 I/O 设备速度有快有慢。在操作系统中，为了有效地利用各种设备，可以使用高速设备来模拟低速设备，从而得到的就是虚拟设备。</p>
+<h3 id="16-什么叫虚拟设备"><a href="#16-什么叫虚拟设备" class="headerlink" title="16 什么叫虚拟设备"></a>16 什么叫虚拟设备</h3><p>不同的 I&#x2F;O 设备速度有快有慢。在操作系统中，为了有效地利用各种设备，可以使用高速设备来模拟低速设备，从而得到的就是虚拟设备。</p>
 <p>在 Windows 中典型的例子就是打印机。我们不难发现在启动打印时打印机并没有工作，而是硬盘在响，然后所有的打印文档都进入打印队列，排队打印。在前一个文档还在打印机上打印的时候，下一个文档已经进入打印队列，提交这个文档的进程无须等待打印机将这个文档打印完毕，就可以继续处理别的事情了。这是由于 Windows 使用硬盘模拟打印机。所有的打印工作实际上都「打印」到了硬盘上。硬盘速度比打印机快得多，所以一下子就完成了。此时有另一个进程负责从硬盘上读出打印数据，打印到实际的打印机上，这个进程在后台工作，不影响前台的其他进程。</p>
 <h3 id="17-什么是与设备无关性（设备独立性）"><a href="#17-什么是与设备无关性（设备独立性）" class="headerlink" title="17 什么是与设备无关性（设备独立性）"></a>17 什么是与设备无关性（设备独立性）</h3><p>计算机的外部设备很多，同种类型的设备又有不同厂家、不同型号的产品。这些产品总会有些细微的差别。这就给应用程序的编写带来很大的困难，因为一个应用程序不可能顾及到所有硬件的兼容性。</p>
 <p>为此，操作系统将具体的硬件设备同整个系统隔离开来，对硬件的具体操作、与硬件有关的兼容性问题等统统由设备驱动程序来解决，同时操作系统向应用程序提供统一的操纵设备的方法，应用程序只需要按套路调用操作系统提供的功能即可，无须关心实际的设备是什么，这就是与设备无关性。这样，每增添或改动一个系统上的硬件，只需要安装相应的驱动程序即可。</p>
 <h3 id="18-什么是缓冲技术"><a href="#18-什么是缓冲技术" class="headerlink" title="18 什么是缓冲技术"></a>18 什么是缓冲技术</h3><p>在数据到达与离去速度不匹配的地方，就应该使用缓冲技术。缓冲技术好比是一个水库，如果上游来的水太多，下游来不及排走，水库就起到「缓冲」作用，先让水在水库中停一些时候，等下游能继续排水，再把水送往下游。</p>
-<p>通常 CPU 的速度要比 I/O 设备的速度快得多得多，所以可以设置缓冲区，对于从 CPU 来的数据，先放在缓冲区中，然后设备可以慢慢地从缓冲区中读出数据。</p>
+<p>通常 CPU 的速度要比 I&#x2F;O 设备的速度快得多得多，所以可以设置缓冲区，对于从 CPU 来的数据，先放在缓冲区中，然后设备可以慢慢地从缓冲区中读出数据。</p>
 
       
 
@@ -272,7 +273,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/09/10/操作系统原理通俗化解释/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/09/10/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E9%80%9A%E4%BF%97%E5%8C%96%E8%A7%A3%E9%87%8A/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -286,7 +287,7 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/10/09/用于切割日志的-shell-脚本/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/10/09/%E7%94%A8%E4%BA%8E%E5%88%87%E5%89%B2%E6%97%A5%E5%BF%97%E7%9A%84-shell-%E8%84%9A%E6%9C%AC/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
@@ -296,7 +297,7 @@
     </a>
   
   
-    <a href="/2019/09/01/解析记录达到-10-万条的-Excel-出现内存溢出怎么办/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/09/01/%E8%A7%A3%E6%9E%90%E8%AE%B0%E5%BD%95%E8%BE%BE%E5%88%B0-10-%E4%B8%87%E6%9D%A1%E7%9A%84-Excel-%E5%87%BA%E7%8E%B0%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E6%80%8E%E4%B9%88%E5%8A%9E/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">解析记录达到 10 万条的 Excel 出现内存溢出怎么办</div>
       <i class="icon-circle-right"></i>
     </a>
@@ -427,19 +428,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">记录生活</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">

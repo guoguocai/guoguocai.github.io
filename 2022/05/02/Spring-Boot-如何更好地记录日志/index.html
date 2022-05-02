@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | GUOGUOCAI&#39;S BLOG</title>
+  <title>Spring Boot 如何更好地记录日志 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:url" content="http://yoursite.com/archives/page/4/index.html">
+  <meta name="description" content="日志在我们日常开发调试的过程中非常重要。一份好的日志，能帮助我们快速找到问题原因，提高代码健壮性。这里就简单介绍一些记录日志的方法，还有一些应该注意的地方，供大家参考。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot 如何更好地记录日志">
+<meta property="og:url" content="http://yoursite.com/2022/05/02/Spring-Boot-%E5%A6%82%E4%BD%95%E6%9B%B4%E5%A5%BD%E5%9C%B0%E8%AE%B0%E5%BD%95%E6%97%A5%E5%BF%97/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
+<meta property="og:description" content="日志在我们日常开发调试的过程中非常重要。一份好的日志，能帮助我们快速找到问题原因，提高代码健壮性。这里就简单介绍一些记录日志的方法，还有一些应该注意的地方，供大家参考。">
 <meta property="og:locale">
+<meta property="article:published_time" content="2022-05-02T07:11:29.000Z">
+<meta property="article:modified_time" content="2022-05-02T08:02:29.994Z">
 <meta property="article:author" content="guoguocai">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
@@ -128,188 +133,44 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Spring-Boot-如何更好地记录日志" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Spring Boot 如何更好地记录日志
+    </h1>
+  
+
+        
+        <a href="/2022/05/02/Spring-Boot-%E5%A6%82%E4%BD%95%E6%9B%B4%E5%A5%BD%E5%9C%B0%E8%AE%B0%E5%BD%95%E6%97%A5%E5%BF%97/" class="archive-article-date">
+  	<time datetime="2022-05-02T07:11:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-02</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>日志在我们日常开发调试的过程中非常重要。一份好的日志，能帮助我们快速找到问题原因，提高代码健壮性。这里就简单介绍一些记录日志的方法，还有一些应该注意的地方，供大家参考。</p>
+<span id="more"></span>
+
+<h3 id="1-日志输出到文件"><a href="#1-日志输出到文件" class="headerlink" title="1.日志输出到文件"></a>1.日志输出到文件</h3><p>在资源（resources）目录下添加日志配置文件 logback-spring.xml，通过配置，将日志记录在指定的文件中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="line">&lt;!-- 日志级别从低到高分为TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL，如果设置为WARN，则低于WARN的信息都不会输出 --&gt;</span><br><span class="line">&lt;!-- scan:当此属性设置为<span class="literal">true</span>时，配置文档如果发生改变，将会被重新加载，默认值为<span class="literal">true</span> --&gt;</span><br><span class="line">&lt;!-- scanPeriod:设置监测配置文档是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。</span><br><span class="line">                 当scan为<span class="literal">true</span>时，此属性生效。默认的时间间隔为<span class="number">1</span>分钟。 --&gt;</span><br><span class="line">&lt;!-- debug:当此属性设置为<span class="literal">true</span>时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为<span class="literal">false</span>。 --&gt;</span><br><span class="line">&lt;configuration  scan=<span class="string">&quot;true&quot;</span> scanPeriod=<span class="string">&quot;10 seconds&quot;</span>&gt;</span><br><span class="line">    &lt;contextName&gt;logback&lt;/contextName&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义后，可以使“$&#123;&#125;”来使用变量。 --&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;log.path&quot;</span> value=<span class="string">&quot;/var/log/guoguocai&quot;</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!--<span class="number">0.</span> 日志格式和颜色渲染 --&gt;</span><br><span class="line">    &lt;!-- 彩色日志依赖的渲染类 --&gt;</span><br><span class="line">    &lt;conversionRule conversionWord=<span class="string">&quot;clr&quot;</span> converterClass=<span class="string">&quot;org.springframework.boot.logging.logback.ColorConverter&quot;</span> /&gt;</span><br><span class="line">    &lt;conversionRule conversionWord=<span class="string">&quot;wex&quot;</span> converterClass=<span class="string">&quot;org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter&quot;</span> /&gt;</span><br><span class="line">    &lt;conversionRule conversionWord=<span class="string">&quot;wEx&quot;</span> converterClass=<span class="string">&quot;org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter&quot;</span> /&gt;</span><br><span class="line">    &lt;!-- 彩色日志格式 --&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;CONSOLE_LOG_PATTERN&quot;</span> value=<span class="string">&quot;$&#123;CONSOLE_LOG_PATTERN:-%clr(%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125;)&#123;faint&#125; %clr($&#123;LOG_LEVEL_PATTERN:-%5p&#125;) %clr($&#123;PID:- &#125;)&#123;magenta&#125; %clr(---)&#123;faint&#125; %clr([%15.15t])&#123;faint&#125; %clr(%-40.40logger&#123;39&#125;)&#123;cyan&#125; %L %clr(:)&#123;faint&#125; %m%n$&#123;LOG_EXCEPTION_CONVERSION_WORD:-%wEx&#125;&#125;&quot;</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!--<span class="number">1.</span> 输出到控制台--&gt;</span><br><span class="line">    &lt;appender name=<span class="string">&quot;CONSOLE&quot;</span> class=<span class="string">&quot;ch.qos.logback.core.ConsoleAppender&quot;</span>&gt;</span><br><span class="line">        &lt;!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息--&gt;</span><br><span class="line">        &lt;filter class=<span class="string">&quot;ch.qos.logback.classic.filter.ThresholdFilter&quot;</span>&gt;</span><br><span class="line">            &lt;level&gt;debug&lt;/level&gt;</span><br><span class="line">        &lt;/filter&gt;</span><br><span class="line">        &lt;encoder&gt;</span><br><span class="line">            &lt;Pattern&gt;$&#123;CONSOLE_LOG_PATTERN&#125;&lt;/Pattern&gt;</span><br><span class="line">            &lt;!-- 设置字符集 --&gt;</span><br><span class="line">            &lt;charset&gt;UTF-<span class="number">8</span>&lt;/charset&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!--<span class="number">2.</span> 输出到文档--&gt;</span><br><span class="line">    &lt;!-- <span class="number">2.1</span> level为 DEBUG 日志，时间滚动输出  --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">&quot;DEBUG_FILE&quot;</span> class=<span class="string">&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;</span>&gt;</span><br><span class="line">        &lt;!-- 正在记录的日志文档的路径及文档名 --&gt;</span><br><span class="line">        &lt;file&gt;$&#123;log.path&#125;/debug.log&lt;/file&gt;</span><br><span class="line">        &lt;!--日志文档输出格式--&gt;</span><br><span class="line">        &lt;encoder&gt;</span><br><span class="line">            &lt;pattern&gt;%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;<span class="number">50</span>&#125; %line - %msg%n&lt;/pattern&gt;</span><br><span class="line">            &lt;charset&gt;UTF-<span class="number">8</span>&lt;/charset&gt; &lt;!-- 设置字符集 --&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">        &lt;!-- 日志记录器的滚动策略，按日期，按大小记录 --&gt;</span><br><span class="line">        &lt;rollingPolicy class=<span class="string">&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;</span>&gt;</span><br><span class="line">            &lt;!-- 日志归档 --&gt;</span><br><span class="line">            &lt;fileNamePattern&gt;$&#123;log.path&#125;/web-debug-%d&#123;yyyy-MM-dd&#125;.%i.log&lt;/fileNamePattern&gt;</span><br><span class="line">            &lt;timeBasedFileNamingAndTriggeringPolicy class=<span class="string">&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;</span>&gt;</span><br><span class="line">                &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;</span><br><span class="line">            &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span><br><span class="line">            &lt;!--日志文档保留天数--&gt;</span><br><span class="line">            &lt;maxHistory&gt;<span class="number">15</span>&lt;/maxHistory&gt;</span><br><span class="line">        &lt;/rollingPolicy&gt;</span><br><span class="line">        &lt;!-- 此日志文档只记录debug级别的 --&gt;</span><br><span class="line">        &lt;filter class=<span class="string">&quot;ch.qos.logback.classic.filter.LevelFilter&quot;</span>&gt;</span><br><span class="line">            &lt;level&gt;debug&lt;/level&gt;</span><br><span class="line">            &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt;</span><br><span class="line">            &lt;onMismatch&gt;DENY&lt;/onMismatch&gt;</span><br><span class="line">        &lt;/filter&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- <span class="number">2.2</span> level为 INFO 日志，时间滚动输出  --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">&quot;INFO_FILE&quot;</span> class=<span class="string">&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;</span>&gt;</span><br><span class="line">        &lt;!-- 正在记录的日志文档的路径及文档名 --&gt;</span><br><span class="line">        &lt;file&gt;$&#123;log.path&#125;/info.log&lt;/file&gt;</span><br><span class="line">        &lt;!--日志文档输出格式--&gt;</span><br><span class="line">        &lt;encoder&gt;</span><br><span class="line">            &lt;pattern&gt;%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;<span class="number">50</span>&#125; %line - %msg%n&lt;/pattern&gt;</span><br><span class="line">            &lt;charset&gt;UTF-<span class="number">8</span>&lt;/charset&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">        &lt;!-- 日志记录器的滚动策略，按日期，按大小记录 --&gt;</span><br><span class="line">        &lt;rollingPolicy class=<span class="string">&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;</span>&gt;</span><br><span class="line">            &lt;!-- 每天日志归档路径以及格式 --&gt;</span><br><span class="line">            &lt;fileNamePattern&gt;$&#123;log.path&#125;/web-info-%d&#123;yyyy-MM-dd&#125;.%i.log&lt;/fileNamePattern&gt;</span><br><span class="line">            &lt;timeBasedFileNamingAndTriggeringPolicy class=<span class="string">&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;</span>&gt;</span><br><span class="line">                &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;</span><br><span class="line">            &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span><br><span class="line">            &lt;!--日志文档保留天数--&gt;</span><br><span class="line">            &lt;maxHistory&gt;<span class="number">15</span>&lt;/maxHistory&gt;</span><br><span class="line">        &lt;/rollingPolicy&gt;</span><br><span class="line">        &lt;!-- 此日志文档只记录info级别的 --&gt;</span><br><span class="line">        &lt;filter class=<span class="string">&quot;ch.qos.logback.classic.filter.LevelFilter&quot;</span>&gt;</span><br><span class="line">            &lt;level&gt;info&lt;/level&gt;</span><br><span class="line">            &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt;</span><br><span class="line">            &lt;onMismatch&gt;DENY&lt;/onMismatch&gt;</span><br><span class="line">        &lt;/filter&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- <span class="number">2.3</span> level为 WARN 日志，时间滚动输出  --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">&quot;WARN_FILE&quot;</span> class=<span class="string">&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;</span>&gt;</span><br><span class="line">        &lt;!-- 正在记录的日志文档的路径及文档名 --&gt;</span><br><span class="line">        &lt;file&gt;$&#123;log.path&#125;/warn.log&lt;/file&gt;</span><br><span class="line">        &lt;!--日志文档输出格式--&gt;</span><br><span class="line">        &lt;encoder&gt;</span><br><span class="line">            &lt;pattern&gt;%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;<span class="number">50</span>&#125; %line - %msg%n&lt;/pattern&gt;</span><br><span class="line">            &lt;charset&gt;UTF-<span class="number">8</span>&lt;/charset&gt; &lt;!-- 此处设置字符集 --&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">        &lt;!-- 日志记录器的滚动策略，按日期，按大小记录 --&gt;</span><br><span class="line">        &lt;rollingPolicy class=<span class="string">&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;</span>&gt;</span><br><span class="line">            &lt;fileNamePattern&gt;$&#123;log.path&#125;/web-warn-%d&#123;yyyy-MM-dd&#125;.%i.log&lt;/fileNamePattern&gt;</span><br><span class="line">            &lt;timeBasedFileNamingAndTriggeringPolicy class=<span class="string">&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;</span>&gt;</span><br><span class="line">                &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;</span><br><span class="line">            &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span><br><span class="line">            &lt;!--日志文档保留天数--&gt;</span><br><span class="line">            &lt;maxHistory&gt;<span class="number">15</span>&lt;/maxHistory&gt;</span><br><span class="line">        &lt;/rollingPolicy&gt;</span><br><span class="line">        &lt;!-- 此日志文档只记录warn级别的 --&gt;</span><br><span class="line">        &lt;filter class=<span class="string">&quot;ch.qos.logback.classic.filter.LevelFilter&quot;</span>&gt;</span><br><span class="line">            &lt;level&gt;warn&lt;/level&gt;</span><br><span class="line">            &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt;</span><br><span class="line">            &lt;onMismatch&gt;DENY&lt;/onMismatch&gt;</span><br><span class="line">        &lt;/filter&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- <span class="number">2.4</span> level为 ERROR 日志，时间滚动输出  --&gt;</span><br><span class="line">    &lt;appender name=<span class="string">&quot;ERROR_FILE&quot;</span> class=<span class="string">&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;</span>&gt;</span><br><span class="line">        &lt;!-- 正在记录的日志文档的路径及文档名 --&gt;</span><br><span class="line">        &lt;file&gt;$&#123;log.path&#125;/error.log&lt;/file&gt;</span><br><span class="line">        &lt;!--日志文档输出格式--&gt;</span><br><span class="line">        &lt;encoder&gt;</span><br><span class="line">            &lt;pattern&gt;%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;<span class="number">50</span>&#125; %line - %msg%n&lt;/pattern&gt;</span><br><span class="line">            &lt;charset&gt;UTF-<span class="number">8</span>&lt;/charset&gt; &lt;!-- 此处设置字符集 --&gt;</span><br><span class="line">        &lt;/encoder&gt;</span><br><span class="line">        &lt;!-- 日志记录器的滚动策略，按日期，按大小记录 --&gt;</span><br><span class="line">        &lt;rollingPolicy class=<span class="string">&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;</span>&gt;</span><br><span class="line">            &lt;fileNamePattern&gt;$&#123;log.path&#125;/web-error-%d&#123;yyyy-MM-dd&#125;.%i.log&lt;/fileNamePattern&gt;</span><br><span class="line">            &lt;timeBasedFileNamingAndTriggeringPolicy class=<span class="string">&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;</span>&gt;</span><br><span class="line">                &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;</span><br><span class="line">            &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span><br><span class="line">            &lt;!--日志文档保留天数--&gt;</span><br><span class="line">            &lt;maxHistory&gt;<span class="number">15</span>&lt;/maxHistory&gt;</span><br><span class="line">        &lt;/rollingPolicy&gt;</span><br><span class="line">        &lt;!-- 此日志文档只记录ERROR级别的 --&gt;</span><br><span class="line">        &lt;filter class=<span class="string">&quot;ch.qos.logback.classic.filter.LevelFilter&quot;</span>&gt;</span><br><span class="line">            &lt;level&gt;ERROR&lt;/level&gt;</span><br><span class="line">            &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt;</span><br><span class="line">            &lt;onMismatch&gt;DENY&lt;/onMismatch&gt;</span><br><span class="line">        &lt;/filter&gt;</span><br><span class="line">    &lt;/appender&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!--</span><br><span class="line">        &lt;logger&gt;用来设置某一个包或者具体的某一个类的日志打印级别、</span><br><span class="line">        以及指定&lt;appender&gt;。&lt;logger&gt;仅有一个name属性，</span><br><span class="line">        一个可选的level和一个可选的addtivity属性。</span><br><span class="line">        name:用来指定受此logger约束的某一个包或者具体的某一个类。</span><br><span class="line">        level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，</span><br><span class="line">              还有一个特俗值INHERITED或者同义词NULL，代表强制执行上级的级别。</span><br><span class="line">              如果未设置此属性，那么当前logger将会继承上级的级别。</span><br><span class="line">        addtivity:是否向上级logger传递打印信息。默认是<span class="literal">true</span>。</span><br><span class="line">        &lt;logger name=<span class="string">&quot;org.springframework.web&quot;</span> level=<span class="string">&quot;info&quot;</span>/&gt;</span><br><span class="line">        &lt;logger name=<span class="string">&quot;org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor&quot;</span> level=<span class="string">&quot;INFO&quot;</span>/&gt;</span><br><span class="line">    --&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!--</span><br><span class="line">        使用mybatis的时候，sql语句是debug下才会打印，而这里我们只配置了info，所以想要查看sql语句的话，有以下两种操作：</span><br><span class="line">        第一种把&lt;root level=<span class="string">&quot;info&quot;</span>&gt;改成&lt;root level=<span class="string">&quot;DEBUG&quot;</span>&gt;这样就会打印sql，不过这样日志那边会出现很多其他消息</span><br><span class="line">        第二种就是单独给dao下目录配置debug模式，代码如下，这样配置sql语句会打印，其他还是正常info级别：</span><br><span class="line">        【logging.level.org.mybatis=debug logging.level.dao=debug】</span><br><span class="line">     --&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!--</span><br><span class="line">        root节点是必选节点，用来指定最基础的日志输出级别，只有一个level属性</span><br><span class="line">        level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，</span><br><span class="line">        不能设置为INHERITED或者同义词NULL。默认是DEBUG</span><br><span class="line">        可以包含零个或多个元素，标识这个appender将会添加到这个logger。</span><br><span class="line">    --&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- <span class="number">4.</span> 最终的策略 --&gt;</span><br><span class="line">    &lt;!-- <span class="number">4.1</span> 开发环境:打印控制台--&gt;</span><br><span class="line">&lt;!--    &lt;springProfile name=<span class="string">&quot;dev&quot;</span>&gt;--&gt;</span><br><span class="line">&lt;!--        &lt;logger name=<span class="string">&quot;com.guo.cai.mapper.GuoguocaiMapper&quot;</span> level=<span class="string">&quot;debug&quot;</span>/&gt;--&gt;</span><br><span class="line">&lt;!--    &lt;/springProfile&gt;--&gt;</span><br><span class="line"></span><br><span class="line">    &lt;root level=<span class="string">&quot;info&quot;</span>&gt;</span><br><span class="line">        &lt;appender-ref ref=<span class="string">&quot;CONSOLE&quot;</span> /&gt;</span><br><span class="line">        &lt;appender-ref ref=<span class="string">&quot;DEBUG_FILE&quot;</span> /&gt;</span><br><span class="line">        &lt;appender-ref ref=<span class="string">&quot;INFO_FILE&quot;</span> /&gt;</span><br><span class="line">        &lt;appender-ref ref=<span class="string">&quot;WARN_FILE&quot;</span> /&gt;</span><br><span class="line">        &lt;appender-ref ref=<span class="string">&quot;ERROR_FILE&quot;</span> /&gt;</span><br><span class="line">    &lt;/root&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!--   <span class="number">4.2</span> 生产环境:输出到文档 --&gt;</span><br><span class="line">    &lt;!--     &lt;springProfile name=<span class="string">&quot;prod&quot;</span>&gt; --&gt;</span><br><span class="line">    &lt;!--         &lt;root level=<span class="string">&quot;info&quot;</span>&gt; --&gt;</span><br><span class="line">    &lt;!--             &lt;appender-ref ref=<span class="string">&quot;CONSOLE&quot;</span> /&gt; --&gt;</span><br><span class="line">    &lt;!--             &lt;appender-ref ref=<span class="string">&quot;DEBUG_FILE&quot;</span> /&gt; --&gt;</span><br><span class="line">    &lt;!--             &lt;appender-ref ref=<span class="string">&quot;INFO_FILE&quot;</span> /&gt; --&gt;</span><br><span class="line">    &lt;!--             &lt;appender-ref ref=<span class="string">&quot;ERROR_FILE&quot;</span> /&gt; --&gt;</span><br><span class="line">    &lt;!--             &lt;appender-ref ref=<span class="string">&quot;WARN_FILE&quot;</span> /&gt; --&gt;</span><br><span class="line">    &lt;!--         &lt;/root&gt; --&gt;</span><br><span class="line">    &lt;!--     &lt;/springProfile&gt; --&gt;</span><br><span class="line"></span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-不要用-e-printStackTrace"><a href="#2-不要用-e-printStackTrace" class="headerlink" title="2.不要用 e.printStackTrace()"></a>2.不要用 e.printStackTrace()</h3><p>原因很简单，因为它是将异常输出在控制台，这个操作需要字符串常量池所在的内存块有足够的空间。然而，因为 e.printStackTrace() 语句要产生的字符串记录的是堆栈信息，太长太多，内存很容易被填满！如果大量线程产出字符串产出一半后，发现内存不够了，那么就会等待内存被释放，但这个时候内存又是释放不了的，所以等待的线程不断堆积，造成锁死，导致整个应用挂掉。</p>
+<p>除此以外，e.printStackTrace() 的信息也不会输出到 error.log 日志文件中，这会给我们在调试生产环境问题的时候带来很多困难。如果我们用的是 slf4j 来管理日志，那么正确记录堆栈信息的写法是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Logger</span> <span class="variable">LOGGER</span> <span class="operator">=</span> LoggerFactory.getLogger(Test.class);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">3</span> / <span class="number">0</span>;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="comment">// 以下两种写法都可以，第二种是加入了格式化的信息</span></span><br><span class="line">    <span class="comment">//注意：异常对象 e 必须放在最后一个参数，否则不会打印堆栈信息</span></span><br><span class="line">    LOGGER.error(e.getMessage(), e);</span><br><span class="line">    LOGGER.error(<span class="string">&quot;Occurs ex: &#123;&#125;&quot;</span>, e.getMessage(), e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/11/04/%E5%BD%93%E8%B4%9F%E9%9D%A2%E6%83%85%E7%BB%AA%E7%88%86%E6%A3%9A%E6%97%B6-%E4%B8%8D%E5%A6%A8%E8%AF%95%E8%AF%95%E8%BF%99%E4%BA%9B%E6%96%B9%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2018-11-04T14:16:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/11/04/%E5%BD%93%E8%B4%9F%E9%9D%A2%E6%83%85%E7%BB%AA%E7%88%86%E6%A3%9A%E6%97%B6-%E4%B8%8D%E5%A6%A8%E8%AF%95%E8%AF%95%E8%BF%99%E4%BA%9B%E6%96%B9%E6%B3%95/">当负面情绪爆棚时 不妨试试这些方法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">记录生活</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/10/22/%E3%80%8A%E8%B5%B7%E9%A3%8E%E4%BA%86%E3%80%8B/" class="archive-article-date">
-  	<time datetime="2018-10-22T13:13:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/10/22/%E3%80%8A%E8%B5%B7%E9%A3%8E%E4%BA%86%E3%80%8B/">《起风了》</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">一个人的电影史</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/10/07/%E3%80%8A%E6%9C%AB%E4%BB%A3%E7%9A%87%E5%B8%9D%E3%80%8B/" class="archive-article-date">
-  	<time datetime="2018-10-07T13:50:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/10/07/%E3%80%8A%E6%9C%AB%E4%BB%A3%E7%9A%87%E5%B8%9D%E3%80%8B/">《末代皇帝》</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">一个人的电影史</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/09/23/sourceTree-%E7%9A%84%E8%B4%A6%E5%8F%B7%E9%97%AE%E9%A2%98/" class="archive-article-date">
-  	<time datetime="2018-09-23T06:02:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/23/sourceTree-%E7%9A%84%E8%B4%A6%E5%8F%B7%E9%97%AE%E9%A2%98/">sourceTree 的账号问题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Git</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/09/17/%E5%A6%82%E4%BD%95%E5%B0%86%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90%E5%8F%AF%E4%BB%A5%E4%BC%A0%E5%8F%82%E7%9A%84Jar%E5%8C%85/" class="archive-article-date">
-  	<time datetime="2018-09-17T14:55:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/17/%E5%A6%82%E4%BD%95%E5%B0%86%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90%E5%8F%AF%E4%BB%A5%E4%BC%A0%E5%8F%82%E7%9A%84Jar%E5%8C%85/">如何将程序打包成可以传参的Jar包</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -321,60 +182,105 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2022/05/02/Spring-Boot-%E5%A6%82%E4%BD%95%E6%9B%B4%E5%A5%BD%E5%9C%B0%E8%AE%B0%E5%BD%95%E6%97%A5%E5%BF%97/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/06/25/My-First-Blog/" class="archive-article-date">
-  	<time datetime="2018-06-25T05:30:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-25</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2022/04/17/%E4%B8%BA%E4%BB%80%E4%B9%88java-concurrent-automic%E9%87%8C%E9%9D%A2%E6%B2%A1%E6%9C%89String/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">为什么java.concurrent.automic里面没有String</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/06/25/My-First-Blog/">My First Blog</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">记录生活</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><span class="page-number current">4</span>
-    </nav>
+  
+
   
 
 
@@ -398,8 +304,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
