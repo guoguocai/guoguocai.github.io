@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | GUOGUOCAI&#39;S BLOG</title>
+  <title>如何解决用 Java 浮点类型计算时的精度问题 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确的表示。（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何解决用 Java 浮点类型计算时的精度问题">
+<meta property="og:url" content="http://yoursite.com/2022/05/15/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E7%94%A8-Java-%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%97%B6%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
+<meta property="og:description" content="这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确的表示。（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的">
 <meta property="og:locale">
+<meta property="article:published_time" content="2022-05-15T02:14:27.000Z">
+<meta property="article:modified_time" content="2022-05-15T03:08:35.935Z">
 <meta property="article:author" content="guoguocai">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
@@ -128,36 +133,45 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-如何解决用-Java-浮点类型计算时的精度问题" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      如何解决用 Java 浮点类型计算时的精度问题
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2022" class="archive-year">2022</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/05/15/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E7%94%A8-Java-%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%97%B6%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/" class="archive-article-date">
+
+        
+        <a href="/2022/05/15/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E7%94%A8-Java-%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%97%B6%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/" class="archive-article-date">
   	<time datetime="2022-05-15T02:14:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-15</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/05/15/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E7%94%A8-Java-%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%97%B6%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/">如何解决用 Java 浮点类型计算时的精度问题</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的<strong>根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确的表示。</strong>（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的 1.2 了）</p>
+<span id="more"></span>
 
-        <div class="article-info info-on-right">
-          
+<p><strong>如果需要精确计算的话就用字符串来保存和计算</strong>，各种语言标准库都会提供类似 Decimal 的类，封装好了类似操作。</p>
+<p>对 Java 来说，就是用 BigDecimal 类了。不过要注意，<strong>使用 BigDecimal(double val) 构造函数时仍会存在精度丢失问题，建议使用 BigDecimal(String val)。</strong>这就需要先把 double 转换为字符串然后在作为 BigDecimal(String val) 构造函数的参数。转换为 BigDecimal 对象之后再进行加减乘除操作，这样精度就不会出现问题了。这也是为什么有关金钱数据存储都使用 BigDecimal。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="number">0.11</span> + <span class="number">2001299.32</span>);</span><br><span class="line"><span class="type">BigDecimal</span> <span class="variable">bigDecimal1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(<span class="number">0.11</span>));</span><br><span class="line"><span class="type">BigDecimal</span> <span class="variable">bigDecimal2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(<span class="number">2001299.32</span>));</span><br><span class="line">System.out.println(bigDecimal1.add(bigDecimal2));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 控制台输出：</span></span><br><span class="line"><span class="comment">// 2001299.4300000002</span></span><br><span class="line"><span class="comment">// 2001299.43</span></span><br></pre></td></tr></table></figure>
+
+<p>下面是常用的运算方法，可放在工具类中使用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 提供精确的加法运算。   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v1 被加数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v2 加数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 两个参数的和</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">add</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v1));</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v2));</span><br><span class="line">    <span class="keyword">return</span> b1.add(b2).doubleValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 提供精确的减法运算。   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v1 被减数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v2 减数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 两个参数的差</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">sub</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v1));</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v2));</span><br><span class="line">    <span class="keyword">return</span> b1.subtract(b2).doubleValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 提供精确的乘法运算。   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v1 被乘数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v2 乘数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 两个参数的积</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">mul</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v1));</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v2));</span><br><span class="line">    <span class="keyword">return</span> b1.multiply(b2).doubleValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 提供（相对）精确的除法运算，当发生除不尽的情况时，精确到   </span></span><br><span class="line"><span class="comment"> * 小数点以后10位，以后的数字四舍五入。DEF_DIV_SCALE 是一</span></span><br><span class="line"><span class="comment"> * 个自定义的常量数字。 </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v1 被除数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v2 除数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 两个参数的商</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">div</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> div(v1, v2, DEF_DIV_SCALE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指   </span></span><br><span class="line"><span class="comment"> * 定精度，以后的数字四舍五入。   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v1 被除数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v2 除数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> scale 表示表示需要精确到小数点以后几位</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 两个参数的商</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">div</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2, <span class="type">int</span> scale)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(</span><br><span class="line">                <span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v1));</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v2));</span><br><span class="line">    <span class="keyword">return</span> b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 提供精确的小数位四舍五入处理。   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v 需要四舍五入的数字   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> scale 小数点后保留几位   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 四舍五入后的结果</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">round</span><span class="params">(<span class="type">double</span> v, <span class="type">int</span> scale)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(</span><br><span class="line">                <span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v));</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">one</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;1&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> b.divide(one, scale, BigDecimal.ROUND_HALF_UP).doubleValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 提供精确的类型转换(Float)   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v 需要被转换的数字   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 返回转换结果</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">float</span> <span class="title function_">convertsToFloat</span><span class="params">(<span class="type">double</span> v)</span> &#123;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v);</span><br><span class="line">    <span class="keyword">return</span> b.floatValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 提供精确的类型转换(Int)不进行四舍五入   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v 需要被转换的数字   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 返回转换结果</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">convertsToInt</span><span class="params">(<span class="type">double</span> v)</span> &#123;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v);</span><br><span class="line">    <span class="keyword">return</span> b.intValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 提供精确的类型转换(Long)   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v 需要被转换的数字   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 返回转换结果</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">long</span> <span class="title function_">convertsToLong</span><span class="params">(<span class="type">double</span> v)</span> &#123;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v);</span><br><span class="line">    <span class="keyword">return</span> b.longValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回两个数中大的一个值   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v1 需要被对比的第一个数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v2 需要被对比的第二个数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 返回两个数中大的一个值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">returnMax</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);</span><br><span class="line">    <span class="keyword">return</span> b1.max(b2).doubleValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回两个数中小的一个值   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v1 需要被对比的第一个数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v2 需要被对比的第二个数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 返回两个数中小的一个值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">returnMin</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);</span><br><span class="line">    <span class="keyword">return</span> b1.min(b2).doubleValue();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 精确对比两个数字   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v1 需要被对比的第一个数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v2 需要被对比的第二个数   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 如果两个数一样则返回0，如果第一个数比第二个数大则返回1，反之返回-1   </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);</span><br><span class="line">    <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);</span><br><span class="line">    <span class="keyword">return</span> b1.compareTo(b2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（完）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -169,394 +183,105 @@
 		</ul>
 	</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/05/02/Spring-Boot-%E5%A6%82%E4%BD%95%E6%9B%B4%E5%A5%BD%E5%9C%B0%E8%AE%B0%E5%BD%95%E6%97%A5%E5%BF%97/" class="archive-article-date">
-  	<time datetime="2022-05-02T07:11:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/05/02/Spring-Boot-%E5%A6%82%E4%BD%95%E6%9B%B4%E5%A5%BD%E5%9C%B0%E8%AE%B0%E5%BD%95%E6%97%A5%E5%BF%97/">Spring Boot 如何更好地记录日志</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/17/%E4%B8%BA%E4%BB%80%E4%B9%88java-concurrent-automic%E9%87%8C%E9%9D%A2%E6%B2%A1%E6%9C%89String/" class="archive-article-date">
-  	<time datetime="2022-04-17T01:54:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/17/%E4%B8%BA%E4%BB%80%E4%B9%88java-concurrent-automic%E9%87%8C%E9%9D%A2%E6%B2%A1%E6%9C%89String/">为什么java.concurrent.automic里面没有String</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2022/04/10/%E8%AF%BB-Yaml-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B7%A5%E5%85%B7%E7%B1%BB/" class="archive-article-date">
-  	<time datetime="2022-04-10T08:21:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-04-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2022/04/10/%E8%AF%BB-Yaml-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%B7%A5%E5%85%B7%E7%B1%BB/">读 Yaml 配置文件工具类</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
       
-        </div></section>
+
       
+
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/09/02/%E5%A6%82%E4%BD%95%E7%BB%99-SpringBoot-%E9%A1%B9%E7%9B%AE%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86/" class="archive-article-date">
-  	<time datetime="2021-09-02T14:35:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-09-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/09/02/%E5%A6%82%E4%BD%95%E7%BB%99-SpringBoot-%E9%A1%B9%E7%9B%AE%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86/">如何给 SpringBoot 项目的配置文件中的密码加密</a>
-    </h1>
-  
+      </div>
+    </span>
+  </div>
+</div>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2022/05/15/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E7%94%A8-Java-%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%97%B6%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/" alt="微信分享二维码">
+    </div>
+</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2022/05/02/Spring-Boot-%E5%A6%82%E4%BD%95%E6%9B%B4%E5%A5%BD%E5%9C%B0%E8%AE%B0%E5%BD%95%E6%97%A5%E5%BF%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Spring Boot 如何更好地记录日志</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/11/08/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95-ID-%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7%E7%B1%BB/" class="archive-article-date">
-  	<time datetime="2020-11-08T01:27:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-08</time>
-</a>
-        </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/11/08/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95-ID-%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7%E7%B1%BB/">雪花算法 ID 生成工具类</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/31/%E7%94%A8-Netty-%E5%86%99%E4%B8%80%E4%B8%AA-WebSocket-%E6%9C%8D%E5%8A%A1%E7%AB%AF/" class="archive-article-date">
-  	<time datetime="2020-08-31T15:12:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-31</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/31/%E7%94%A8-Netty-%E5%86%99%E4%B8%80%E4%B8%AA-WebSocket-%E6%9C%8D%E5%8A%A1%E7%AB%AF/">用 Netty 写一个 WebSocket 服务端</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/06/13/%E5%85%B3%E4%BA%8E%E5%86%99%E5%A5%BD%E7%AE%80%E5%8E%86%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BB%BA%E8%AE%AE/" class="archive-article-date">
-  	<time datetime="2020-06-13T09:24:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/06/13/%E5%85%B3%E4%BA%8E%E5%86%99%E5%A5%BD%E7%AE%80%E5%8E%86%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BB%BA%E8%AE%AE/">关于写好简历的一些建议</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">记录生活</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/04/25/%E6%8B%A8%E5%8F%B7%E4%B8%8A%E7%BD%91%E6%AD%A5%E9%AA%A4%E5%8F%8A%E7%94%A8%E6%88%B7%E6%97%A0%E6%B3%95%E5%BC%80%E5%90%AF-WiFi-%E5%85%B1%E4%BA%AB%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2020-04-25T09:01:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/04/25/%E6%8B%A8%E5%8F%B7%E4%B8%8A%E7%BD%91%E6%AD%A5%E9%AA%A4%E5%8F%8A%E7%94%A8%E6%88%B7%E6%97%A0%E6%B3%95%E5%BC%80%E5%90%AF-WiFi-%E5%85%B1%E4%BA%AB%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">拨号上网步骤及用户无法开启 WiFi 共享的解决办法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">电脑问题</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/13/Linux-ftp-%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  	<time datetime="2019-10-13T07:47:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/13/Linux-ftp-%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0/">Linux ftp 相关命令学习</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><a class="extend next" rel="next" href="/archives/page/2/">Next &amp;raquo;</a>
-    </nav>
   
 
 
@@ -580,8 +305,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
