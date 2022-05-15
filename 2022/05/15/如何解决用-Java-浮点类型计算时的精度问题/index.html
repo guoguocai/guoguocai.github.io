@@ -16,7 +16,7 @@
 <meta property="og:description" content="这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确的表示。（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-05-15T02:14:27.000Z">
-<meta property="article:modified_time" content="2022-05-15T03:08:35.935Z">
+<meta property="article:modified_time" content="2022-05-15T03:47:47.437Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -157,7 +157,8 @@
 <span id="more"></span>
 
 <p><strong>如果需要精确计算的话就用字符串来保存和计算</strong>，各种语言标准库都会提供类似 Decimal 的类，封装好了类似操作。</p>
-<p>对 Java 来说，就是用 BigDecimal 类了。不过要注意，<strong>使用 BigDecimal(double val) 构造函数时仍会存在精度丢失问题，建议使用 BigDecimal(String val)。</strong>这就需要先把 double 转换为字符串然后在作为 BigDecimal(String val) 构造函数的参数。转换为 BigDecimal 对象之后再进行加减乘除操作，这样精度就不会出现问题了。这也是为什么有关金钱数据存储都使用 BigDecimal。</p>
+<p>对 Java 来说，就是用 BigDecimal 类了。不过要注意，<strong>使用 BigDecimal(double val) 构造函数时仍会存在精度丢失问题，建议使用 BigDecimal(String val)。</strong>这就需要先把 double 转换为字符串然后在作为 BigDecimal(String val) 构造函数的参数。转换为 BigDecimal 对象之后再进行加减乘除操作，这样精度就不会出现问题了。</p>
+<p>在《Effective Java》这本书中，也提到了这个原则：float 和 double 只能用来做科学计算或者是工程计算，在商业计算中我们要用 BigDecimal，并且一定要用 String 来够造 BigDecimal。这也是为什么有关金钱数据存储的都使用 BigDecimal。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="number">0.11</span> + <span class="number">2001299.32</span>);</span><br><span class="line"><span class="type">BigDecimal</span> <span class="variable">bigDecimal1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(<span class="number">0.11</span>));</span><br><span class="line"><span class="type">BigDecimal</span> <span class="variable">bigDecimal2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(<span class="number">2001299.32</span>));</span><br><span class="line">System.out.println(bigDecimal1.add(bigDecimal2));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 控制台输出：</span></span><br><span class="line"><span class="comment">// 2001299.4300000002</span></span><br><span class="line"><span class="comment">// 2001299.43</span></span><br></pre></td></tr></table></figure>
 
 <p>下面是常用的运算方法，可放在工具类中使用：</p>
