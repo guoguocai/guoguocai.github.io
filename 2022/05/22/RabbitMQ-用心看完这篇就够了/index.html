@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2022-05-22/fanout.png">
 <meta property="og:image" content="http://yoursite.com/images/2022-05-22/fanoutResult.png">
 <meta property="article:published_time" content="2022-05-22T03:45:04.000Z">
-<meta property="article:modified_time" content="2022-05-23T15:37:37.631Z">
+<meta property="article:modified_time" content="2022-05-24T13:19:25.623Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -178,7 +178,8 @@
 <img src="/images/2022-05-22/MessageStream.png" width="45%" />
 
 <p>左边的黄色圈圈就是我们的消息推送服务，将消息推送到中间方框里面也就是 RabbitMQ 的服务器，然后经过服务器里面的交换机、队列等各种关系（后面会详细讲）将数据处理入列后，最终右边的蓝色圈圈消费者获取对应监听的消息。</p>
-<p>[TOC]</p>
+<!-- toc -->
+
 <p>常用的交换机有以下三种，因为消费者是从队列获取信息的，队列又绑定在交换机上（一般），所以对应的消息推送&#x2F;接收模式也会有以下几种：</p>
 <h3 id="Direct-Exchange"><a href="#Direct-Exchange" class="headerlink" title="Direct Exchange"></a>Direct Exchange</h3><p>直连交换机，根据消息携带的路由键将消息投递给对应队列。</p>
 <p>大致流程是，有一个队列绑定到一个直连交换机上，同时赋予一个路由键 Routing Key 。然后当一个消息携带着路由值为 X，这个消息通过生产者发送给交换机时，交换机就会根据这个路由值 X 去寻找绑定值也是 X 的队列。</p>
