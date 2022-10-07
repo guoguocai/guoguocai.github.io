@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2019-06-18/features.jpg">
 <meta property="og:image" content="http://yoursite.com/images/2019-06-18/improve.jpg">
 <meta property="article:published_time" content="2019-06-18T14:57:08.000Z">
-<meta property="article:modified_time" content="2022-09-27T13:57:08.566Z">
+<meta property="article:modified_time" content="2022-10-07T02:14:17.390Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -184,7 +184,7 @@
 <p>优点：<br>由于每次都是对整个半区进行内存回收，因此分配时就不用考虑内存碎片等情况，只要移动堆顶指针，按顺序分配内存即可，实现简单，运行高效。</p>
 <p>缺点：<br>将内存缩小为了原来的一半，代价太高了一点。</p>
 <p>扩展：<br>现在的商业虚拟机都采用这种收集算法来回收新生代，IBM 公司有研究表明，新生代中的对象有 98% 都是「朝生夕死」的，所以并不需要按照 1：1 的比例来划分内存空间。</p>
-<p>一般会把新生代分为一块较大的 Eden 空间和两块较小的 Survivor 空间，每次使用 Eden 和其中一块 Survivor 。当回收时，将 Eden 和 Survivor 中还存活着的对象一次性地复制到另外一块 Survivor 空间上，最后清理掉 Eden 和刚才用过的 Survivor 空间。</p>
+<p>一般会把新生代分为一块较大的 Eden （伊甸园）空间和两块较小的 Survivor 空间，每次使用 Eden 和其中一块 Survivor 。当回收时，将 Eden 和 Survivor 中还存活着的对象一次性地复制到另外一块 Survivor 空间上，最后清理掉 Eden 和刚才用过的 Survivor 空间。</p>
 <p>Sun HotSpot 虚拟机默认 Eden 和 Survivor 的大小比例是 8：1，也就是每次新生代中可用内存空间为整个新生代容量的 90%，只有 10% 的内存会被「浪费」。当然，98% 只是一般场景下的数据，我们没有办法保证每次回收都只有不多于 10% 的对象存活，当 Survivor 空间不够用时，需要依赖其他内存（这里指老年代）进行分配担保（Handle Promotion）。</p>
 <p>内存的分配担保就好比我们去银行借款，如果我们信誉很好，在 98% 的情况下都能按时偿还，于是银行可能会默认我们下一次也会按时按量偿还，只需要有一个担保人能保证如果我不能还款时，可以从他的账户扣钱，那银行就认为没有风险了。</p>
 <p>内存的分配担保也一样，如果另外一块 Survivor 空间没有足够空间存放上一次新生代收集下来的存活对象时，这些对象将直接通过分配担保机制进入老年代。</p>
