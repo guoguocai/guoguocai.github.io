@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2019-06-13/dataRegion.png">
 <meta property="og:image" content="http://yoursite.com/images/2019-06-13/jvmParam.png">
 <meta property="article:published_time" content="2019-06-13T13:35:53.000Z">
-<meta property="article:modified_time" content="2022-10-07T09:30:36.552Z">
+<meta property="article:modified_time" content="2022-10-08T13:51:00.040Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -190,14 +190,23 @@
 
 <p>由 DirectMemory 导致的内存溢出，一个明显的特征是在 Heap Dump 文件中不会看见明显的异常，如果发现 OOM 之后 Dump 文件很小，而程序中又直接或间接使用了 NIO，就可以考虑一下是不是这方面的原因。</p>
 <h4 id="名词解释"><a href="#名词解释" class="headerlink" title="*名词解释"></a>*名词解释</h4><p>（1）字面量</p>
-<p>也叫直接量，它表示数据在程序中的书写格式。也可理解为在程序中通过源代码直接给出的值，例如在 int a &#x3D; 5; 这行代码中，把整数 5 赋值给 int 型变量 a，整数 5 就是一个字面量。<strong>并不是所有的数据类型都可以指定字面量，能指定字面量的通常只有三种类型：基本类型、字符串类型和 null 类型。</strong>所以，String s &#x3D; “abc”; 中的 abc 也是字面量。</p>
-<p>关于字符串字面量有一点需要指出，当程序第一次使用某个字符串字面量时，Java 会使用常量池（constant pool）来缓存该字符串字面量，如果程序后面的部分需要用到该字符串字面量时，Java 会直接使用常量池（constant pool）中的字符串字面量。常量池（constant pool）指的是在编译期被确定，并被保存在已编译的 .class 文件中的一些数据，它包括关于类、方法、接口中的常量，也包括字符串字面量。</p>
+<p>也叫直接量，它表示数据在程序中的书写格式，也可理解为在程序中直接给出的值。</p>
+<p>例如在 int a &#x3D; 5; 这行代码中，把整数 5 赋值给 int 型变量 a，整数 5 就是一个字面量。再比如，String s &#x3D; “abc”; 中的 abc 也是字面量。<strong>并不是所有的数据类型都可以指定字面量，能指定字面量的通常只有三种类型：基本类型、字符串类型和 null 类型。</strong>关于字符串字面量有一点需要指出，当程序第一次使用某个字符串字面量时，Java 会使用常量池来缓存该字符串字面量，如果后面的程序再次用到该字符串，Java 会直接使用常量池中的字符串字面量（上文中在介绍 intern 方法时也介绍过这个机制）。</p>
+<p>常量池（constant pool）指的是在编译期被确定、并被保存在已编译的 .class 文件中的一些数据，主要包括类、方法、接口中的常量，也包括字符串字面量。</p>
 <p>（2）元数据</p>
-<p>对数据进行说明描述的数据。在编程语言上下文中，元数据是添加到程序元素（方法、字段、类、包）上的额外信息。比如注解 &#x2F; Annotation，就是 Java 平台的元数据。在注解诞生之前，程序的元数据存在的形式仅限于 XML 部署描述文件、Java 注释或 Java doc，但注解可以提供更多功能，它不仅包含元数据，还能作用于运行期，注解解析器能够使用注解决定处理流程。</p>
+<p>对数据进行说明描述的数据。在编程语言上下文中，元数据是添加到程序元素（方法、字段、类、包）上的额外信息。</p>
+<p>比如注解 &#x2F; Annotation，就是 Java 平台的元数据。在注解诞生之前，程序的元数据存在的形式仅限于 XML 部署描述文件、Java 注释或 Java doc，但注解可以提供更多功能，它不仅包含元数据，还能作用于运行期，注解解析器能够使用注解决定处理流程。</p>
 <p>（3）符号引用</p>
-<p>符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能够无歧义的定位到目标即可。比如 org.simple.People 类引用了 org.simple.Language 类，在编译时 People 类并不知道 Language 类的实际内存地址，因此只能使用符号 org.simple.Language 来表示 Language 类的地址（此处只是举例，实际中是由类似于 CONSTANT_CLASS_INFO 的常量来表示的）。<strong>在 JVM 类加载过程中，在解析阶段，JVM 会把类的二进制数据中的符号引用替换为直接引用（直接引用能找到实际的内存地址）。</strong></p>
+<p>符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能够无歧义的定位到目标即可。</p>
+<p>比如 org.simple.People 类引用了 org.simple.Language 类，在编译时 People 类并不知道 Language 类的实际内存地址，因此只能使用符号 org.simple.Language 来表示 Language 类的地址（此处只是举例，实际上是由类似于 CONSTANT_CLASS_INFO 的常量来表示的）。</p>
+<p><strong>在 JVM 类加载过程中，在解析阶段，JVM 会把类的二进制数据中的符号引用替换为直接引用。</strong></p>
 <p>（4）直接引用</p>
-<p>直接指向目标的指针（比如，指向“类型”【Class对象】、类变量、类方法的直接引用可能是指向方法区的指针）、相对偏移量（比如，指向实例变量、实例方法的直接引用都是偏移量）、一个能间接定位到目标的句柄。</p>
+<p>能直接找到实际的内存地址的引用。包括：</p>
+<ul>
+<li>直接指向目标的指针（比如，指向「类型」（Class 对象）、类变量、类方法的直接引用可能是指向方法区的指针）</li>
+<li>相对偏移量（比如，指向实例变量、实例方法的直接引用都是偏移量）</li>
+<li>一个能间接定位到目标的句柄</li>
+</ul>
 
       
 
