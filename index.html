@@ -130,6 +130,78 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-实现邮箱注册及发送邮件验证码功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/07/09/%E5%AE%9E%E7%8E%B0%E9%82%AE%E7%AE%B1%E6%B3%A8%E5%86%8C%E5%8F%8A%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD/">实现邮箱注册及发送邮件验证码功能</a>
+    </h1>
+  
+
+        
+        <a href="/2024/07/09/%E5%AE%9E%E7%8E%B0%E9%82%AE%E7%AE%B1%E6%B3%A8%E5%86%8C%E5%8F%8A%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD/" class="archive-article-date">
+  	<time datetime="2024-07-09T14:33:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-07-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>用邮箱注册账号是一个很常见的功能，下面就详细讲讲如何实现。</p>
+        
+          <a class="article-more-a" href="/2024/07/09/%E5%AE%9E%E7%8E%B0%E9%82%AE%E7%AE%B1%E6%B3%A8%E5%86%8C%E5%8F%8A%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-运动练习总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -778,78 +850,6 @@
 
 
   
-    <article id="post-如何解决用-Java-浮点类型计算时的精度问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/05/15/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E7%94%A8-Java-%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%97%B6%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/">如何解决用 Java 浮点类型计算时的精度问题</a>
-    </h1>
-  
-
-        
-        <a href="/2022/05/15/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E7%94%A8-Java-%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%97%B6%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/" class="archive-article-date">
-  	<time datetime="2022-05-15T02:14:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-05-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的<strong>根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确的表示。</strong>（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的 1.2 了）</p>
-        
-          <a class="article-more-a" href="/2022/05/15/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E7%94%A8-Java-%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%97%B6%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -951,11 +951,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
