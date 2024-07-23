@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | GUOGUOCAI&#39;S BLOG</title>
+  <title>Mybatis 玩转 java.util.Map 类型 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:url" content="http://yoursite.com/archives/page/5/index.html">
+  <meta name="description" content="java.util.Map 类型在 Java 中有广泛的应用，在数据持久层用好 Map，同样能起到事半功倍的效果，以下是一些使用场景，可能有你平时没注意到的，快来看看吧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis 玩转 java.util.Map 类型">
+<meta property="og:url" content="http://yoursite.com/2024/07/23/Mybatis-%E7%8E%A9%E8%BD%AC-java-util-Map-%E7%B1%BB%E5%9E%8B/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
+<meta property="og:description" content="java.util.Map 类型在 Java 中有广泛的应用，在数据持久层用好 Map，同样能起到事半功倍的效果，以下是一些使用场景，可能有你平时没注意到的，快来看看吧。">
 <meta property="og:locale">
+<meta property="article:published_time" content="2024-07-23T13:39:43.000Z">
+<meta property="article:modified_time" content="2024-07-23T14:00:54.305Z">
 <meta property="article:author" content="guoguocai">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
@@ -128,36 +133,63 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Mybatis-玩转-java-util-Map-类型" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/12/26/%E7%94%A8-Eclipse-%E5%88%9B%E5%BB%BA-WebService-%E6%9C%8D%E5%8A%A1%E7%AB%AF/" class="archive-article-date">
-  	<time datetime="2018-12-26T13:42:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-26</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/26/%E7%94%A8-Eclipse-%E5%88%9B%E5%BB%BA-WebService-%E6%9C%8D%E5%8A%A1%E7%AB%AF/">用 Eclipse 创建 WebService 服务端</a>
+    <h1 class="article-title" itemprop="name">
+      Mybatis 玩转 java.util.Map 类型
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2024/07/23/Mybatis-%E7%8E%A9%E8%BD%AC-java-util-Map-%E7%B1%BB%E5%9E%8B/" class="archive-article-date">
+  	<time datetime="2024-07-23T13:39:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-07-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>java.util.Map 类型在 Java 中有广泛的应用，在数据持久层用好 Map，同样能起到事半功倍的效果，以下是一些使用场景，可能有你平时没注意到的，快来看看吧。</p>
+<span id="more"></span>
+
+<h3 id="Case-1-简化代码"><a href="#Case-1-简化代码" class="headerlink" title="Case 1 简化代码"></a>Case 1 简化代码</h3><p>如果实体类的属性过多，则可以考虑使用万能的 Map，查询和新增数据时都可以用 java.util.Map 类型，可极大地简化代码。如果数据库中的字段为 NULL，则在查询时不会被放进 Map；更新时，也会根据 Map 中存在的属性有选择性地更新，很方便。</p>
+<h4 id="1-查询数据"><a href="#1-查询数据" class="headerlink" title="1 查询数据"></a>1 查询数据</h4><p>查询 SQL：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryOrgInfo&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;map&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;string&quot;</span>&gt;</span></span><br><span class="line">    SELECT</span><br><span class="line">        org_id,</span><br><span class="line">        org_name,</span><br><span class="line">        org_level,</span><br><span class="line">        org_parent_id,</span><br><span class="line">        org_type,</span><br><span class="line">        org_status,</span><br><span class="line">        address,</span><br><span class="line">        org_desc</span><br><span class="line">    FROM tb_org WHERE 1 = 0</span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;orgId != null and orgId != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">        OR org_id = #&#123;orgId&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>对应的 Mapper 类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.github.yulichang.base.MPJBaseMapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Param;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OrgMapper</span> <span class="keyword">extends</span> <span class="title class_">MPJBaseMapper</span>&lt;Org&gt; &#123;</span><br><span class="line"></span><br><span class="line">    Map <span class="title function_">queryOrgInfo</span><span class="params">(<span class="meta">@Param(&quot;orgId&quot;)</span> String orgId)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的 SQL 中，可以发现 resultType 和 parameterType 的数据类型首字母用的都是小写，而不是全限定类名。原因是 Mybatis 在加载时已经给常用的数据类型注册了别名，所以可以用小写（具体的对应关系可参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_56245143/article/details/130310656">Mybatis 的参数处理详解</a>）。</p>
+<p>查询到数据后，服务层将其转换为 JSON 字符串并进行后续处理，可以发现，Map 中元素的 Key 为数据库表的字段名：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Map</span> <span class="variable">map</span> <span class="operator">=</span> orgMapper.queryOrgInfo(orgId);</span><br><span class="line">LOGGER.info(<span class="string">&quot;Sync org info json: &#123;&#125;&quot;</span>, JSON.toJSONString(map));</span><br><span class="line"><span class="comment">// Sync org info json: &#123;&quot;org_parent_id&quot;:&quot;3&quot;,&quot;org_status&quot;:1,&quot;org_type&quot;:&quot;3&quot;,&quot;org_id&quot;:&quot;001&quot;,&quot;org_level&quot;:3,&quot;org_desc&quot;:&quot;默认组织&quot;,&quot;org_name&quot;:&quot;go&quot;&#125;</span></span><br><span class="line">orgInfoMessage = GrpcUtil.getOrgMessage(clientId, JSON.toJSONString(map));</span><br><span class="line">onNext(orgInfoMessage);</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-新增数据"><a href="#2-新增数据" class="headerlink" title="2 新增数据"></a>2 新增数据</h4><p>首先在服务层对 JSON 字符串进行解析：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSON;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> Integer <span class="title function_">syncOrgInfo</span><span class="params">(String jsonOrgInfo)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.isBlank(jsonOrgInfo)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">Map</span> <span class="variable">param</span> <span class="operator">=</span> JSON.parseObject(jsonOrgInfo, Map.class);</span><br><span class="line">    <span class="keyword">if</span> (CollectionUtils.isEmpty(param)) &#123;</span><br><span class="line">        LOGGER.info(<span class="string">&quot;fetch org info is empty&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    LOGGER.info(<span class="string">&quot;Org info with Map: &#123;&#125;&quot;</span>, param.toString());</span><br><span class="line">    <span class="comment">// Org info with Map: &#123;org_parent_id=3, org_status=1, org_id=001, org_type=3, org_level=3, org_desc=默认组织, org_name=go&#125;</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">syncOrgId</span> <span class="operator">=</span> param.get(<span class="string">&quot;org_id&quot;</span>).toString();</span><br><span class="line">    <span class="type">String</span> <span class="variable">syncOrgName</span> <span class="operator">=</span> param.get(<span class="string">&quot;org_name&quot;</span>).toString();</span><br><span class="line">    <span class="keyword">return</span> orgMapper.addOrUpdateOrg(param);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编写 Mapper 类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.github.yulichang.base.MPJBaseMapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Param;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OrgMapper</span> <span class="keyword">extends</span> <span class="title class_">MPJBaseMapper</span>&lt;Org&gt; &#123;</span><br><span class="line"></span><br><span class="line">    Integer <span class="title function_">addOrUpdateOrg</span><span class="params">(<span class="meta">@Param(&quot;map&quot;)</span> Map&lt;String, Serializable&gt; map)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编写对应的新增 SQL：（其中的 map 含义不同，应该能看懂吧）</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">&quot;addOrUpdateOrg&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;map&quot;</span>&gt;</span></span><br><span class="line">    INSERT INTO tb_org</span><br><span class="line">	(</span><br><span class="line">		org_id,</span><br><span class="line">		org_name,</span><br><span class="line">		org_level,</span><br><span class="line">		org_parent_id,</span><br><span class="line">		org_type,</span><br><span class="line">		org_status,</span><br><span class="line">		org_desc,</span><br><span class="line">		address</span><br><span class="line">	)</span><br><span class="line">	VALUES</span><br><span class="line">	(</span><br><span class="line">		#&#123;map.org_id&#125;,</span><br><span class="line">		#&#123;map.org_name&#125;,</span><br><span class="line">		#&#123;map.org_level&#125;,</span><br><span class="line">		#&#123;map.org_parent_id&#125;,</span><br><span class="line">		#&#123;map.org_type&#125;,</span><br><span class="line">		#&#123;map.org_status&#125;,</span><br><span class="line">		#&#123;map.org_desc&#125;,</span><br><span class="line">		#&#123;map.address&#125;</span><br><span class="line">	)</span><br><span class="line">	ON DUPLICATE KEY UPDATE </span><br><span class="line">    org_name = IFNULL(VALUES(org_name), org_name),</span><br><span class="line">    org_level = IFNULL(VALUES(org_level), org_level),</span><br><span class="line">    org_parent_id = IFNULL(VALUES(org_parent_id), org_parent_id),</span><br><span class="line">    org_type = IFNULL(VALUES(org_type), org_type),</span><br><span class="line">    org_status = IFNULL(VALUES(org_status), org_status),</span><br><span class="line">    org_desc = IFNULL(VALUES(org_desc), org_desc),</span><br><span class="line">    address = IFNULL(VALUES(address), address)</span><br><span class="line"><span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Case-2-传递参数"><a href="#Case-2-传递参数" class="headerlink" title="Case 2 传递参数"></a>Case 2 传递参数</h3><p>关联查询，传多个参数时要用 java.util.Map 类型。</p>
+<h4 id="1-传多个参数"><a href="#1-传多个参数" class="headerlink" title="1 传多个参数"></a>1 传多个参数</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;testMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;XXX&quot;</span> &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span> <span class="attr">property</span>=<span class="string">&quot;id&quot;</span> <span class="attr">column</span>=<span class="string">&quot;T_ID&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;DECIMAL&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">&quot;startDateStr&quot;</span> <span class="attr">column</span>=<span class="string">&quot;START_DATE&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;VARCHAR&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">&quot;endDateStr&quot;</span> <span class="attr">column</span>=<span class="string">&quot;END_DATE&quot;</span> <span class="attr">jdbcType</span>=<span class="string">&quot;VARCHAR&quot;</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 关联查询传入多值，column 当 java.util.Map 使用 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">association</span> <span class="attr">property</span>=<span class="string">&quot;actualWorkTime&quot;</span> <span class="attr">column</span>=<span class="string">&quot;&#123;reqId=T_ID, startDate=START_DATE, endDate=END_DATE&#125;&quot;</span> <span class="attr">select</span>=<span class="string">&quot;selectById&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 说明: reqId 为 key, column=&quot;T_ID&quot; 为 value; 注意类型为 java.util.Map --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectById&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;java.util.Map&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;java.lang.Double&quot;</span>&gt;</span></span><br><span class="line">    select * from Table_XXX where reqId=#&#123;reqId&#125;</span><br><span class="line">    and DATE_FORMAT(endDate,&#x27;%Y-%m-%d&#x27;) &lt;= DATE_FORMAT(#&#123;endDate&#125;,&#x27;%Y-%m-%d&#x27;)</span><br><span class="line">    and DATE_FORMAT(startDate,&#x27;%Y-%m-%d&#x27;) &gt;= DATE_FORMAT(#&#123;startDate&#125;,&#x27;%Y-%m-%d&#x27;)</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-传单个参数"><a href="#2-传单个参数" class="headerlink" title="2 传单个参数"></a>2 传单个参数</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;PathMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;com.test.entity.po.Path&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span> <span class="attr">property</span>=<span class="string">&quot;pathId&quot;</span> <span class="attr">column</span>=<span class="string">&quot;PATH_ID&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">&quot;bidirectional&quot;</span> <span class="attr">column</span>=<span class="string">&quot;BIDIRECTIONAL&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">association</span> <span class="attr">property</span>=<span class="string">&quot;point1&quot;</span> <span class="attr">javaType</span>=<span class="string">&quot;com.test.entity.Point&quot;</span> <span class="attr">select</span>=<span class="string">&quot;findPointById&quot;</span> <span class="attr">column</span>=<span class="string">&quot;POINT1_ID&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">association</span> <span class="attr">property</span>=<span class="string">&quot;point2&quot;</span> <span class="attr">javaType</span>=<span class="string">&quot;com.test.entity.Point&quot;</span> <span class="attr">select</span>=<span class="string">&quot;findPointById&quot;</span> <span class="attr">column</span>=<span class="string">&quot;POINT2_ID&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 注意类型为 java.util.String --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;findPointById&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;String&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;PointMap&quot;</span>&gt;</span></span><br><span class="line">	SELECT POSITION_X, POSITION_Y, POSITION_Z FROM tb_point</span><br><span class="line">	WHERE POINT_ID = #&#123;pointId&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>（完）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -169,288 +201,118 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2024/07/23/Mybatis-%E7%8E%A9%E8%BD%AC-java-util-Map-%E7%B1%BB%E5%9E%8B/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/12/18/%E4%BF%AE%E6%94%B9%E7%94%B5%E8%84%91%E8%B4%A6%E6%88%B7%E5%90%8D%E5%AF%BC%E8%87%B4%E6%A1%8C%E9%9D%A2%E5%BC%82%E5%B8%B8/" class="archive-article-date">
-  	<time datetime="2018-12-18T14:20:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-18</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2024/07/09/%E5%AE%9E%E7%8E%B0%E9%82%AE%E7%AE%B1%E6%B3%A8%E5%86%8C%E5%8F%8A%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">实现邮箱注册及发送邮件验证码功能</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/18/%E4%BF%AE%E6%94%B9%E7%94%B5%E8%84%91%E8%B4%A6%E6%88%B7%E5%90%8D%E5%AF%BC%E8%87%B4%E6%A1%8C%E9%9D%A2%E5%BC%82%E5%B8%B8/">修改电脑账户名导致桌面异常</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">电脑问题</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Case-1-%E7%AE%80%E5%8C%96%E4%BB%A3%E7%A0%81"><span class="toc-number">1.</span> <span class="toc-text">Case 1 简化代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="toc-number">1.1.</span> <span class="toc-text">1 查询数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%96%B0%E5%A2%9E%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.</span> <span class="toc-text">2 新增数据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Case-2-%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">Case 2 传递参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%BC%A0%E5%A4%9A%E4%B8%AA%E5%8F%82%E6%95%B0"><span class="toc-number">2.1.</span> <span class="toc-text">1 传多个参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%BC%A0%E5%8D%95%E4%B8%AA%E5%8F%82%E6%95%B0"><span class="toc-number">2.2.</span> <span class="toc-text">2 传单个参数</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/11/04/%E5%BD%93%E8%B4%9F%E9%9D%A2%E6%83%85%E7%BB%AA%E7%88%86%E6%A3%9A%E6%97%B6-%E4%B8%8D%E5%A6%A8%E8%AF%95%E8%AF%95%E8%BF%99%E4%BA%9B%E6%96%B9%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2018-11-04T14:16:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-04</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/11/04/%E5%BD%93%E8%B4%9F%E9%9D%A2%E6%83%85%E7%BB%AA%E7%88%86%E6%A3%9A%E6%97%B6-%E4%B8%8D%E5%A6%A8%E8%AF%95%E8%AF%95%E8%BF%99%E4%BA%9B%E6%96%B9%E6%B3%95/">当负面情绪爆棚时 不妨试试这些方法</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">记录生活</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/10/22/%E3%80%8A%E8%B5%B7%E9%A3%8E%E4%BA%86%E3%80%8B/" class="archive-article-date">
-  	<time datetime="2018-10-22T13:13:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/10/22/%E3%80%8A%E8%B5%B7%E9%A3%8E%E4%BA%86%E3%80%8B/">《起风了》</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">一个人的电影史</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/10/07/%E3%80%8A%E6%9C%AB%E4%BB%A3%E7%9A%87%E5%B8%9D%E3%80%8B/" class="archive-article-date">
-  	<time datetime="2018-10-07T13:50:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/10/07/%E3%80%8A%E6%9C%AB%E4%BB%A3%E7%9A%87%E5%B8%9D%E3%80%8B/">《末代皇帝》</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">一个人的电影史</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/09/23/sourceTree-%E7%9A%84%E8%B4%A6%E5%8F%B7%E9%97%AE%E9%A2%98/" class="archive-article-date">
-  	<time datetime="2018-09-23T06:02:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/23/sourceTree-%E7%9A%84%E8%B4%A6%E5%8F%B7%E9%97%AE%E9%A2%98/">sourceTree 的账号问题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Git</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/09/17/%E5%A6%82%E4%BD%95%E5%B0%86%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90%E5%8F%AF%E4%BB%A5%E4%BC%A0%E5%8F%82%E7%9A%84Jar%E5%8C%85/" class="archive-article-date">
-  	<time datetime="2018-09-17T14:55:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/17/%E5%A6%82%E4%BD%95%E5%B0%86%E7%A8%8B%E5%BA%8F%E6%89%93%E5%8C%85%E6%88%90%E5%8F%AF%E4%BB%A5%E4%BC%A0%E5%8F%82%E7%9A%84Jar%E5%8C%85/">如何将程序打包成可以传参的Jar包</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/06/25/My-First-Blog/" class="archive-article-date">
-  	<time datetime="2018-06-25T05:30:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/06/25/My-First-Blog/">My First Blog</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">记录生活</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><span class="page-number current">5</span>
-    </nav>
   
 
 
@@ -474,8 +336,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
