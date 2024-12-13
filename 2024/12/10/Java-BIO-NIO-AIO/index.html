@@ -8,18 +8,24 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Java BIO NIO AIO | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文大部分内容来自于《Netty 权威指南(第2版)》第一、二章，有兴趣可直接找原书阅读完整内容。">
+  <meta name="description" content="本文的部分内容来自于《Netty 权威指南(第2版)》第一、二章，有兴趣可找原书阅读。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java BIO NIO AIO">
 <meta property="og:url" content="http://yoursite.com/2024/12/10/Java-BIO-NIO-AIO/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:description" content="本文大部分内容来自于《Netty 权威指南(第2版)》第一、二章，有兴趣可直接找原书阅读完整内容。">
+<meta property="og:description" content="本文的部分内容来自于《Netty 权威指南(第2版)》第一、二章，有兴趣可找原书阅读。">
 <meta property="og:locale">
+<meta property="og:image" content="http://yoursite.com/images/2024-12-10/kernel.png">
+<meta property="og:image" content="http://yoursite.com/images/2024-12-10/BIO.png">
+<meta property="og:image" content="http://yoursite.com/images/2024-12-10/round_robin.png">
+<meta property="og:image" content="http://yoursite.com/images/2024-12-10/NIO.png">
+<meta property="og:image" content="http://yoursite.com/images/2024-12-10/mmap.png">
 <meta property="article:published_time" content="2024-12-10T09:30:39.000Z">
-<meta property="article:modified_time" content="2024-12-11T15:17:42.001Z">
+<meta property="article:modified_time" content="2024-12-13T15:36:40.700Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/2024-12-10/kernel.png">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
   
@@ -153,10 +159,38 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本文大部分内容来自于《Netty 权威指南(第2版)》第一、二章，有兴趣可直接找原书阅读完整内容。</p>
+        <p>本文的部分内容来自于《Netty 权威指南(第2版)》第一、二章，有兴趣可找原书阅读。</p>
 <span id="more"></span>
 
+<p>Linux 的内核将所有的外部设备都看作是一个文件来操作，对一个文件进行读写操作时，会调用内核提供的系统命令，然后返回一个 file descriptor（fd，文件描述符），而对一个 socket 读写时也会有相应的描述符，称为 socketfd（socket 描述符）。描述符就是一个数字，它指向内核中的一个结构体（包含文件路径、数据区等一些属性）。</p>
+<p>根据 UNIX 网络编程对 I&#x2F;O 模型的分类，UNIX 提供了 5 种 I&#x2F;O 模型，但无论是哪一种，实际上都可以分为两个阶段（以 read 操作为例）：<br><strong>第一阶段：等待内核中的数据准备就绪；</strong><br><strong>第二阶段：将数据从内核拷贝到用户空间。</strong></p>
+<p><em>那什么是内核空间和用户空间？请看下图：</em></p>
+<img src="/images/2024-12-10/kernel.png" width="45%" />
 
+<p><em>用户空间：也称为用户态，即上层应用程序的活动空间，应用程序的执行必须依赖于内核提供的资源。<br>内核空间：也称为内核态，控制计算机的硬件资源，并给上层应用程序提供运行环境。<br>注：用户态可以通过系统调用切换到内核态，这是主动进入到内核态。在出现异常或者外围设备中断时进入到内核态，属于被动进入。两者都有自己的数据缓冲区，通常数据会先放到缓冲区。</em></p>
+<p>而这 5 种 I&#x2F;O 模型就是根据它在上述两个阶段的不同表现来区分的：在第一阶段用户进程（或者说用户线程）是否阻塞来区分阻塞 IO &#x2F; 非阻塞 IO，在第二阶段用户进程（或者说用户线程）是否阻塞来区分同步 IO &#x2F; 异步 IO！（<strong>注意：每本书的定义可能不一样，不要过分纠结在一些技术术语的咬文嚼字上，知道是怎么一回事就行了</strong>）</p>
+<p>假设在用户进程中有个调用叫 recvfrom，那么在不同的 IO 模型中，它的执行过程是这样的：</p>
+<h3 id="1-阻塞-IO"><a href="#1-阻塞-IO" class="headerlink" title="1 阻塞 IO"></a>1 阻塞 IO</h3><p>两个阶段都阻塞（<strong>BIO</strong>）。<br>换句话说，进程从调用 recvfrom 开始到它返回的整段时间内都是被阻塞的，如下图：</p>
+<img src="/images/2024-12-10/BIO.png" width="45%" />
+
+<p>这是最常用的 IO 模型，缺省情况下，所有文件操作都是阻塞的。</p>
+<h3 id="2-非阻塞-IO"><a href="#2-非阻塞-IO" class="headerlink" title="2 非阻塞 IO"></a>2 非阻塞 IO</h3><p>第一阶段不再阻塞，而是用<strong>轮询</strong>的方式检查数据是否准备好，第二阶段阻塞。<br>调用 recvfrom 后，如果内核缓冲区中没有数据，那就直接返回一个错误，然后开始轮询，直到有数据到来。</p>
+<img src="/images/2024-12-10/round_robin.png" width="45%" />
+
+<h3 id="3-IO-复用"><a href="#3-IO-复用" class="headerlink" title="3 IO 复用"></a>3 IO 复用</h3><p>在调用 recvfrom 之前，用户进程将一个或多个 fd 先传递给 <strong>select &#x2F; poll</strong> 系统调用，让其阻塞在 select 上，select &#x2F; poll 就可以帮我们顺序、线性地扫描这些 fd 是否处于就绪状态，当发现有 fd 就绪时（有数据可读了），再调用 recvfrom。此时 recvfrom 调用的第一阶段其实已经完成了，自然不会阻塞，第二阶段还是阻塞。</p>
+<p>不过，正由于 select &#x2F; poll 是顺序扫描，而且它支持的 fd 数量有限，因此它的使用受到了一些制约。所以 Linux 还提供了另一个系统调用 <strong>epoll</strong>，epoll 使用基于事件驱动的方式代替顺序扫描，因此性能更高。当有 fd 就绪时，立即回调 rollback 函数。</p>
+<img src="/images/2024-12-10/NIO.png" width="45%" />
+
+<p><strong>Java NIO</strong> 的核心类库多路复用器 Selector 就是基于 epoll 的技术实现，但是要注意 Selector 并没有用事件驱动，而是不断轮询注册在其上的 Channel，这和上文中非阻塞 IO 的方式结合起来了，如果某个 Channel 上面发生读或者写事件，这个 Channel 就处于就绪状态，会被 Selector 轮询出来，然后通过 SelectionKey 就可以获取就绪 Channel 的集合，再进行后续的 IO 操作。一个 Selector 可以同时轮询多个 Channel，这意味着只需要一个线程负责 Selector，就可接入成千上万的客户端。</p>
+<h3 id="4-信号驱动-IO"><a href="#4-信号驱动-IO" class="headerlink" title="4 信号驱动 IO"></a>4 信号驱动 IO</h3><p>系统调用 sigaction 时不会阻塞，数据准备就绪后通知用户进程可以开始一个 IO 操作，然后调用 recvfrom，第一阶段不会阻塞，第二阶段阻塞；</p>
+<h3 id="5-异步-IO"><a href="#5-异步-IO" class="headerlink" title="5 异步 IO"></a>5 异步 IO</h3><p>系统调用 read 时，两个阶段都不会阻塞，IO 操作完成时会通知用户进程。（AIO，对应 Unix 网络编程事件驱动 IO）</p>
+<p>hint：<br>阻塞会让出 CPU 时间片<br>“半包读”、“半包写”问题</p>
+<p>Java BIO：一个线程处理一个客户端连接（1:1）<br>Java NIO：一个线程处理多个客户端连接（1:n）<br>Java AIO：被动回调，不需要启动额外的线程（0:n）</p>
+<p>为什么不用 JDK NIO 的原生类库，而选择 Netty？<br>JDK NIO 有本身固有的复杂性和 Bug，开发出高质量的 NIO 程序并不是一件简单的事情，需要足够的编程经验。</p>
+<p><strong>Memory map</strong>：<br>解释一：<br>妃嫔太多了，皇帝就一个，难免会互相争风吃醋。位高的贵妃仗势欺人，一些小妃嫔无法正面回击，自然会用点别的奇淫技巧，扎小人就是其中一个出现频率较高的方法。扎小人这个技术的核心思想是：用户这边由于无法扎到正主，只能拿个自己身边的布片等物品模拟一个小人出来，在上面画上正主的经筋脉络，写上名字，施以某种魔法，然后用针扎自己手边的小人的某个穴道，远程那位正主的对应部位就会受到同样的折磨。虽然有点神乎其技，令人羡慕而不可得。但是在 linux 内核开发里面，却可以用 mmap 的机制实现类似的效果。</p>
+<p>mmap 的核心思想是：用户这边由于在用户态无法直接操作寄存器的物理地址，于是通过 mmap 方法进行内存映射，将物理地址映射到用户态的虚拟地址上，然后用户通过读写自己手边的虚拟地址，就可以实现对物理地址的读取&#x2F;写入。两者的共同点是，由于无法直接操作目标，所以通过某种方法，将自己能操作的事物和目标建立一种映射关系，从而达到如臂使指，指哪打哪，打哪哪疼的效果。只要能建立起对目标的映射，我们借此映射能做什么文章，自然有很多想象空间。所以 mmap 有很多用途，有人用它来实现进程间通信，有人用它搬运数据，对于嵌入式工程师来说，可以用它来点灯。</p>
+<p>解释二：<br>内存映射，简而言之就是将内核空间的一段内存区域映射到用户空间。映射成功后，用户对这段内存区域的修改可以直接反映到内核空间，相反，内核空间对这段区域的修改也直接反映用户空间。那么对于内核空间与用户空间两者之间需要大量数据传输等操作的话效率是非常高的。当然，<strong>也可以将内核空间的一段内存区域同时映射到多个用户进程，这样还可以实现进程间的共享内存通信</strong>。<br>系统调用 mmap() 就是用来实现上面说的内存映射。最常见的操作就是对文件（在 Linux 下设备也被看做文件）的操作，可以将某文件映射至内存(进程空间)，如此可以把对文件的操作转为对内存的操作，以此避免更多的 lseek() 与 read()、write() 操作，这点对于大文件或者频繁访问的文件而言尤其受益。</p>
+<img src="/images/2024-12-10/mmap.png" width="45%" />
       
 
       
@@ -268,7 +302,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    目录，不存在的…
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%98%BB%E5%A1%9E-IO"><span class="toc-number">1.</span> <span class="toc-text">1 阻塞 IO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%9D%9E%E9%98%BB%E5%A1%9E-IO"><span class="toc-number">2.</span> <span class="toc-text">2 非阻塞 IO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-IO-%E5%A4%8D%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">3 IO 复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E4%BF%A1%E5%8F%B7%E9%A9%B1%E5%8A%A8-IO"><span class="toc-number">4.</span> <span class="toc-text">4 信号驱动 IO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%BC%82%E6%AD%A5-IO"><span class="toc-number">5.</span> <span class="toc-text">5 异步 IO</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -380,10 +414,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
@@ -392,15 +422,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">记录生活</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
