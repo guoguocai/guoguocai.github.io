@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/sigaction.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/AIO.png">
 <meta property="article:published_time" content="2024-12-10T09:30:39.000Z">
-<meta property="article:modified_time" content="2024-12-19T08:47:50.835Z">
+<meta property="article:modified_time" content="2024-12-20T10:28:08.364Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -193,10 +193,10 @@
 </li>
 <li><p><strong>使用 mmap 加速内核与用户空间的消息传递</strong></p>
 <p>无论是 select、poll 还是 epoll，都需要内核把 fd 消息通知给用户空间，如何避免不必要的内存复制就显得非常重要，epoll 是通过内核和用户空间 mmap 同一块内存来实现的。下面简单介绍一下 mmap（知道的可跳过）：</p>
-<p>古代的皇帝有很多妃嫔，因此难免争风吃醋，位高的贵妃仗势欺人，一些小妃嫔无法正面回击，于是就想些别的点子，比如扎小人。扎小人的方法是：用户这边由于无法扎到正主，所以只能拿布片等物品模拟一个小人出来，在上面画上正主的经脉，写上名字，再施以某种魔法，然后用针扎这个小人的穴道，远程那位正主的相应部位就会受到同样的折磨。虽然有点神乎其技，但在 Linux 的内核开发里，mmap 就是这种魔法。</p>
+<p>古代的皇帝有很多妃嫔，难免争风吃醋，位高的贵妃仗势欺人，一些小妃嫔无法正面回击，于是就想些别的点子，比如扎小人。扎小人的方法是：用户这边由于无法扎到正主，所以只能拿布片等物品模拟一个小人出来，在上面画上正主的经脉，写上名字，再施以某种魔法，然后用针扎这个小人的穴道，远程那位正主的相应部位就会受到同样的折磨。虽然有点神乎其技，但在 Linux 的内核开发里，mmap 就是这种魔法。</p>
 <p>系统调用 mmap（<strong>Memory map</strong>），即内存映射，简而言之就是将内核空间的一段内存区域映射到用户空间。因为用户空间无法直接操作寄存器的物理地址，于是通过 mmap 进行内存映射，将物理地址映射到用户空间的虚拟地址上，映射成功后，用户通过读写自己手边的虚拟地址，就可以实现对物理地址的读取&#x2F;写入，反之，内核空间对这段区域的修改也会直接反映到用户空间。</p>
 <p>mmap 有诸多用途，比如它<strong>可以将内核空间的一段内存区域同时映射到多个用户进程，以此便可以实现进程间的通信</strong>；还有在内核与用户空间之间需要传输大量数据时，使用 mmap 后效率非常高。它是一种<strong>零拷贝</strong>技术，其 IO 模型如下图所示：</p>
-<img src="/images/2024-12-10/mmap.png" width="70%" />
+<img src="/images/2024-12-10/mmap.png" width="65%" />
 </li>
 <li><p><strong>epoll 的 API 更加简单</strong></p>
 <p>包括创建一个 epoll 描述符、添加监听事件、阻塞等待所监听的事件发生、关闭 epoll 描述符等等。</p>
@@ -474,10 +474,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
@@ -486,15 +482,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">记录生活</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
