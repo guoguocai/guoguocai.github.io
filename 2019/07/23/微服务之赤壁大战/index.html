@@ -24,7 +24,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2019-07-23/mesh.jpg">
 <meta property="og:image" content="http://yoursite.com/images/2019-07-23/car.jpg">
 <meta property="article:published_time" content="2019-07-23T14:28:44.000Z">
-<meta property="article:modified_time" content="2022-04-17T01:59:19.403Z">
+<meta property="article:modified_time" content="2024-12-25T03:18:53.459Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -174,7 +174,7 @@
 <p>刘备：“他们岂肯逆曹而收留我们？”</p>
 <p>诸葛亮：“亮自有妙计，且听我慢慢道来。”</p>
 <p>诸葛亮：“东吴世代熟悉水战，创始人孙坚，一直使用<font color="orange"> <strong>Go 语言</strong></font>，其儿孙策继承父志，搞出了<font color="orange"> <strong>Docker</strong></font>。现在孙策之弟孙权在位，我们可以说服他联合抗曹。”</p>
-<p>刘备：“talk is cheap，你先带赵云去东吴游说，我们带着军队随后就到。”</p>
+<p>刘备：“Talk is cheap，你先带赵云去东吴游说，我们带着军队随后就到。”</p>
 <p><font color="orange" size="4"><strong>东吴</strong></font></p>
 <p>诸葛亮来到东吴，说明了来意。</p>
 <p>诸葛亮：“曹操正率百万大军向东吴进攻，目前形势危急，我主刘备欲助东吴一起抗曹”。</p>
@@ -201,7 +201,7 @@
 <p>周瑜：“我以为你会写火。”</p>
 <p>诸葛亮哈哈大笑：“我也以为你会写火”。</p>
 <p>看到了吗，英雄的想法总是相似的，无论他们多么想与对方不一样。</p>
-<p>两人彻夜长谈，共同商定抗曹方案，从微服务谈到服务降级，限流，最后到Docker部署，制定了周详的作战计划。计划制定完毕，两人作了最后一次模拟演练，演练过程中，这二人竟然有一种惺惺相惜的感觉。</p>
+<p>两人彻夜长谈，共同商定抗曹方案，从微服务谈到服务降级，限流，最后到 Docker 部署，制定了周详的作战计划。计划制定完毕，两人作了最后一次模拟演练，演练过程中，这二人竟然有一种惺惺相惜的感觉。</p>
 <p>天亮了，周瑜离开了诸葛亮的住处，路上，他心思极重：“诸葛亮真乃旷世奇才，可惜和我各事其主，此人必不可久留。”</p>
 <p>话分两头说，曹操这边倒是正在发愁。</p>
 <p><font color="orange" size="4"><strong>曹营</strong></font></p>
@@ -243,13 +243,13 @@
 <p><font color="orange" size="4"><strong>开战</strong></font></p>
 <p>月黑风高，长江上的浪花拍打着两岸，发出巨大的声响。江岸两边，曹操与周瑜隔江相对。就在今晚，曹操向孙刘发起了总攻，而周瑜也早已做好了战斗准备。</p>
 <p>不远处，诸葛亮登上了七星台，与周瑜遥相呼应，相互配合。</p>
-<p>曹操一声令下：“全军出击”。</p>
+<p>曹操一声令下：“全军出击！”</p>
 <p>百万大军驾驶着一艘战舰，朝周瑜这边驶来。</p>
 <p>而那周瑜，只有区区十几艘小船，与那战舰一比，就像蚂蚁和大象。</p>
 <p>曹操巨大的战舰向周瑜发动着猛烈的攻击。而那周瑜却不慌不忙，一面命令将士们顶住火力，另一面，暗中观察曹操那巨型战舰的火力分布。</p>
 <p>他在寻找<font color="orange"><strong>系统弱点</strong></font>。</p>
 <p>突然，他发现曹操战舰的东北 45 度角火力有点慢，不像其他地方那么猛烈，一个火力开回比其他地方慢了 50ms。</p>
-<p>是的，就是这转瞬即逝的 50ms，也瞒不过天才都督周瑜，他一声令下：“集火。”</p>
+<p>是的，就是这转瞬即逝的 50ms，也瞒不过天才都督周瑜，他一声令下：“集火！”</p>
 <p>由于周瑜的系统是基于微服务设计的，每个微服务都可以<font color="orange"><strong>独立缩扩容</strong></font>。而系统又是用 <font color="orange"><strong>Docker</strong></font> 部署。</p>
 <p>周瑜军队需要做的就是将其他系统的 Docker 容器关闭，然后启动进攻东北 45 度的 Docker 容器。</p>
 <p>两条命令，整个过程不超过半分钟。</p>
@@ -262,7 +262,7 @@
 <p>张辽：“不行了，必须要<font color="orange"><strong>扩容</strong></font>，西北 45 度区夏侯敦那边没有火力，赶紧去那边调十台机器来扩容。”</p>
 <p>那西北 45 度区是用 Nodejs 写的，首领夏侯敦收到张辽的救援请求，马上调拨了十台机器给张辽。</p>
 <p>但是要在这新的十台机器上部署 Python 模块谈何容易，张辽部队全部上了，都在<font color="orange"><strong>手动部署</strong></font>，装 Python 环境，设置环境变量，拷贝代码，设置配置文件，这一套流程下来，十几分钟过去了。</p>
-<p>结果要启动的时候，报错，Python 依赖的一个系统库与之前 Nodejs 用的一个<font color="orange"><strong>系统库冲突</strong></font>。</p>
+<p>结果要启动的时候，报错，Python 依赖的一个系统库与之前 NodeJS 用的一个<font color="orange"><strong>系统库冲突</strong></font>。</p>
 <p>这下张辽是真的慌了：“重装，赶紧重装系统！”</p>
 <p>嗯，整艘战舰的人都等着张辽在这重装系统，然后再装 Python 环境，设置环境变量，拷贝代码，设置配置文件。</p>
 <p><font color="orange" size="4"><strong>曹操</strong></font></p>
@@ -319,13 +319,13 @@
 <p>&amp;nbsp;<br>    <img src="/images/2019-07-23/side.png" width="45%" /><br>&amp;nbsp;</p>
 <p>（注：这个代理被称为 Sidecar，即边车，摩托车旁边的那个座位）</p>
 <p><font color="orange" size="4"><strong>ServiceMesh</strong></font></p>
-<p>司马懿：“我们的微服务都可以使用这种模式，这样就组成了一个网格，就是ServiceMesh。”</p>
+<p>司马懿：“我们的微服务都可以使用这种模式，这样就组成了一个网格，就是 ServiceMesh。”</p>
 <p>&amp;nbsp;<br>    <img src="/images/2019-07-23/mesh.jpg" width="45%" /><br>&amp;nbsp;</p>
 <p>司马懿：请看看上图，浅蓝色部分代表咱们现在各个语言的业务模块，灰色部分代表代理(sidecar)，你可以看到，<font color="orange"><strong>业务模块只和自己的代理通信，而真正实现相互之间通信的是代理</strong></font>。</p>
 <p>&amp;nbsp;<br>    <img src="/images/2019-07-23/car.jpg" width="45%" /><br>&amp;nbsp;</p>
-<p>程昱：“哦，我明白了，这倒是一种方法。那么实现ServiceMesh需要多长时间呢？”</p>
+<p>程昱：“哦，我明白了，这倒是一种方法。那么实现 ServiceMesh 需要多长时间呢？”</p>
 <p>司马懿：“不用自己造轮子了，现在已经有一些现成的方案，比如 <font color="orange"><strong>Istio</strong></font>。”</p>
-<p>曹操一听大喜：“行，就按照你说的来改造，但是这次改造完成，<font color="orange"><strong>我们要执行严格的灾难测试</strong></font>。”</p>
+<p>曹操一听大喜：“行，就照你说的来改造，但是这次改造完成，<font color="orange"><strong>我们要执行严格的灾难测试</strong></font>。”</p>
 <p>司马懿将代码回滚到庞统来之前，然后改造系统，把系统搭在了 k8s 之上，用上了 Istio，整个系统改造花了不到半年时间。</p>
 <p><font color="orange" size="4"><strong>测试</strong></font></p>
 <p>系统改造完毕，曹操安排了张辽对系统进行灾难测试，主要就是把一些模块搞挂。而那 ServiceMesh + k8s 搭载的系统，已经完全能够承受这种级别的灾难了。</p>
@@ -568,11 +568,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
