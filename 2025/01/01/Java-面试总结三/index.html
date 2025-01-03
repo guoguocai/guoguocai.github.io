@@ -16,7 +16,7 @@
 <meta property="og:description" content="老规矩，先思考，后看解答。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-01-02T14:08:06.735Z">
+<meta property="article:modified_time" content="2025-01-03T11:17:42.300Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -159,7 +159,7 @@
 <h3 id="问答题"><a href="#问答题" class="headerlink" title="问答题"></a>问答题</h3><p>（1）详细描述用户在浏览器输入 <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 到用户看见网页，中间的技术处理细节。</p>
 <p>（2）在一台 1 核 1G 的服务器中运行 Java 程序，可以使用哪些 JVM 参数调优，为什么？</p>
 <p>（3）NIO 解决了什么问题？什么原理？并简述一个包含 NIO 技术的通信框架的调优技巧。</p>
-<p>（4）请给出 3 种多服务器共享 session 的方案。</p>
+<p>（4）请给出 3 种多服务器共享 Session 的方案。</p>
 <p>（5）简述线程间如何通信？</p>
 <p>（6）超时如何处理？请给出 3 种方案。 </p>
 <p>（7）Redis 一般用来存哪些数据？ 用的什么数据结构存？</p>
@@ -167,7 +167,7 @@
 <p>（9）如何实现一个 RPC 框架？</p>
 <p>（10）简述 SOA。</p>
 <p>（11）当发生 OutOfMemoryError 时，该如何定位？</p>
-<p>（12）简述几个缓存的应用场景。</p>
+<p>（12）缓存的原理是什么？应用场景有哪些？</p>
 <p>（13）</p>
 <h3 id="参考答案"><a href="#参考答案" class="headerlink" title="参考答案"></a>参考答案</h3><p><font color=blue>（1）</font>技术处理细节如下：<br>（A）浏览器处理输入：自动在网址上添加默认的协议和端口号‌，并在本地查找是否有这个网址的缓存版本；<br>（B）DNS 解析：查询域名对应的 IP 地址，依次在本地 Host 文件、本地域名服务器、根域名服务器中查找；<br>（C）建立连接：通过 TCP 三次握手与服务器建立连接；<br>（D）发送 HTTP 请求：若使用 HTTPS 协议，还会进行 SSL 握手，建立加密信道‌，然后设置请求头发出请求；<br>（E）服务器处理请求：根据请求解析出受访的主机、应用、资源，封装并返回 HTTP 响应报文；<br>（F）浏览器解析响应和渲染页面：如果响应头中的 Content-Type 是 text&#x2F;html，则进行 HTML 解析，否则做其他处理‌；在渲染页面时，如果遇到外部资源链接（如图片、JS 文件等），则会进一步请求这些资源。</p>
 <p><font color=blue>（2）</font>可使用以下 JVM 参数进行调优：<br>（A）‌堆内存设置：</p>
@@ -182,7 +182,7 @@
 </ul>
 <p>（C）线程栈大小设置：</p>
 <ul>
-<li><strong>‌-Xss</strong>：设置每个线程的栈大小。在内存有限的情况下，将其设置为较小值，如 -Xss256k 或 -Xss512k，以节省内存并允许创建更多的线程‌，提高线程创建和管理的效率。但请注意，如果方法调用的深度过大，过小的栈大小可能会导致栈溢出错误。</li>
+<li><strong>‌-Xss</strong>：设置每个线程的栈大小。在内存有限的情况下，将其设置为较小值，如 -Xss256k 或 -Xss512k，以节省内存并允许创建更多的线程‌，提高线程创建和管理的效率。但也要注意不能设置得过小，如果方法调用的深度过大，可能会导致栈溢出错误。</li>
 </ul>
 <p>（D）性能监控参数：</p>
 <ul>
@@ -190,7 +190,24 @@
 <li><strong>-XX:+PrintGCDateStamps</strong>：在 GC 日志中添加时间戳。可以更准确地分析 GC 事件的时间分布。</li>
 <li><strong>-Xloggc:</strong>：将 GC 日志输出到指定文件。便于收集和分析 GC 数据，如 -Xloggc:log&#x2F;gc.log。</li>
 </ul>
-<p><font color=blue>（3）</font></p>
+<p><font color=blue>（3）</font>NIO 主要解决了在高并发、高性能需求下，使用传统阻塞 I&#x2F;O 模型所带来的资源消耗大、效率低下等问题。传统的阻塞 I&#x2F;O 一个线程管理一个 socket，而 NIO 只用一个线程或少数几个线程就能管理多个网络连接，效率大大提高，特别适用于需要同时处理大量并发连接或大量数据传输的场景，比如网络服务器、文件传输系统等。它的<strong>原理是基于事件驱动的 I&#x2F;O 模型，使用多路复用器（Selector）和事件通知机制来实现非阻塞 I&#x2F;O 操作</strong>。核心概念包括：</p>
+<ul>
+<li>Selector：多路复用器，可以注册一个或多个 Channel，并监听这些通道上的特定事件，比如读取数据、写入数据等，一旦某个事件到达，就通知应用程序进行处理；</li>
+<li>Channel：通道，数据传输的载体，比如文件（FileChannel）、网络连接（SocketChannel）等，它是双向的，既可以读取也可以写入；</li>
+<li>Buffer：缓冲区，一个固定大小的内存块，用于存储要读取或写入的数据，所有数据都通过它来处理。</li>
+</ul>
+<p>具体工作流程如下：</p>
+<ul>
+<li>创建一个 Selector，并将其绑定到某个线程上；</li>
+<li>创建通道，并将其注册到 Selector 上，指定监听的事件类型；</li>
+<li>当通道上的事件到达时，Selector 就将该事件通知给应用程序；</li>
+<li>应用程序通过调用 Selector 的方法获取已经到达的事件列表；</li>
+<li>根据不同的事件类型，应用程序进行相应的读取、写入或其他操作。</li>
+</ul>
+<p>以 <strong>Netty</strong> 为例，它的调优技巧有：<br>（A）线程池：根据应用负载和硬件配置，设置合适的线程池大小，如核心线程数、最大线程数；BossGroup 通常设置为单线程，负责处理连接请求；WorkerGroup 负责处理 I&#x2F;O 操作，可以设置为 CPU 核心数 × 2；<br>（B）内存：启用 Netty 的内存池功能，通过循环利用 ByteBuf 对象来减少内存分配和回收的开销；<br>（C）协议：根据具体应用场景选择合适的协议，如 UDP、WebSocket、TCP 等，并使用更加高效的序列化框架，比如选择 Protobuf 来替代 JSON；<br>（D）I&#x2F;O 模型：根据应用场景和操作系统选择合适的 I&#x2F;O 模型，比如在 Linux 系统上用 epoll 会更加高效；<br>（E）编解码器：选择合适的编解码器，对于大数据量传输，使用 Netty 自带的工具处理粘包和拆包问题，如 LengthFieldBasedFrameDecoder 和 DelimiterBasedFrameDecoder；<br>（F）日志：调整日志级别来减少不必要的日志输出，提升性能；<br>（G）网络配置：开启 TCP_NODELAY 选项，减少延迟，提高小数据包的传输效率；调整 SO_BACKLOG 选项，增加等待连接队列的长度；<br>（H）使用压缩：对于大数据量的 I&#x2F;O 操作，可以考虑使用压缩技术（如 Gzip）来减少数据传输量，从而提高 I&#x2F;O 性能。</p>
+<p><font color=blue>（4）</font>方案如下：<br>（A）使用外部存储（如 Redis）集中存储 Session 数据，当用户访问任意一台服务器时，都从外部存储读取或写入；<br>（B）使用文件来存储 Session 数据，不同服务器之间通过共享这些文件来操作 Session 数据；<br>（C）搭建一个 Session 服务器专门管理 Session 数据，其他服务器都通过访问这个 Session 服务器来操作。</p>
+<p>Session 是一种在服务器端用于跟踪用户会话信息的机制，它的出现主要是为了解决 HTTP 协议无状态的问题，以及为用户提供更好的服务体验。无状态即每个请求都是独立的，服务器不会记住与客户端之前的交互信息，但在实际应用中，用户通常希望在多个请求之间将一些状态信息保持一段时间，如登录状态、购物车内容等。它的用途常有：<br>（A）用户认证‌：通过 Session 可以判断用户是否已经登录，并获取用户的身份信息；<br>（B）状态保持‌：可用于在多个页面请求之间保持用户的状态信息，如购物车内容、表单填写进度等；<br>（C）个性化服务‌：根据 Session 中的用户信息，服务器可以提供个性化服务，如内容推荐、偏好设置等。</p>
+<p><font color=blue>（5）</font></p>
 
       
 
@@ -415,11 +432,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -435,15 +452,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
