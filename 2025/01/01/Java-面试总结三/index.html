@@ -16,7 +16,7 @@
 <meta property="og:description" content="老规矩，先思考，后看解答。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-01-05T14:57:07.780Z">
+<meta property="article:modified_time" content="2025-01-06T15:26:18.986Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -162,7 +162,7 @@
 <p>（4）请给出 3 种多服务器共享 Session 的方案。</p>
 <p>（5）简述线程间如何通信？</p>
 <p>（6）如何优化超时处理机制？</p>
-<p>（7）Redis 适合存储哪些类型的数据？并举例说明。</p>
+<p>（7）Redis 适合存储哪些类型的数据？举例说明。</p>
 <p>（8）简述对 Linux 的了解程度。</p>
 <p>（9）如何实现一个 RPC 框架？</p>
 <p>（10）简述 SOA。</p>
@@ -211,7 +211,8 @@
 <p>在 Java 中的实现：<br>（A）volatile：保证共享变量的可见性和有序性（配合 synchronized 或 ReentrantLock 使用，保证原子性）；<br>（B）BlockingQueue：提供了线程安全的队列实现，可用于在生产者和消费者线程之间传递数据；<br>（C）wait 和 notify&#x2F;notifyAll：由 Object 类提供，用于线程间的等待和通知，必须与 synchronized 配合使用；<br>（D）Condition：提供了比 wait &#x2F; notify 更为灵活的通信机制，通常与 ReentrantLock 配合使用；<br>（E）Semaphore：在 java.util.concurrent 包中，通过 acquire 方法获取许可，通过 release 方法释放许可；<br>（F）CountDownLatch：允许一个或多个线程等待其他线程完成操作（老师必须要等到所有学生交完试卷才能走）；<br>（G）CyclicBarrier：允许一组线程互相等待，直到所有线程都到达某个屏障点（比如，多人游戏必须都要加载到 100% 才能开始）；<br>（H）Exchanger：一个用于在线程之间交换数据的工具。</p>
 <p>并发编程的最佳实践：<br>（A）减少共享变量的使用：通过设计，将对共享变量的访问降到最低，尽量使用不可变对象和局部变量；<br>（B）使用线程安全的集合类：比如 ConcurrentHashMap、CopyOnWriteArrayList 等，这些类是线程安全的；<br>（C）选择合适的同步工具：比如 synchronized、ReentrantLock 或 java.util.concurrent 包中的工具类。<br>（D）确保所有线程都以相同的顺序获取锁，避免死锁；<br>（E）使用线程池。</p>
 <p><font color=blue>（6）</font>超时处理的优化策略如下：<br>（A）提高任务执行效率：通过优化算法、减少不必要的 I&#x2F;O 操作等方式，缩短执行时间；<br>（B）合理分配资源：确保系统有足够的资源来处理任务（如内存、网络带宽等）；<br>（C）使用缓存：对于频繁访问但不经常变化的数据，可使用缓存来减少时间；<br>（D）异步处理：使用异步编程来处理任务（如 CompletableFuture），减少等待时间；<br>（E）使用更高效的超时检测机制：比如使用 ScheduledThreadPoolExecutor 定期检查状态，取代阻塞式的 get；<br>（F）快速失败：如果可以检测到任务不可能在超时时间内完成，就尽快取消任务并释放资源；<br>（G）友好的错误提示：发生超时时，向用户显示清晰的错误提示和可能的解决方案；<br>（H）重试机制‌：提供重试按钮或自动重试功能，让用户可以方便地重新尝试操作；<br>（I）进度条或加载指示器：在操作进行时显示进度条或加载指示器，让用户知道并非无响应。</p>
-<p><font color=blue>（7）</font>Redis 支持的数据类型如下：<br>（A）String：可用于存储在线状态，用户-语种，配置信息；<br>（B）Hash：可用于存储；<br>（C）List：可用于存储消息队列，任务列表；<br>（D）Set：可用于存储标签，关注列表，抽奖，共同好友推荐；<br>（E）SortedSet：可用于存储，排行榜。</p>
+<p><font color=blue>（7）</font>Redis 适合存储的数据类型包括：<br>（A）<strong>String</strong>：适合存储任何形式的字符串，比如软件版本号、API 的执行结果、用户使用的语种（SET &#x2F; GET）；<br>（B）<strong>Hash</strong>：适合存储具有多个属性的对象信息，比如数据字典、用户信息、商品信息（HSET &#x2F; HGETALL）；<br>（C）<strong>List</strong>：适合存储需要有一定顺序的数据集合，比如任务列表、操作日志、消息队列（LPUSH &#x2F; RPOP）；<br>（D）<strong>Set</strong>：适合存储不能有重复的数据集合，如在线用户、标签、类别、抽奖参与人员（SADD &#x2F; SMEMBERS）；<br>（E）<strong>SortedSet</strong>：适合存储需要根据分数进行排序的数据集合，比如排行榜、时间线（ZADD &#x2F; ZRANGE，OTA 时，用收到终端心跳时的当前时间作为分数，每收到一次心跳就更新分数，这样就能根据分数删除心跳超时的终端 ID，以此获取当前在线的可更新的终端列表）。</p>
+<p><font color=blue>（8）</font></p>
 
       
 
@@ -440,11 +441,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
