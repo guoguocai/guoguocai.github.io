@@ -16,7 +16,7 @@
 <meta property="og:description" content="老规矩，先思考，后看解答。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-01-09T10:36:34.034Z">
+<meta property="article:modified_time" content="2025-01-10T05:38:08.690Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -167,7 +167,7 @@
 <p>（9）如何实现一个 RPC 框架？</p>
 <p>（10）SOA 是什么？</p>
 <p>（11）缓存有哪些作用？它的原理是什么？</p>
-<p>（12）</p>
+<p>（12）数据库有两张表，一张为用户表，有 500 万数据，另一张为订单表（包含用户 ID），有 1000 万数据。现在有一个需求，要能支持查询两张表中字段的各类组合条件的前 2 万条的订单记录，请给出至少 3 种技术方案。</p>
 <h3 id="参考答案"><a href="#参考答案" class="headerlink" title="参考答案"></a>参考答案</h3><p><font color=blue>（1）</font>技术处理细节如下：<br>（A）浏览器处理输入：自动在网址上添加默认的协议和端口号‌，并在本地查找是否有这个网址的缓存版本；<br>（B）DNS 解析：查询域名对应的 IP 地址，依次在本地 Host 文件、本地域名服务器、根域名服务器中查找；<br>（C）建立连接：通过 TCP 三次握手与服务器建立连接；<br>（D）发送 HTTP 请求：若使用 HTTPS 协议，还会进行 SSL 握手，建立加密信道‌，然后设置请求头发出请求；<br>（E）服务器处理请求：根据请求解析出受访的主机、应用、资源，封装并返回 HTTP 响应报文；<br>（F）浏览器解析响应和渲染页面：如果响应头中的 Content-Type 是 text&#x2F;html，则进行 HTML 解析，否则做其他处理‌；在渲染页面时，如果遇到外部资源链接（如图片、JS 文件等），则会进一步请求这些资源。</p>
 <p><font color=blue>（2）</font>可使用以下 JVM 参数进行调优：<br>（A）‌堆内存设置：</p>
 <ul>
@@ -212,7 +212,7 @@
 <p><font color=blue>（6）</font>超时处理的优化策略如下：<br>（A）提高任务执行效率：通过优化算法、减少不必要的 I&#x2F;O 操作等方式，缩短执行时间；<br>（B）合理分配资源：确保系统有足够的资源来处理任务（如内存、网络带宽等）；<br>（C）使用缓存：对于频繁访问但不经常变化的数据，可使用缓存来减少时间；<br>（D）异步处理：使用异步编程来处理任务（如 CompletableFuture），减少等待时间；<br>（E）使用更高效的超时检测机制：比如使用 ScheduledThreadPoolExecutor 定期检查状态，取代阻塞式的 get；<br>（F）快速失败：如果可以检测到任务不可能在超时时间内完成，就尽快取消任务并释放资源；<br>（G）友好的错误提示：发生超时时，向用户显示清晰的错误提示和可能的解决方案；<br>（H）重试机制‌：提供重试按钮或自动重试功能，让用户可以方便地重新尝试操作；<br>（I）进度条或加载指示器：在操作进行时显示进度条或加载指示器，让用户知道并非无响应。</p>
 <p><font color=blue>（7）</font>适合存储的数据类型包括：<br>（A）<strong>String</strong>：适合存储任何形式的字符串，比如软件版本号、API 的执行结果、用户使用的语种（SET &#x2F; GET）；<br>（B）<strong>Hash</strong>：适合存储具有多个属性的对象信息，比如数据字典、用户信息、商品信息（HSET &#x2F; HGETALL）；<br>（C）<strong>List</strong>：适合存储需要有一定顺序的数据集合，比如任务列表、操作日志、消息队列（LPUSH &#x2F; RPOP）；<br>（D）<strong>Set</strong>：适合存储不能有重复的数据集合，如在线用户、标签、类别、抽奖参与人员（SADD &#x2F; SMEMBERS）；<br>（E）<strong>SortedSet</strong>：适合存储需要根据分数进行排序的数据集合，比如排行榜、时间线（ZADD &#x2F; ZRANGE，OTA 时，用收到终端心跳时的当前时间作为分数，每收到一次心跳就更新分数，这样就能根据分数删除心跳超时的终端 ID，以此获取当前在线的可更新的终端列表）。</p>
 <p><font color=blue>（8）</font>可从以下几个方面进行说明：<br>（A）掌握 Linux 的基本命令，比如 mkdir、pwd、chmod、cp、mv、history、crontab、vi 编辑器的使用等等；<br>（B）能熟练使用 Linux 的系统管理命令，比如 useradd、passwd、ps、top、kill、systemctl、df、apt、yum 等；<br>（C）能熟练使用 Linux 的命令行工具，比如 tar、ping、ifconfig、netstat、grep、awk 等等；<br>（D）能编写 Shell 脚本实现自动化任务，常用语法包括：使用 #!&#x2F;bin&#x2F;bash 指定脚本解释器，使用 $ 符号引用变量值，使用 -eq、-lt、-gt 来比较数字大小，使用 echo 来输出字符串或覆盖文件内容等等；<br>（E）了解 Linux 的内存管理，它是 Linux 内核的一个关键部分，负责内存的分配与回收，使用了虚拟内存技术。</p>
-<p><font color=blue>（9）</font>RPC（Remote Procedure Call，远程过程调用）是一种用于实现分布式系统中不同节点之间通信和调用的技术。实现一个 RPC 框架通常包括以下步骤：<br>（A）设计‌协议：解决服务端与客户端通信的问题，包括网络传输协议、序列化协议和消息编码协议；<br>（B）实现‌服务端：实现代理对象，接收和处理客户端的请求，调用对应的本地方法，并将结果返回给客户端；<br>（C）实现‌客户端：实现代理对象，发起 RPC 调用，将调用参数打包成请求，并发送给远程服务器；<br>（D）服务注册与发现：将服务提供者的地址和接口等信息注册到注册中心，消费者能通过注册中心发现服务；<br>（E）负载均衡与容错机制：实现负载均衡策略来分配请求，以及容错机制来保证调用的稳定性。</p>
+<p><font color=blue>（9）</font>RPC（Remote Procedure Call，远程过程调用）是一种用于实现分布式系统中不同节点之间通信和调用的技术。实现一个 RPC 框架通常包括以下步骤：<br>（A）<u>设计‌协议</u>：解决服务端与客户端通信的问题，包括网络传输协议、序列化协议和消息编码协议；<br>（B）<u>实现‌服务端</u>：实现代理对象，接收和处理客户端的请求，调用对应的本地方法，并将结果返回给客户端；<br>（C）<u>实现‌客户端</u>：实现代理对象，发起 RPC 调用，将调用参数打包成请求，并发送给远程服务器；<br>（D）<u>服务注册与发现</u>：将服务提供者的地址和接口等信息注册到注册中心，消费者能通过注册中心发现服务；<br>（E）<u>负载均衡与容错机制</u>：实现负载均衡策略来分配请求，以及容错机制来保证调用的稳定性。</p>
 <p>一次完整的 RPC 调用流程如下：</p>
 <ul>
 <li>服务消费者（Client）以本地调用方式调用服务；</li>
@@ -224,10 +224,34 @@
 <p>RPC 框架的目标就是将上面 Client stub 和 Server stub 要做的事情都封装起来，让用户感知不到它们的存在，使用时就像在调用本地方法一样简单，而不用关心网络通信的细节。RPC 主要用到的技术有动态代理、序列化、NIO 等，常见的 RPC 框架有 Dubbo、gRPC、Hessian（基于 Binary-RPC 协议，走二进制数据） 等，支持 RPC 功能的框架有 WebService、Spring Cloud 等。</p>
 <p><font color=blue>（10）</font>SOA 为一种面向服务的架构（Service-Oriented Architecture），是一种软件设计和开发的方法，它将应用程序拆分成一组独立的服务，这些服务之间通过定义良好的接口进行通信。简单来说，可以把 SOA 想象成一套积木，每个积木都是一个独立的服务，都有自己的功能，它们可以组合在一起形成更大的应用程序。</p>
 <p>SOA 与微服务的区别：SOA 注重复用性和统一的架构，倾向于通过统一的服务总线（ESB）将所有服务连接起来，使用统一的数据存储，服务之间有一定的依赖关系，通常需要一起部署，相比于微服务来说更加复杂。微服务更加强调服务的自治，每个服务都有自己独立的环境、数据存储和技术栈等，倾向于创建更加小型、轻量级的服务，服务之间没有依赖关系，支持独立部署和持续集成，相比于 SOA 来说更加轻量。</p>
-<p><font color=blue>（11）</font>缓存技术是提高系统性能和响应速度的关键组件，在高并发的场景下尤为重要。它的作用有：<br>（A）<u>减少数据库负载‌</u>：通过缓存频繁访问的数据，减少查询数据库的次数，可以避免数据库成为性能瓶颈；<br>（B）<u>提高数据读取速度</u>：缓存通常存储在内存中，而内存的访问速度远快于磁盘；<br>（C）<u>缓解网络瓶颈</u>：对于需要从远程服务器获取数据的应用程序，缓存可以减少对远程服务器的请求次数。</p>
-<p>缓存技术的核心原理是<strong>将频繁访问的数据存储在读写速度更快的存储介质中（如内存）</strong>，以减少对慢速存储介质的访问次数（如磁盘或数据库）。当用户请求数据时，系统会首先检查缓存中是否存在所需的数据，如果存在，则直接返回缓存中的数据，从而大大缩短数据访问时间。常见的缓存类型有本地缓存、分布式缓存、CDN 缓存、数据库缓存等。</p>
+<p><font color=blue>（11）</font>缓存技术是提高系统性能和响应速度的关键组件，在高并发的场景下尤为重要。它的作用有：<br>（A）<u>减轻数据库压力</u>：通过缓存频繁访问的数据，减少查询数据库的次数，可以避免数据库成为性能瓶颈；<br>（B）<u>提高数据读取速度</u>：缓存通常存储在内存中，而内存的访问速度远快于磁盘；<br>（C）<u>降低网络延迟</u>：对于需要从远程服务器获取的数据，缓存可以减少对远程服务器的请求次数。</p>
+<p>缓存技术的核心原理是<strong>将频繁访问的数据存储在读写速度更快的存储介质中（如内存）</strong>，以减少对慢速存储介质的访问次数（如磁盘或数据库），那么哪些数据会被频繁访问呢？基于<strong>数据的局部性原理</strong>，最近被访问过的数据很可能在不久的将来再次被访问，并且与它相邻的数据也很可能被访问。当用户请求数据时，系统会首先检查缓存中是否存在所需的数据，如果存在，则直接返回缓存中的数据，从而大大缩短数据访问时间，如果不存在，则查询并添加至缓存。常见的缓存类型有本地缓存（Spring Cache）、分布式缓存（Redis、Memcached）、CDN 缓存、数据库缓存等，常见的缓存失效策略有 LRU、LFU、‌FIFO 等。</p>
 <p>缓存技术的缺点：<br>（A）额外的硬件支出：缓存需要额外的磁盘空间和内存空间来存储数据，增加了硬件成本；<br>（B）数据一致性问题：缓存与数据库之间可能存在数据不一致的问题，需要采取额外的措施来保证数据一致性；<br>（C）高并发缓存失效问题‌：在高并发场景下，缓存失效可能会导致数据库访问量瞬间增大，甚至导致数据库崩溃。</p>
-<p>缓存的数据一致性问题主要由以下原因引起：<br>（A）‌数据更新与缓存同步不一致：当数据源发生更新时，缓存中的数据未能及时更新；<br>（B）‌并发更新：多个并发操作可能导致缓存中的数据更新顺序与数据源中的更新顺序不一致；<br>（C）缓存失效策略不当：缓存中的数据过期后，如果没有有效的失效策略，缓存中的数据将会变得过时。</p>
+<p>缓存的数据一致性问题主要由以下原因引起：<br>（A）‌数据更新与缓存同步不一致：更新数据源后，缓存中的数据未能及时更新（Cache-Aside、Write-Through）；<br>（B）‌并发更新：多个并发的更新操作导致缓存中的数据更新顺序与数据源中的更新顺序不一致（使用分布式锁）；<br>（C）缓存失效策略不当：缓存中的数据已过期，但由于没有有效的失效策略而仍然存在（设置合理的缓存失效策略）。</p>
+<p><font color=blue>（12）</font>方案如下：<br>（A）<u>优化 SQL 与索引</u>（适用于对现有数据库进行快速优化）：</p>
+<ul>
+<li>避免使用 * 号等全表扫描的低效操作，用具体的列名代替；</li>
+<li>避免使用左模糊匹配，如必须使用，可以考虑用全文索引代替；</li>
+<li>利用 ORDER BY 和 LIMIT 等子句限制查询结果的数量为前 2 万条；</li>
+<li>为经常用于查询条件的列创建索引，并定期检查；</li>
+<li>特别注意在订单表中的用户 ID 字段上创建索引，因为它是连接两张表的关键字段；</li>
+<li>避免在 WHERE 子句中使用函数或计算表达式，这会导致索引失效；</li>
+<li>NOT IN、NOT EXISTS、IS NOT NULL 等可能导致索引失效，可考虑用 JOIN 改写；</li>
+<li>OR 可能导致索引失效，可考虑通过 UNION ALL 将语句拆分为多个单表查询，并分别利用索引；</li>
+<li>使用 EXPLAIN 关键字分析查询语句的执行计划，确保使用到了索引。</li>
+</ul>
+<p>（B）<u>增加内存数据库与缓存</u>（适用于需要实时数据分析的场景）：</p>
+<ul>
+<li>选择合适的内存数据库，如 Redis；</li>
+<li>缓存常用数据到内存数据库中，要确保缓存数据的一致性；</li>
+<li>利用内存数据库提供的快速读写能力，提高查询性能。</li>
+</ul>
+<p>（C）<u>转为分布式数据库</u>（适用于需要高扩展性的场景）：</p>
+<ul>
+<li>选择合适的分布式数据库，如 MongoDB；</li>
+<li>迁移数据到分布式数据库中，要确保数据的一致性；</li>
+<li>利用分布式数据库提供的查询优化功能（如自动数据分片）。</li>
+</ul>
 
       
 
@@ -452,15 +476,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -472,11 +496,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
