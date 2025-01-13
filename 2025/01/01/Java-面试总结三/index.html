@@ -15,11 +15,13 @@
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
 <meta property="og:description" content="老规矩，先思考，后看解答。">
 <meta property="og:locale">
+<meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-01-10T05:38:08.690Z">
+<meta property="article:modified_time" content="2025-01-12T08:37:45.047Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
   
     <link rel="alternative" href="/atom.xml" title="GUOGUOCAI&#39;S BLOG" type="application/atom+xml">
   
@@ -167,7 +169,8 @@
 <p>（9）如何实现一个 RPC 框架？</p>
 <p>（10）SOA 是什么？</p>
 <p>（11）缓存有哪些作用？它的原理是什么？</p>
-<p>（12）数据库有两张表，一张为用户表，有 500 万数据，另一张为订单表（包含用户 ID），有 1000 万数据。现在有一个需求，要能支持查询两张表中字段的各类组合条件的前 2 万条的订单记录，请给出至少 3 种技术方案。</p>
+<p>（12）从请求一个 Spring Boot 的 API 接口到收到响应，中间经历了哪些过程？</p>
+<p>（13）数据库有两张表，一张为用户表，有 500 万数据，另一张为订单表（包含用户 ID），有 1000 万数据。现在有一个需求，要能支持查询两张表中字段的各类组合条件的前 2 万条的订单记录，请给出至少 3 种技术方案。</p>
 <h3 id="参考答案"><a href="#参考答案" class="headerlink" title="参考答案"></a>参考答案</h3><p><font color=blue>（1）</font>技术处理细节如下：<br>（A）浏览器处理输入：自动在网址上添加默认的协议和端口号‌，并在本地查找是否有这个网址的缓存版本；<br>（B）DNS 解析：查询域名对应的 IP 地址，依次在本地 Host 文件、本地域名服务器、根域名服务器中查找；<br>（C）建立连接：通过 TCP 三次握手与服务器建立连接；<br>（D）发送 HTTP 请求：若使用 HTTPS 协议，还会进行 SSL 握手，建立加密信道‌，然后设置请求头发出请求；<br>（E）服务器处理请求：根据请求解析出受访的主机、应用、资源，封装并返回 HTTP 响应报文；<br>（F）浏览器解析响应和渲染页面：如果响应头中的 Content-Type 是 text&#x2F;html，则进行 HTML 解析，否则做其他处理‌；在渲染页面时，如果遇到外部资源链接（如图片、JS 文件等），则会进一步请求这些资源。</p>
 <p><font color=blue>（2）</font>可使用以下 JVM 参数进行调优：<br>（A）‌堆内存设置：</p>
 <ul>
@@ -227,8 +230,11 @@
 <p><font color=blue>（11）</font>缓存技术是提高系统性能和响应速度的关键组件，在高并发的场景下尤为重要。它的作用有：<br>（A）<u>减轻数据库压力</u>：通过缓存频繁访问的数据，减少查询数据库的次数，可以避免数据库成为性能瓶颈；<br>（B）<u>提高数据读取速度</u>：缓存通常存储在内存中，而内存的访问速度远快于磁盘；<br>（C）<u>降低网络延迟</u>：对于需要从远程服务器获取的数据，缓存可以减少对远程服务器的请求次数。</p>
 <p>缓存技术的核心原理是<strong>将频繁访问的数据存储在读写速度更快的存储介质中（如内存）</strong>，以减少对慢速存储介质的访问次数（如磁盘或数据库），那么哪些数据会被频繁访问呢？基于<strong>数据的局部性原理</strong>，最近被访问过的数据很可能在不久的将来再次被访问，并且与它相邻的数据也很可能被访问。当用户请求数据时，系统会首先检查缓存中是否存在所需的数据，如果存在，则直接返回缓存中的数据，从而大大缩短数据访问时间，如果不存在，则查询并添加至缓存。常见的缓存类型有本地缓存（Spring Cache）、分布式缓存（Redis、Memcached）、CDN 缓存、数据库缓存等，常见的缓存失效策略有 LRU、LFU、‌FIFO 等。</p>
 <p>缓存技术的缺点：<br>（A）额外的硬件支出：缓存需要额外的磁盘空间和内存空间来存储数据，增加了硬件成本；<br>（B）数据一致性问题：缓存与数据库之间可能存在数据不一致的问题，需要采取额外的措施来保证数据一致性；<br>（C）高并发缓存失效问题‌：在高并发场景下，缓存失效可能会导致数据库访问量瞬间增大，甚至导致数据库崩溃。</p>
-<p>缓存的数据一致性问题主要由以下原因引起：<br>（A）‌数据更新与缓存同步不一致：更新数据源后，缓存中的数据未能及时更新（Cache-Aside、Write-Through）；<br>（B）‌并发更新：多个并发的更新操作导致缓存中的数据更新顺序与数据源中的更新顺序不一致（使用分布式锁）；<br>（C）缓存失效策略不当：缓存中的数据已过期，但由于没有有效的失效策略而仍然存在（设置合理的缓存失效策略）。</p>
-<p><font color=blue>（12）</font>方案如下：<br>（A）<u>优化 SQL 与索引</u>（适用于对现有数据库进行快速优化）：</p>
+<p>缓存的数据一致性问题主要由以下原因引起：<br>（A）‌数据更新与缓存同步不一致：更新数据源后，缓存中的数据未能及时更新（Cache-Aside、Write-Through）；<br>（B）‌并发更新：多个并发的更新操作导致缓存中的数据更新顺序与数据源中的更新顺序不一致（使用分布式锁）；<br>（C）缓存失效策略不当：缓存中的数据已过期，但由于没有有效的失效策略而仍然存在（设置合理的失效策略）。</p>
+<p><font color=blue>（12）</font>过程如下：<br>（A）请求首先<u>到达 Servlet 容器</u>（如 Tomcat，已被内置在 Spring Boot 中）；<br>（B）然后依次经过过滤器链（Filter Chain），每个过滤器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 chain.doFilter() 方法之前的代码</u>，如对请求进行认证、校验等）；<br>（C）<u>到达前端控制器 DispatcherServlet</u>，它负责分发请求，根据请求的 URL 和请求方式找到对应的控制器；<br>（D）依次经过拦截器链（Interceptor Chain），每个拦截器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 preHandle() 方法</u>中的代码，如对请求进行校验、参数绑定等，<u>但这步是可选的</u>，因为拦截器目前只在 Spring MVC 中有效，而 Spring Boot 集成并自动配置了 Spring MVC）；<br>（E）<u>执行 Controller 中的具体方法</u>，并返回响应数据；<br>（F）响应数据经过拦截器链，<u>执行 postHandle() 方法</u>中的代码，进行后处理；<br>（G）执行异常解析器来<u>处理异常</u>（如全局异常处理），然后<u>渲染视图</u>；<br>（H）<u>执行拦截器链中的 afterCompletion() 方法</u>，进行关闭资源等善后工作；<br>（I）响应数据经过过滤器链，<u>执行 chain.doFilter() 方法之后的代码</u>。</p>
+<img src="/images/2025-01-01/api_life.jpg" width="85%" />
+
+<p><font color=blue>（13）</font>方案如下：<br>（A）<u>优化 SQL 与索引</u>（适用于对现有数据库进行快速优化）：</p>
 <ul>
 <li>避免使用 * 号等全表扫描的低效操作，用具体的列名代替；</li>
 <li>避免使用左模糊匹配，如必须使用，可以考虑用全文索引代替；</li>
@@ -476,15 +482,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">HTTP</a>
               </li>
              
               <li class="article-tag-list-item">
