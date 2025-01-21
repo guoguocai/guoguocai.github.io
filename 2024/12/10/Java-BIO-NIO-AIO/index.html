@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/sigaction.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/AIO.png">
 <meta property="article:published_time" content="2024-12-10T09:30:39.000Z">
-<meta property="article:modified_time" content="2025-01-03T09:06:46.333Z">
+<meta property="article:modified_time" content="2025-01-21T15:24:58.554Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -164,13 +164,13 @@
         <p>本文的部分内容来自于《Netty 权威指南(第2版)》第一、二章，有兴趣可找原书阅读。</p>
 <span id="more"></span>
 
-<h3 id="1-Linux-网络-IO-模型"><a href="#1-Linux-网络-IO-模型" class="headerlink" title="1 Linux 网络 IO 模型"></a>1 Linux 网络 IO 模型</h3><p>Linux 的内核将所有的外部设备都看作是一个文件来操作，对一个文件进行读写操作时，会调用内核提供的系统命令，然后返回一个 file descriptor（fd，文件描述符），而对一个 socket 读写时也会有相应的描述符，称为 socket fd（socket 描述符）。描述符就是一个数字，它指向内核中的一个结构体（包含文件路径、数据区等一些属性）。</p>
+<h3 id="1-Linux-网络-IO-模型"><a href="#1-Linux-网络-IO-模型" class="headerlink" title="1 Linux 网络 IO 模型"></a>1 Linux 网络 IO 模型</h3><p>Linux 的内核将所有的外部设备都看作是一个文件来操作，对一个文件进行读写操作时会调用内核提供的系统命令，然后返回一个 file descriptor（fd，文件描述符），类似的，对一个 socket 读写时也会有相应的描述符，称为 socket fd（socket 描述符）。描述符就是一个数字，它指向内核中的一个结构体（包含文件路径、数据区等一些属性）。</p>
 <p>根据 UNIX 网络编程对 I&#x2F;O 模型的分类，UNIX 提供了 5 种 I&#x2F;O 模型，但无论是哪一种，实际上都可以分为两个阶段（以 read 操作为例）：<br><strong>第一阶段：等待内核中的数据准备就绪；</strong><br><strong>第二阶段：将数据从内核拷贝到用户空间。</strong></p>
 <p><em>那什么是内核空间和用户空间？请看下图：</em></p>
 <img src="/images/2024-12-10/kernel.png" width="40%" />
 
 <p><em>用户空间：也称为用户态，即上层应用程序的活动空间，应用程序的执行必须依赖于内核提供的资源。<br>内核空间：也称为内核态，控制计算机的硬件资源，并给上层应用程序提供运行环境。<br>注：用户态可以通过系统调用切换到内核态，这是主动进入到内核态。在出现异常或者外围设备中断时进入到内核态，属于被动进入。两者都有自己的数据缓冲区，通常数据会先放到缓冲区。</em></p>
-<p>而这 5 种 I&#x2F;O 模型就是根据它在上述两个阶段的不同表现来区分的：在第一阶段用户进程（或者说用户线程）是否阻塞来区分阻塞 IO &#x2F; 非阻塞 IO，在第二阶段用户进程（或者说用户线程）是否阻塞来区分同步 IO &#x2F; 异步 IO！（<strong>注意：每本书的定义可能不一样，不要过分纠结在一些技术术语的咬文嚼字上，知道是怎么一回事就行了</strong>）</p>
+<p>而这 5 种 I&#x2F;O 模型就是根据它在上述两个阶段的不同表现来区分的：根据第一阶段用户进程（或者说用户线程）是否阻塞来区分阻塞 IO &#x2F; 非阻塞 IO，根据第二阶段用户进程（或者说用户线程）是否阻塞来区分同步 IO &#x2F; 异步 IO！（<strong>注意：每本书的定义可能不一样，不要过分纠结在一些技术术语的咬文嚼字上，知道是怎么一回事就行了</strong>）</p>
 <p>假设在用户进程中有个调用叫 recvfrom，那么在不同的 IO 模型中，它的执行过程是这样的：</p>
 <h4 id="1-1-阻塞-IO"><a href="#1-1-阻塞-IO" class="headerlink" title="1.1 阻塞 IO"></a>1.1 阻塞 IO</h4><p>两个阶段都阻塞（<strong>BIO</strong>）。<br>换句话说，进程从调用 recvfrom 开始到它返回的整段时间内都是被阻塞的，如下图：</p>
 <img src="/images/2024-12-10/BIO.png" width="55%" />
@@ -507,11 +507,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
+                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
               </li>
              
               <li class="article-tag-list-item">
