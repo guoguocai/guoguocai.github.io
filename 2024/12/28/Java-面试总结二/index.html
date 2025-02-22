@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-02-21T13:31:28.960Z">
+<meta property="article:modified_time" content="2025-02-22T07:07:32.357Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -167,7 +167,8 @@
 <p>（7）Mysql 用的什么数据库引擎？聚集索引和非聚集索引的区别是什么？</p>
 <p>（8）设计一个类似 TCP&#x2F;IP 的硬件设备与服务端的交互协议。</p>
 <p>（9）解决跨域有哪些方法？</p>
-<h3 id="编程题"><a href="#编程题" class="headerlink" title="编程题"></a>编程题</h3><p>（10）3 * 7 的表格，从左上走到右下，每次只能往右或者往下走一格，有几种不同的走法？写程序实现，要求最终能对任意大小的表格进行统计。</p>
+<p>（10）RESTful API 的设计规范有哪些？</p>
+<h3 id="编程题"><a href="#编程题" class="headerlink" title="编程题"></a>编程题</h3><p>（11）3 * 7 的表格，从左上走到右下，每次只能往右或者往下走一格，有几种不同的走法？写程序实现，要求最终能对任意大小的表格进行统计。</p>
 <h3 id="参考答案"><a href="#参考答案" class="headerlink" title="参考答案"></a>参考答案</h3><p><span style="background-color:green;"><font color=white>（1）</font></span><strong>会有冲突的风险</strong>。因为 HashMap 的 put() 方法是非原子性的操作，它涉及多个步骤，包括<strong>计算 key 的哈希值</strong>、<strong>找到在数组中的位置</strong>、<strong>处理哈希冲突</strong>等，且没有同步机制，当多个线程对同一个 key 设置时，常见的问题是后设置的值会覆盖先设置的值，导致数据丢失。如果是在 JDK 1.7 中，多个线程同时 put 并都触发扩容时，扩容同样是一个非原子性的操作，那么新的链表可能出现环形结构，这会导致在 get 时陷入死循环，进而导致 CPU 利用率接近 100%（在 JDK 1.8 及以后版本中，红黑树的使用大大降低了死循环出现的概率，但并非为 0，所以在多线程并发时，建议使用 ConcurrentHashMap 或 Hashtable）。</p>
 <p>HashMap 的工作原理：</p>
 <p>HashMap 是基于哈希表实现的数据结构，它结合了数组和链表（在 JDK 1.8 及以后版本中，还结合了红黑树）。HashMap 的主干是一个 Node 数组，每个 Node 对象包含一个 key-value 键值对。当要存储一个键值对时，首先会计算 key 的哈希值，然后通过这个哈希值确定该键值对在数组中的位置，如果两个不同的 key 计算出的哈希值相同（即发生了哈希冲突），HashMap 会采用链表存储（当链表长度超过阈值时，默认是 8，转为红黑树）的方式来解决。</p>
@@ -189,7 +190,8 @@
 <p>聚集索引和非聚集索引的区别（两者的索引结构都是使用 B+ 树存储）：<br>（A）聚集索引：将数据与索引放到一起，找到索引也就找到了数据，索引结构的叶子节点存储的是索引键值和完整的行数据（表中的数据行按照聚集索引的顺序进行存储），因此，一个表只能有一个聚集索引，通常为主键。<br>（B）非聚集索引：将数据与索引分开存储，索引结构的叶子节点存储的是索引键值和指向数据行的地址，因此，一个表可以有多个非聚集索引，这个过程需要两次查找，因此查询速度较慢‌，适用于频繁查询但不经常修改的列。</p>
 <p><span style="background-color:green;"><font color=white>（8）</font></span>以下是一个基本的设计思路：<br>（A）消息头：<br>协议版本：标识通信双方所使用的协议版本；<br>消息类型：标识消息的类型，如请求、响应、心跳等；<br>消息长度：整个消息的长度，包括消息头和消息体；<br>校验和：用于验证数据的完整性；<br>时间戳：记录时间。<br>（B）消息体：<br>根据消息类型，消息体包含不同的字段，例如：<br>请求消息：设备 ID、请求的操作码、参数等；<br>响应消息：操作结果、状态码、数据等。<br>（C）消息尾（可选）：<br>包含一些额外信息，如签名。</p>
 <p><span style="background-color:green;"><font color=white>（9）</font></span>解决 CORS 问题（即跨源资源共享）通常涉及配置服务器以允许来自不同源的请求，以下是几种常见方法：<br>（A）通过 @Configuration 注解配置一个类，再让这个类实现 WebMvcConfigurer 接口来全局设置 CORS 策略；<br>（B）创建一个 Servlet Filter 来处理 CORS，再将这个 Filter 配置到 web.xml 中；<br>（C）对于特定的控制器或方法，可以使用 @CrossOrigin 注解来设置 CORS 策略；<br>（D）通过 Nginx 等代理服务器配置。<br>注意，允许来自任意源的请求可能会带来安全风险，务必限制允许的源和方法。</p>
-<p><span style="background-color:green;"><font color=white>（10）</font></span>当场的解题思路：直接写不出来，那就从最简单的 2 * 2 表格开始，一共有多少种走法可以直接数出来，然后逐渐扩大表格，慢慢找出规律，如下：</p>
+<p><span style="background-color:green;"><font color=white>（10）</font></span>RESTful 是目前最流行的 API 设计规范，包括：<br>（A）使用 HTTP 动词来表达操作‌，比如 GET、POST、PUT、DELETE 等；<br>（B）使用名词来表示资源，是 HTTP 动词作用的对象，通常使用复数形式；<br>（C）使用 URI 来定位资源，确保每个资源都有一个唯一的标识符；<br>（D）‌使用查询参数来过滤和分页；<br>（E）使用标准的 HTTP 状态码来表示请求结果‌，比如 200、400、404、500；<br>（F）使用 JSON 来表示数据，便于客户端进行数据解析和处理；<br>（G）具有无状态性，每次请求都包含所有必要的信息，比如 Token；<br>（H）使用版本号来管理 API 的不同版本，比如 GET &#x2F;v1&#x2F;users?limit&#x3D;10。</p>
+<p><span style="background-color:green;"><font color=white>（11）</font></span>当场的解题思路：直接写不出来，那就从最简单的 2 * 2 表格开始，一共有多少种走法可以直接数出来，然后逐渐扩大表格，慢慢找出规律，如下：</p>
 <table>
 <thead>
 <tr>
@@ -484,11 +486,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
