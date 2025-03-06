@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>如何解决用 Java 浮点类型计算时的精度问题 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确的表示。（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的">
+  <meta name="description" content="这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确表示。（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的 1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何解决用 Java 浮点类型计算时的精度问题">
 <meta property="og:url" content="http://yoursite.com/2022/05/15/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E7%94%A8-Java-%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%97%B6%E7%9A%84%E7%B2%BE%E5%BA%A6%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:description" content="这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确的表示。（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的">
+<meta property="og:description" content="这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确表示。（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的 1">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-05-15T02:14:27.000Z">
-<meta property="article:modified_time" content="2022-05-15T03:47:47.437Z">
+<meta property="article:modified_time" content="2025-03-05T02:53:17.950Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -153,7 +153,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的<strong>根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确的表示。</strong>（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的 1.2 了）</p>
+        <p>这是一个很常见的问题，在我们用 float 或 double 进行数值计算时，经常会有保留小数多少位数的需求，而不管我们是用强制转换，还是用封装类 Float&#x2F;Double 自带的转换方法，精度丢失永远是一个跨不过去的坎。出现精度丢失的<strong>根本原因是：数学意义上的小数不是每个都能用二进制在有限位数内精确表示。</strong>（像 0.1、1.1 这样的小数并没有精确的二进制表示，所以求和后也就不是精确的 1.2 了）</p>
 <span id="more"></span>
 
 <p><strong>如果需要精确计算的话就用字符串来保存和计算</strong>，各种语言标准库都会提供类似 Decimal 的类，封装好了类似操作。</p>
