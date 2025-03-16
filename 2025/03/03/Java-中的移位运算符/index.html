@@ -16,7 +16,7 @@
 <meta property="og:description" content="位运算符可以直接对二进制位进行操作，比使用乘除法的效率更高‌，Java 中常用的移位运算符包括 &lt;&lt;、&gt;&gt;、&gt;&gt;&gt;。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-03-03T09:20:44.000Z">
-<meta property="article:modified_time" content="2025-03-08T03:38:28.895Z">
+<meta property="article:modified_time" content="2025-03-16T13:10:49.184Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -158,21 +158,21 @@
 
 <h3 id="1-lt-lt"><a href="#1-lt-lt" class="headerlink" title="1 &lt;&lt;"></a>1 &lt;&lt;</h3><p><strong>&lt;&lt; 表示左移，左移时不管正负，低位补 0。</strong></p>
 <p>为了使运算过程看得更清楚，下文的示例只取 8 位，但在实际的计算机中，如果操作数是 short（占 2 字节）、byte（占 1 字节）、char 类型（占 2 字节），则在进行位运算前会自动将其转为 int 类型，即会自动扩大位数过小的数据类型，以便在移位过程中不会丢失信息，运算的结果也为 int 类型‌。另外注意：<u>操作数是以补码的形式存储在计算机中的。</u></p>
-<p>正数：result &#x3D; 20 &lt;&lt; 2<br>20 的二进制补码：0001 0100<br>向左移动两位后：0101 0000<br>                  结果：result &#x3D; 80</p>
-<p>负数：result &#x3D; -20 &lt;&lt; 2<br>-20 的二进制原码：1001 0100<br>-20 的二进制反码：1110 1011<br>-20 的二进制补码：1110 1100<br>左移两位后的补码：1011 0000<br>                     反码：1010 1111<br>                     原码：1101 0000<br>                     结果：result &#x3D; -80</p>
+<p>正数：result &#x3D; 20 &lt;&lt; 2<br>20 的二进制补码：0001 0100<br>向左移动两位后：0101 0000<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;结果：result &#x3D; 80</p>
+<p>负数：result &#x3D; -20 &lt;&lt; 2<br>-20 的二进制原码：1001 0100<br>-20 的二进制反码：1110 1011<br>-20 的二进制补码：1110 1100<br>左移两位后的补码：1011 0000<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;反码：1010 1111<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;原码：1101 0000<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;结果：result &#x3D; -80</p>
 <p>左移时，操作数的所有位（包括符号位）都会向左移动指定的位数，移动位数的不同，有可能影响结果的正负：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span> <span class="variable">number1</span> <span class="operator">=</span> (<span class="type">byte</span>) (<span class="number">20</span> &lt;&lt; <span class="number">3</span>); <span class="comment">// -96</span></span><br><span class="line"><span class="type">byte</span> <span class="variable">number2</span> <span class="operator">=</span> (<span class="type">byte</span>) (-<span class="number">20</span> &lt;&lt; <span class="number">3</span>); <span class="comment">// 96</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="2-gt-gt"><a href="#2-gt-gt" class="headerlink" title="2 &gt;&gt;"></a>2 &gt;&gt;</h3><p><strong>符号 &gt;&gt; 表示右移，若该数为正，则高位补 0，若为负数，则高位补 1。</strong></p>
-<p>正数：result &#x3D; 20 &gt;&gt; 2<br>20 的二进制补码：0001 0100<br>向右移动两位后：0000 0101<br>                  结果：result &#x3D; 5</p>
-<p>负数：result &#x3D; -20 &gt;&gt; 2<br>-20 的二进制原码：1001 0100<br>-20 的二进制反码：1110 1011<br>-20 的二进制补码：1110 1100<br>右移两位后的补码：1111 1011<br>                     反码：1111 1010<br>                     原码：1000 0101<br>                     结果：result &#x3D; -5</p>
+<p>正数：result &#x3D; 20 &gt;&gt; 2<br>20 的二进制补码：0001 0100<br>向右移动两位后：0000 0101<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;结果：result &#x3D; 5</p>
+<p>负数：result &#x3D; -20 &gt;&gt; 2<br>-20 的二进制原码：1001 0100<br>-20 的二进制反码：1110 1011<br>-20 的二进制补码：1110 1100<br>右移两位后的补码：1111 1011<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;反码：1111 1010<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;原码：1000 0101<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;结果：result &#x3D; -5</p>
 <p>右移时，操作数的所有位（包括符号位）都会向右移动指定的位数，但由于高位补位的数字与原先的符号位相同，因此不会影响结果的正负。</p>
 <h3 id="3-gt-gt-gt"><a href="#3-gt-gt-gt" class="headerlink" title="3 &gt;&gt;&gt;"></a>3 &gt;&gt;&gt;</h3><p><strong>符号 &gt;&gt;&gt; 表示无符号右移，也叫逻辑右移，无符号右移时不管正负，高位补 0。</strong></p>
 <p>无符号右移是在不考虑符号位的情况下，操作数的所有位（包括符号位）向右移动指定的位数。为了确保结果的正确性，操作数必须被扩展为足够大的位数，因此，无符号右移只对 32 位和 64 位有意义。</p>
 <p>正数：result &#x3D; 20 &gt;&gt;&gt; 2<br>结果与 result &#x3D; 20 &gt;&gt; 2 相同。</p>
-<p>负数：result &#x3D; -20 &gt;&gt;&gt; 2<br>-20 的二进制原码：10000000 00000000 00000000 00010100<br>-20 的二进制反码：11111111 11111111 11111111 11101011<br>-20 的二进制补码：11111111 11111111 11111111 11101100<br>无符号右移两位后：00111111 11111111 11111111 11111011<br>                     结果：result &#x3D; 1073741819</p>
+<p>负数：result &#x3D; -20 &gt;&gt;&gt; 2<br>-20 的二进制原码：10000000 00000000 00000000 00010100<br>-20 的二进制反码：11111111 11111111 11111111 11101011<br>-20 的二进制补码：11111111 11111111 11111111 11101100<br>无符号右移两位后：00111111 11111111 11111111 11111011<br>结果：result &#x3D; 1073741819</p>
 <h3 id="4-拓展"><a href="#4-拓展" class="headerlink" title="4 拓展"></a>4 拓展</h3><p>&lt;&lt;&#x3D;、&gt;&gt;&#x3D;、&amp;&#x3D;、^&#x3D;、|&#x3D;、~ 分别表示什么意思？<br>这些操作符分别是左移后赋值、右移后赋值、按位与后赋值、按位异或后赋值（对应位上的值相同时，结果为 0，不同时为 1）、按位或后赋值，跟 +&#x3D; 还有 -&#x3D; 的意思差不多，只不过这些都是要转换成二进制后再计算，最后一个运算符代表取反，要注意<strong>取反运算符是对所有的位进行取反操作，包括符号位。</strong>这与负数的反码不同，<strong>负数的反码是符号位保持不变，其余位取反。</strong></p>
-<p>举例：<br>正数：result &#x3D; ~15<br>15 的二进制补码：0000 1111<br>取反后的补码为：1111 0000<br>              反码为：1110 1111<br>              原码为：1001 0000<br>                 结果：result &#x3D; -16</p>
+<p>举例：<br>正数：result &#x3D; ~15<br>15 的二进制补码：0000 1111<br>取反后的补码为：1111 0000<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;反码为：1110 1111<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;原码为：1001 0000<br>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;结果：result &#x3D; -16</p>
 
       
 
@@ -406,11 +406,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -422,11 +422,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
