@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-03-13T06:52:05.330Z">
+<meta property="article:modified_time" content="2025-03-28T10:10:09.762Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -170,7 +170,7 @@
 <p>（10）SOA 是什么？</p>
 <p>（11）缓存有哪些作用？它的原理是什么？</p>
 <p>（12）从请求一个 Spring Boot 的 API 接口到收到响应，中间经历了哪些过程？</p>
-<p>（13）数据库有两张表，一张为用户表，有 500 万数据，另一张为订单表（包含用户 ID），有 1000 万数据。现在有一个需求，要能支持查询两张表中字段的各类组合条件的前 2 万条的订单记录，请给出至少 3 种技术方案。</p>
+<p>（13）SQL 语句执行很慢，如何处理？</p>
 <h3 id="参考答案"><a href="#参考答案" class="headerlink" title="参考答案"></a>参考答案</h3><p><span style="background-color:green;"><font color=white>（1）</font></span>技术处理细节如下：<br>（A）浏览器处理输入：自动在网址上添加默认的协议和端口号‌，并在本地查找是否有这个网址的缓存版本；<br>（B）DNS 解析：查询域名对应的 IP 地址，依次在本地 Host 文件、本地域名服务器、根域名服务器中查找；<br>（C）建立连接：通过 TCP 三次握手与服务器建立连接；<br>（D）发送 HTTP 请求：若使用 HTTPS 协议，还会进行 SSL 握手，建立加密信道‌，然后设置请求头发出请求；<br>（E）服务器处理请求：根据请求解析出受访的主机、应用、资源，封装并返回 HTTP 响应报文；<br>（F）浏览器解析响应和渲染页面：如果响应头中的 Content-Type 是 text&#x2F;html，则进行 HTML 解析，否则做其他处理‌；在渲染页面时，如果遇到外部资源链接（如图片、JS 文件等），则会进一步请求这些资源。</p>
 <p><span style="background-color:green;"><font color=white>（2）</font></span>可使用以下 JVM 参数进行调优：<br>（A）‌堆内存设置：</p>
 <ul>
@@ -236,29 +236,47 @@
 <p><span style="background-color:green;"><font color=white>（12）</font></span>过程如下：<br>（A）请求首先<u>到达 Servlet 容器</u>（如 Tomcat，已被内置在 Spring Boot 中）；<br>（B）然后依次经过过滤器链（Filter Chain），每个过滤器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 chain.doFilter() 方法之前的代码</u>，如对请求进行认证、校验等）；<br>（C）<u>到达前端控制器 DispatcherServlet</u>，它负责分发请求，根据请求的 URL 和请求方式找到对应的控制器；<br>（D）依次经过拦截器链（Interceptor Chain），每个拦截器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 preHandle() 方法</u>中的代码，如对请求进行校验、参数绑定等，<u>但这步是可选的</u>，因为拦截器目前只在 Spring MVC 中有效，而 Spring Boot 集成并自动配置了 Spring MVC）；<br>（E）<u>执行 Controller 中的具体方法</u>，并返回响应数据；<br>（F）响应数据经过拦截器链，<u>执行 postHandle() 方法</u>中的代码，进行后处理；<br>（G）执行异常解析器来<u>处理异常</u>（如全局异常处理），然后<u>渲染视图</u>；<br>（H）<u>执行拦截器链中的 afterCompletion() 方法</u>，进行关闭资源等善后工作；<br>（I）响应数据经过过滤器链，<u>执行 chain.doFilter() 方法之后的代码</u>。</p>
 <img src="/images/2025-01-01/api_life.jpg" width="90%" />
 
-<p><span style="background-color:green;"><font color=white>（13）</font></span>方案如下：<br>（A）<u>优化 SQL 与索引</u>（适用于对现有数据库进行快速优化）：</p>
+<p><span style="background-color:green;"><font color=white>（13）</font></span>措施如下：<br>（A）定位问题：<br>（a）启用慢查询日志：通过设置阈值来记录执行时间过长的 SQL，以快速定位高频慢查询语句‌。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- MySQL示例</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> slow_query_log <span class="operator">=</span> <span class="string">&#x27;ON&#x27;</span>;</span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> long_query_time <span class="operator">=</span> <span class="number">1</span>; <span class="comment">-- 记录超过1秒的查询</span></span><br></pre></td></tr></table></figure>
+
+<p>（b）使用 EXPLAIN 关键字分析 SQL 语句的执行计划，确保使用到了索引，重点关注：</p>
 <ul>
-<li>避免使用 * 号等全表扫描的低效操作，用具体的列名代替；</li>
-<li>避免使用左模糊匹配，如必须使用，可以考虑用全文索引代替；</li>
-<li>利用 ORDER BY 和 LIMIT 等子句限制查询结果的数量为前 2 万条；</li>
-<li>为经常用于查询条件的列创建索引，并定期检查；</li>
-<li>特别注意在订单表中的用户 ID 字段上创建索引，因为它是连接两张表的关键字段；</li>
-<li>避免在 WHERE 子句中使用函数或计算表达式，这会导致索引失效；</li>
-<li>NOT IN、NOT EXISTS、IS NOT NULL 等可能导致索引失效，可考虑用 JOIN 改写；</li>
-<li>OR 可能导致索引失效，可考虑通过 UNION ALL 将语句拆分为多个单表查询，并分别利用索引；</li>
-<li>使用 EXPLAIN 关键字分析查询语句的执行计划，确保使用到了索引。</li>
+<li>type 字段：访问类型（如全表扫描 ALL、索引扫描 INDEX 等）；</li>
+<li>key 字段：实际使用的索引；</li>
+<li>rows 字段：预估扫描行数‌。</li>
 </ul>
-<p>（B）<u>增加内存数据库与缓存</u>（适用于需要实时数据分析的场景）：</p>
+<p>（B）索引优化：<br>（a）为高频查询条件（如 WHERE、JOIN、ORDER BY 后的字段）创建索引，并定期检查。  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> INDEX idx_department <span class="keyword">ON</span> employees(department_id);</span><br></pre></td></tr></table></figure>
+
+<p>（b）避免索引失效：</p>
 <ul>
-<li>选择合适的内存数据库，如 Redis；</li>
-<li>缓存常用数据到内存数据库中，要确保缓存数据的一致性；</li>
-<li>利用内存数据库提供的快速读写能力，提高查询性能。</li>
+<li>避免隐式类型转换（如对字符串字段使用数字查询）；</li>
+<li>避免索引列在 WHERE 子句中参与运算（如 WHERE YEAR(create_time) &#x3D; 2025）；</li>
+<li>避免使用左模糊匹配（如 LIKE ‘%keyword’），如必须使用，可以考虑用全文索引代替；</li>
+<li>避免使用 NOT IN 和 NOT EXISTS 引发全表扫描‌‌。</li>
 </ul>
-<p>（C）<u>转为分布式数据库</u>（适用于需要高扩展性的场景）：</p>
+<p>（C）调整 SQL 结构：</p>
 <ul>
-<li>选择合适的分布式数据库，如 MongoDB；</li>
-<li>迁移数据到分布式数据库中，要确保数据的一致性；</li>
-<li>利用分布式数据库提供的查询优化功能（如自动数据分片）。</li>
+<li>避免使用 SELECT *，明确指定所需字段以减少 I&#x2F;O 开销‌；</li>
+<li>用 ORDER BY 和 LIMIT 等子句减少查询结果的数量；</li>
+<li>将多层子查询拆解为临时表或内存计算‌；</li>
+<li>用 JOIN 替代 IN 或 EXISTS 子查询，降低执行复杂度‌。</li>
+</ul>
+<p>（D）配置调优：</p>
+<ul>
+<li>增大 innodb_buffer_pool_size 缓存池，提升热数据访问速度‌；</li>
+<li>优化 max_connections 和连接池配置，避免资源争用‌；</li>
+<li>根据业务场景选择合适的事务隔离级别。</li>
+</ul>
+<p>（E）架构级优化：</p>
+<ul>
+<li>读写分离，建立集群，并通过主从分离将读请求分发到从库，降低主库压力‌；</li>
+<li>分库分表，对超大数据表进行水平拆分（如按时间或 ID 范围分），分散单表压力‌。</li>
+</ul>
+<p>（F）工具辅助：</p>
+<ul>
+<li>使用压测工具 sysbench 模拟高并发场景，验证优化效果；</li>
+<li>集成 Prometheus + Grafana 监控慢查询、锁等待等关键指标‌。</li>
 </ul>
 
       
@@ -493,11 +511,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
