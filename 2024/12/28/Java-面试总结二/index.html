@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-04-04T15:51:45.534Z">
+<meta property="article:modified_time" content="2025-04-05T08:57:35.684Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -174,7 +174,7 @@
 <h3 id="参考答案"><a href="#参考答案" class="headerlink" title="参考答案"></a>参考答案</h3><p><span style="background-color:green;"><font color=white>（1）</font></span><strong>会有冲突的风险</strong>。因为 HashMap 的 put() 方法是非原子性的操作，它涉及多个步骤，包括<strong>计算 key 的哈希值</strong>、<strong>找到在数组中的位置</strong>、<strong>处理哈希冲突</strong>等，且没有同步机制，当多个线程对同一个 key 设置时，常见的问题是后设置的值会覆盖先设置的值，导致数据丢失。如果是在 JDK 1.7 中，多个线程同时 put 并都触发扩容时，扩容同样是一个非原子性的操作，那么新的链表可能出现环形结构，这会导致在 get 时陷入死循环，进而导致 CPU 利用率接近 100%。</p>
 <p>在 JDK 1.8 及以后版本中，红黑树的使用大大降低了死循环出现的概率，但并非为 0，所以在多线程并发时，建议使用 ConcurrentHashMap 或 Hashtable 来保证线程安全，且 ConcurrentHashMap 的性能更高。因为 <u>Hashtable 是对整个哈希表加锁</u>，意味着在任一时刻只有一个线程可以访问 Hashtable，这在高并发环境下会发生锁的争用，导致性能显著下降，只适用于并发级别较低或需要兼容旧代码的场景。而 <u>ConcurrentHashMap 采用了粒度更细的锁机制，它将整个哈希表分为多个段，每个段独立加锁</u>，允许多个线程同时操作不同的段，从而避免了锁竞争，后又进一步<u>引入了无锁的 CAS</u>，这使得在低冲突的情况下可以完全无锁地执行操作，进一步提升了性能。</p>
 <p>HashMap 的工作原理：</p>
-<p>HashMap 是基于哈希表实现的数据结构，它结合了数组和链表（在 JDK 1.8 及以后版本中，还结合了红黑树，用这种结构的原因当然是为了利用它们各自的优点，使得查询、插入和删除的效率都很高）。HashMap 的主干是一个 Node 数组，Node 是 Entry 接口的实现类，每个 Node 对象包含一个 key-value 键值对和指向下一个节点的 next 引用。当要存储一个键值对时，首先会计算 key 的哈希值，然后通过这个哈希值确定该键值对在数组中的位置，如果两个不同的 key 计算出的哈希值相同（即发生了哈希冲突），HashMap 会采用链表存储（当链表长度超过阈值时，默认是 8，转为红黑树，小于 6 时又退化为链表）的方式来解决。</p>
+<p>HashMap 是基于哈希表实现的数据结构，它结合了数组和链表（在 JDK 1.8 及以后版本中，还结合了红黑树，用这种结构的原因当然是为了利用它们各自的优点，使得查询、插入和删除的效率都很高）。HashMap 的主干是一个 Node 数组，Node 是 Entry 接口的实现类，每个 Node 对象包含一个 key-value 键值对和指向下一个节点的 next 引用。当要存储一个键值对时，首先会计算 key 的哈希值，然后通过这个哈希值确定该键值对在数组中的位置，如果两个不同的 key 计算出的哈希值相同（即发生了哈希冲突，产生冲突的本质是哈希函数的输入域是无限的而输出域有限），HashMap 会采用链表存储（当链表长度超过 8 时，转为红黑树，小于 6 时又退化为链表）的方式来解决。</p>
 <p>接下来需要判断要存储的键值对是否已经存在。先判断 key 是否存在（通过先比较 key 的哈希值，再用 equals() 比较 key 的原始值的方式），如果 key 不存在，则调用 addEntry() 方法添加键值对，如果 key 已存在，则覆盖之前的 value。然后 Map.Entry 的哈希值就是存放在其中的 key 的哈希值，遍历 HashMap 效率最高的方式是对 entrySet().iterator() 进行遍历，使用 iterator.remove() 可以安全地删除元素。</p>
 <p><span style="background-color:green;"><font color=white>（2）</font></span>HashMap 中数组的长度是固定的，当存放的元素越来越多的时候，哈希冲突的几率也越来越高，所以当 HashMap 中的元素数量超过阈值时（当前容量与负载因子的乘积），就会进行扩容。默认情况下，HashMap 的负载因子为 0.75，这意味着当 HashMap 中的元素数量达到其容量的 75% 时，就会触发扩容操作，新容量通常是旧容量的两倍（比如 16 * 2 &#x3D; 32），但不会超过 HashMap 允许的最大容量 2^30（数组扩容这个操作在 ArrayList 中也有）。</p>
 <p>扩容的过程也是非原子性的，在多线程并发时会有问题。它包括<strong>创建新数组</strong>、<strong>重新计算所有 key 的哈希值</strong>、<strong>将原数组中的元素迁移到新数组中</strong>、<strong>设置新阈值</strong>等步骤，如果原数组中存在链表或红黑树结构的哈希冲突，这些结构在扩容过程中也会被拆分并重新分配到新数组上。扩容是一个昂贵的操作，很消耗性能，因为它涉及到大量的内存分配和元素重新映射，因此，为了避免频繁的扩容，可以通过预估 HashMap 要存放的元素个数，然后设置合适的初始容量，或者设置合理的负载因子来提高性能。</p>
@@ -224,14 +224,14 @@
 <li>500：服务器内部错误。</li>
 </ul>
 <p>（F）使用 JSON 来表示数据，便于客户端进行数据解析和处理；<br>（G）具有无状态性，每次请求都包含所有必要的信息，比如 Token；<br>（H）使用版本号来管理 API 的不同版本，比如 GET &#x2F;v1&#x2F;users?limit&#x3D;10。</p>
-<p><span style="background-color:green;"><font color=white>（12）</font></span><strong>幂等性是指一个操作无论执行多少次，它的执行结果都是一致‌的，不会因为多次执行而产生副作用。</strong>它可以避免重复请求带来的影响，比如支付接口重复扣款、订单重复创建等业务风险‌；也可以提升容错能力，比如应对网络超时重试、消息队列重复消费等场景‌。</p>
-<p>保证幂等性的常见方案有：<br>（A）唯一标识符：客户端生成唯一 ID（如 UUID），服务端通过缓存（如 Redis）校验 ID 是否已处理，若已处理，则直接返回历史结果‌，实现简单，扩展性强，适用于高并发接口调用、消息队列消费、异步任务‌等。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 ConcurrentHashMap 模拟请求记录存储</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IdempotencyService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ConcurrentHashMap&lt;String, Boolean&gt; processedRequests = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">processRequest</span><span class="params">(String requestId)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> processedRequests.putIfAbsent(requestId, <span class="literal">true</span>) == <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><span style="background-color:green;"><font color=white>（12）</font></span><strong>幂等性是指一个操作无论执行多少次，它的执行结果都是一致‌的，不会因为多次执行而产生副作用。</strong>它可以避免重复请求带来的影响，比如支付接口重复扣款、订单重复创建等业务风险‌；也可以提升容错能力，比如应对网络超时重试、消息队列重复消费等场景‌。当然，也有一些操作不需要幂等，比如短信发送。</p>
+<p>保证幂等性的常见方案有：<br>（A）<u>唯一标识符</u>：客户端为请求生成全局唯一 ID（如 UUID，并缓存在 Redis 中），服务端通过该 ID 判断请求是否已处理，若已处理，则直接返回历史结果‌。实现简单，扩展性强，适用于高并发接口调用、消息队列消费、异步任务‌等。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 ConcurrentHashMap 模拟缓存</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IdempotencyService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ConcurrentHashMap&lt;String, Boolean&gt; processedRequests = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;();</span><br><span class="line">    <span class="comment">// 只有第一次返回 true</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">processRequest</span><span class="params">(String requestId)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> processedRequests.putIfAbsent(requestId, <span class="literal">true</span>) == <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>（B）数据库约束：通过唯一索引‌或主键防止重复数据插入，如唯一订单号，可靠性高，适用于数据写入场景（如订单创建）；除此之外，还可以基于乐观锁，根据版本号或特定条件更新，确保仅当数据未变更时才能更新成功‌。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">table</span> <span class="keyword">SET</span> balance <span class="operator">=</span> new_value <span class="keyword">WHERE</span> version <span class="operator">=</span> old_version;</span><br></pre></td></tr></table></figure>
+<p>（B）<u>数据库约束</u>：通过唯一索引‌或主键防止重复数据插入（如唯一的订单号），可靠性高，适用于数据写入场景（如订单创建）；除此之外，还可以基于乐观锁，根据版本号（VERSION）、时间戳（LAST_UPDATE）或特定条件更新，确保仅当数据未变更时才能更新成功‌，若发现数据已被修改，可以及时回滚，适用于高并发下的数据更新。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">table</span> <span class="keyword">SET</span> balance <span class="operator">=</span> new_value, version <span class="operator">=</span> version <span class="operator">+</span> <span class="number">1</span> <span class="keyword">WHERE</span> version <span class="operator">=</span> old_version;</span><br></pre></td></tr></table></figure>
 
-<p>（C）Token 机制：客户端请求获取 Token 并存储于 Redis，然后提交请求时携带此 Token，服务端校验 Redis 中的 Token 是否存在，若存在，则执行业务并删除 Token，否则拒绝‌，适用于防止前端重复提交（如多次点击表单提交按钮）。<br>（D） ‌状态机控制：适用于业务操作中附带状态流转的场景（如订单状态从「未支付」到「已支付」），仅允许特定状态下能执行操作‌。</p>
+<p>（C）<u>Token 机制</u>：客户端请求获取 Token，然后提交请求时携带此 Token，服务端校验 Token 是否有效，若有效，则执行业务并令 Token 失效，适用于防止前端重复提交（如多次点击表单的提交按钮）。<br>（D）<u>分布式锁</u>：通过 Redis、ZooKeeper 等工具加锁，确保同一操作在分布式系统中仅执行一次，但要注意设置锁的超时时间，避免死锁。<br>（E） ‌<u>状态机控制</u>：适用于业务操作中附带状态流转的场景（如订单状态从「未支付」到「已支付」），仅允许特定状态下能执行操作‌。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> orders <span class="keyword">SET</span> status <span class="operator">=</span> <span class="string">&#x27;paid&#x27;</span> <span class="keyword">WHERE</span> order_id <span class="operator">=</span> <span class="string">&#x27;123&#x27;</span> <span class="keyword">AND</span> status <span class="operator">=</span> <span class="string">&#x27;unpaid&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
 <p><span style="background-color:green;"><font color=white>（13）</font></span>当场的解题思路：直接写不出来，那就从最简单的 2 * 2 表格开始，一共有多少种走法可以直接数出来，然后逐渐扩大表格，慢慢找出规律，如下：</p>
@@ -545,11 +545,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
