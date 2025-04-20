@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-04-16T06:55:37.857Z">
+<meta property="article:modified_time" content="2025-04-20T04:19:30.727Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -226,6 +226,8 @@
 <p>（F）使用 JSON 来表示数据，便于客户端进行数据解析和处理；<br>（G）具有无状态性，每次请求都包含所有必要的信息，比如 Token；<br>（H）使用版本号来管理 API 的不同版本，比如 GET &#x2F;v1&#x2F;users?limit&#x3D;10。</p>
 <p><span style="background-color:green;"><font color=white>（12）</font></span><strong>幂等性是指一个操作无论执行多少次，它的执行结果都是一致‌的，不会因为多次执行而产生副作用。</strong>它可以避免重复请求带来的影响，比如支付接口重复扣款、订单重复创建等业务风险‌；也可以提升容错能力，比如应对网络超时重试、消息队列重复消费等场景‌。当然，也有一些操作不需要幂等，比如短信发送。</p>
 <p>保证幂等性的常见方案有：<br>（A）<u>唯一标识符</u>：客户端为请求生成全局唯一 ID（如 UUID，并缓存在 Redis 中），服务端通过该 ID 判断请求是否已处理，若已处理，则直接返回历史结果‌。实现简单，扩展性强，适用于高并发接口调用、消息队列消费、异步任务‌等。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用 Redis 的 SETNX 命令：若返回 1，表示首次处理；返回 0，表示重复请求</span></span><br><span class="line">SETNX request_id:123 &quot;processed&quot;</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 ConcurrentHashMap 模拟缓存</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IdempotencyService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ConcurrentHashMap&lt;String, Boolean&gt; processedRequests = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;();</span><br><span class="line">    <span class="comment">// 只有第一次返回 true</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">processRequest</span><span class="params">(String requestId)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> processedRequests.putIfAbsent(requestId, <span class="literal">true</span>) == <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>（B）<u>数据库约束</u>：通过唯一索引‌或主键防止重复数据插入（如唯一的订单号），可靠性高，适用于数据写入场景（如订单创建）；除此之外，还可以基于乐观锁，根据版本号（VERSION）、时间戳（LAST_UPDATE）或特定条件更新，确保仅当数据未变更时才能更新成功‌，若发现数据已被修改，可以及时回滚，适用于高并发下的数据更新。</p>
@@ -529,11 +531,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -545,11 +547,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
