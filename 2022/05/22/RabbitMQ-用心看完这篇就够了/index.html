@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2022-05-22/fanout.png">
 <meta property="og:image" content="http://yoursite.com/images/2022-05-22/fanoutResult.png">
 <meta property="article:published_time" content="2022-05-22T03:45:04.000Z">
-<meta property="article:modified_time" content="2025-04-22T14:17:10.243Z">
+<meta property="article:modified_time" content="2025-04-22T16:13:26.394Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -334,7 +334,7 @@
 <p>最后提一句，<strong>用 MQ 很重要的一点就是为了解耦，为了达到这个目的，我们不能把完全不同的业务耦合到一个消费者里去，要学会分成多个消费者去解决问题。</strong></p>
 <h3 id="扩展问答"><a href="#扩展问答" class="headerlink" title="扩展问答"></a>扩展问答</h3><p>一、消息队列阻塞了怎么办？<br>（1）临时降低生产者发送速率，或动态缩减生产节点数量，防止积压加剧；<br>（2）增加消费者实例数量，并对非关键操作做异步化处理，提升消费能力；<br>（3）检查消费者配置，确保消息确认机制配置正确，避免无效消息堆积；<br>（4）扩大队列容量，并设置消息的过期时间（TTL）；<br>（5）手动清除队列中的无效消息，快速释放空间；<br>（6）通过错误日志定位根本原因，作针对性优化。</p>
 <p>二、对消息队列可以进行哪些优化？<br>（1）生产者：按业务规则将消息划分到不同队列，再结合负载均衡，防止单个队列过载；<br>（2）消费者：扩展消费者实例数量（比如通过 K8s 动态扩容），并对耗时操作做异步处理，提升消费能力；<br>（3）消息：用 GZIP 等算法压缩消息、采用 Protobuf 等高效序列化框架、批量发送与消费消息，减少网络 IO 次数；<br>（4）‌容错机制：设置死信队列处理异常消息，避免消息无限重试；实现消费端的幂等性设计，防止重复消费；<br>（5）监控预警：集成 APM 工具，添加消息的唯一 ID 与时间戳，实时跟踪消息积压量、消费 TPS 等指标。</p>
-<p>三、如何保证消费者消费消息的顺序跟生产消息的顺序一致？<br>（1）生产者将同一业务标识（如订单 ID）的消息强制路由（比如对 ID 进行哈希）到同一队列，并且对于同一业务标识的消息，生产者采用同步发送，确保消息按提交顺序写入队列。在低并发场景中，可通过将业务 ID 绑定到同一队列，再用单线程消费的方式来保证有序；<br>（2）使用支持先进先出的队列，生产者为消息添加序列号，消费者根据序列号重新排序处理；若消息乱序到达，可通过时间戳或业务逻辑在消费端二次排序。‌</p>
+<p>三、如何保证消费者消费消息的顺序跟生产消息的顺序一致？<br>（1）<u>生产者将相同业务 ID 的消息</u>（如订单 ID）通过哈希算法<u>路由到同一队列</u>，并且采用同步发送，确保消息按提交顺序写入队列，队列为先进先出，然后同一队列仅允许<u>单线程消费</u>，避免乱序，此方式适用于并发量不高的场景。<br>（2）<u>生产者为消息添加序列号</u>（如放在消息头），若乱序到达，则<u>消费者根据序列号重新排序处理</u>，发现缺失时主动拉取补漏。‌</p>
 <p>参考文章：<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35387940/article/details/100514134">Springboot 整合 RabbitMQ，用心看完这一篇就够了</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43852058/article/details/110367396">RabbitMQ 消息传递的可靠性保证：ConfirmCallback、returnCallback、手动确认</a></p>
 <p>（完）</p>
 
@@ -570,11 +570,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
