@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-04-28T14:06:22.618Z">
+<meta property="article:modified_time" content="2025-04-29T12:41:34.599Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -254,8 +254,12 @@
 <li>一致性：由原子性、持久性、隔离性和数据库约束共同保障。</li>
 </ul>
 <p>（13.2）对于分布式事务，则是需要协调多个独立的服务或组件之间的一致性操作。例如，在电商系统中，用户下单的操作可能涉及库存服务、支付服务和订单服务，分布式事务要确保库存扣减、支付扣款和订单生成这三个操作要么全部成功，要么全部失败，以防止出现用户支付成功但库存未扣减或订单未生成的情况‌。常见的分布式事务解决方案有：</p>
-<p>（I）保证强一致性：<br>（A）<strong>两阶段提交（2PC）</strong>：分为<u>准备阶段（Prepare）</u>和<u>提交阶段（Commit）</u>，通过协调者协调所有参与者。准备阶段为协调者询问所有参与者是否准备好提交事务，参与者执行本地事务但不提交；提交阶段为若所有参与者反馈成功，则协调者通知提交，否则通知回滚。优点是逻辑简单，缺点是同步阻塞，存在单点故障的风险‌。<br>（B）<strong>三阶段提交（3PC）</strong>：在 2PC 的基础上<u>增加预提交阶段（CanCommit &#x2F; PreCommit &#x2F; DoCommit）</u>，引入超时机制，减少阻塞时间，缺点是实现复杂，2PC 和 3PC 都适用于低并发金融系统。</p>
-<p>（II）保证最终一致性：<br>（C）<strong>TCC</strong>：在业务层面实现 <u>Try</u>（预留资源，如锁定库存）、<u>Confirm</u>（确认执行业务操作，如扣减库存）、<u>Cancel</u>（失败时释放预留资源） 三个阶段，需手动实现补偿和回滚逻辑，适合高并发场景，如电商、秒杀。<br>（D）<strong>‌消息队列事务消息</strong>：使用<u>支持事务的消息队列</u>（如 RocketMQ），生产者发送事务消息至 MQ，MQ 暂存消息但不投递，生产者执行本地事务并反馈结果，MQ 根据结果决定投递或删除消息，MQ 的这种二阶段提交机制，保证了消息投递的可靠性，适用于高吞吐、对实时性要求不高的场景‌，如发放活动积分、发送通知。<br>（E）<strong>Saga 模式</strong>：将长事务<u>拆分为多个子事务</u>，每个子事务执行后触发下一个子事务，若某子事务失败，则触发补偿或者回滚，无锁化设计，适用于复杂的长流程业务，如物流状态更新。</p>
+<p>（I）保证强一致性：<br>（A）<strong>两阶段提交（2PC）</strong>：分为<u>准备阶段（Prepare）</u>和<u>提交阶段（Commit）</u>，通过协调者协调所有参与者（TC，Transaction Coordinator，事务协调者，维护全局事务状态，驱动分支事务提交或回滚）。准备阶段为协调者询问所有参与者是否准备好提交事务，参与者执行本地事务但不提交；提交阶段为若所有参与者反馈成功，则协调者通知提交，否则通知回滚。优点是逻辑简单，缺点是同步阻塞，存在单点故障的风险‌，适用于金融交易。<br>（B）<strong>三阶段提交（3PC）</strong>：在 2PC 的基础上<u>增加预提交阶段（CanCommit &#x2F; PreCommit &#x2F; DoCommit）</u>，引入超时机制，减少阻塞时间，容忍部分节点临时不可用，缺点是实现复杂，适用于跨境物流。</p>
+<p>（II）保证最终一致性：<br>（C）<strong>TCC（Try-Confirm-Cancel）</strong>：在业务层面实现事务操作的三个阶段，在 <u>Try 阶段进行资源预留</u>（如锁定库存），尝试执行事务操作但不提交，若 Try 阶段成功，则进入 <u>Confirm 阶段提交</u>（如扣减库存）；若 Try 阶段失败，则进入 <u>Cancel 阶段撤销操作</u>（如释放库存）。TCC 不依赖于数据库事务，但开发成本高，适合高并发场景，如电商促销。<br>（D）<strong>‌消息队列事务消息</strong>：使用<u>支持事务的消息队列</u>（如 RocketMQ、Kafka），生产者发送事务消息至 MQ，MQ 暂存消息但不投递，生产者执行本地事务并反馈结果，MQ 根据结果决定投递还是删除消息，MQ 的这种二阶段提交机制，保证了消息投递的可靠性，适用于对实时性要求不高的场景‌，如发放活动积分、发送通知。<br>（E）<strong>Saga 模式</strong>：将长事务<u>拆分为多个子事务</u>，每个子事务提交后触发下一个子事务，若某子事务失败，则触发补偿操作，无锁化设计，适用于复杂的跨服务长流程业务，如物流状态更新。</p>
+<ul>
+<li><strong>事务补偿</strong>：是分布式事务中用于<strong>回滚已提交操作</strong>的一种机制（<u>传统数据库事务无法回滚已提交的操作</u>）。当分布式事务中的某一步失败时，通过执行<strong>与原始操作逻辑相反</strong>的补偿操作，将系统状态恢复到事务执行前的状态，确保最终一致性（如订单创建成功后支付失败，则需取消订单，若存在未支付之类的中间状态，也要做相应处理）。一般通过超时机制和事务状态轮询来触发补偿，不同的模式有不同的补偿方式：<br>（I）显式补偿（TCC 模式）：在业务代码中手动实现补偿逻辑，需显式调用 Cancel 等接口。<br>（II）隐式补偿（Saga 模式）：预定义好正向事务对应的逆向补偿操作，并记录事务日志，自动触发。<br>（III）基于消息的补偿（消息队列事务消息）：服务监听到失败后触发，将补偿操作封装为消息，交给消费者处理。</li>
+</ul>
+<p>Spring Cloud 主要通过 ‌Seata‌ 框架实现分布式事务，同时兼容 Saga 和 2PC 等方案。Seata‌ 支持 AT、TCC 等模式，AT 模式基于数据库事务，利用全局锁保证隔离性，事务失败时通过数据库代理自动生成反向 SQL 实现补偿（undo_log 表），优点为无需侵入业务代码，缺点为可能产生锁冲突。</p>
 <p><span style="background-color:green;"><font color=white>（14）</font></span>当场的解题思路：直接写不出来，那就从最简单的 2 * 2 表格开始，一共有多少种走法可以直接数出来，然后逐渐扩大表格，慢慢找出规律，如下：</p>
 <table>
 <thead>
@@ -551,11 +555,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">

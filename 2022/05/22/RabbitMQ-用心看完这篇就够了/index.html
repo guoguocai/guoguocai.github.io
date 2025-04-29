@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2022-05-22/fanout.png">
 <meta property="og:image" content="http://yoursite.com/images/2022-05-22/fanoutResult.png">
 <meta property="article:published_time" content="2022-05-22T03:45:04.000Z">
-<meta property="article:modified_time" content="2025-04-23T13:02:25.223Z">
+<meta property="article:modified_time" content="2025-04-29T12:56:11.935Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -334,7 +334,7 @@
 <h3 id="扩展问答"><a href="#扩展问答" class="headerlink" title="扩展问答"></a>扩展问答</h3><p><strong>一、消息队列阻塞了怎么办？</strong><br>（1）临时降低生产者发送速率，或动态缩减生产节点数量，防止积压加剧；<br>（2）增加消费者实例数量，并对非关键操作做异步化处理，提升消费能力；<br>（3）检查消费者配置，确保消息确认机制配置正确，避免无效消息堆积；<br>（4）扩大队列容量，并设置消息的过期时间（TTL）；<br>（5）手动清除队列中的无效消息，快速释放空间；<br>（6）通过错误日志定位根本原因，作针对性优化。</p>
 <p><strong>二、对消息队列可以进行哪些优化？</strong><br>（1）生产者：根据业务逻辑将消息划分到不同队列，再结合负载均衡，防止单个队列过载；<br>（2）消费者：扩展消费者实例数量（比如通过 K8s 动态扩容），并对耗时操作做异步化处理，提升消费能力；<br>（3）消息：用 GZIP 等算法压缩、采用 Protobuf 等高效序列化框架、批量发送与消费消息，可减少网络 IO 次数；<br>（4）‌容错机制：设置死信队列处理异常消息，避免消息无限重试；实现消费端的幂等性设计，防止重复消费；<br>（5）监控预警：集成 APM 工具，添加消息的唯一 ID 与时间戳，实时跟踪消息积压量、消费 TPS 等指标。</p>
 <ul>
-<li><strong>消息补偿</strong>：<u>当某个消息处理失败时，通过重试、延时队列等方式让消费者重新处理该消息，直到处理成功为止</u>，确保消息处理的可靠性，注意要做好幂等性，防止消息在处理成功的情况下重复消费。应用场景比如确保库存扣减正确、保证金融交易的最终一致性、确保物流配送的环节正确等等。</li>
+<li><strong>消息补偿</strong>：<u>当某个消息处理失败时，通过重试、延时队列等方式让生产者或者消费者重新处理该消息，直到消息被正确处理，确保消息的最终一致性</u>，注意要做好幂等性，防止消息在处理成功的情况下重复消费。应用场景比如确保库存扣减正确、保证金融交易的一致性、确保物流配送的环节正确等等。</li>
 <li><strong>死信队列</strong>：<u>当消息在原始队列中无法被正常消费时</u>，比如消息被拒绝、消息过期、消息长度超过限制等，可将这些消息放入死信队列（通过死信交换机），从而避免消息被直接丢弃，便于后续排查和修复，也给那些暂时处理失败的消息提供了一种延迟重试的机制。</li>
 <li><strong>延时队列</strong>：<u>与普通的先进先出队列不同，延时队列中的元素是按照预期执行时间排序的，只有当元素的预期执行时间到达时，才能被消费者取出</u>。应用场景比如定时发送提醒消息、未支付订单 30 分钟后自动关闭、限时优惠券到期后自动失效、失败消息在一定时间后重试、会议预约在指定时间提醒等。实现方式可以通过 Redis Sorted Set （将执行时间戳作为 score，获取消息时与当前时间戳作比较）或设置消息 TTL 结合死信队列（消息过期后自动路由到死信交换机）实现。</li>
 </ul>
@@ -574,11 +574,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
