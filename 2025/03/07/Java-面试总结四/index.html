@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2025-03-07/B_plus_tree.png">
 <meta property="og:image" content="http://yoursite.com/images/2025-03-07/B_plus_and_B.png">
 <meta property="article:published_time" content="2025-03-07T13:41:12.000Z">
-<meta property="article:modified_time" content="2025-05-08T15:40:12.420Z">
+<meta property="article:modified_time" content="2025-05-09T14:01:41.022Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -196,7 +196,7 @@
 <p>其查找过程类似二分法，查找所需的最大次数等同于二叉查找树的高度。但它在插入新节点时存在下面这种缺陷：</p>
 <img src="/images/2025-03-07/defect_bst.png" width="45%" />
 
-<p>如果得到这种结构，那查找的性能将大打折扣，几乎变成了线性查找。为了解决这种失衡的情况，红黑树应运而生，它除了符合二叉查找树的基本特征外，还必须满足以下规则（除了红黑树外，平衡的二叉查找树（AVL）也能解决失衡，它通过旋转来保证左右子树的深度差绝对值不超过 1，但这种相对严格的平衡条件虽然提高了查询性能，却损失了插入性能，红黑树的平衡条件相对宽松，在查询性能与插入性能之间实现了均衡）：</p>
+<p>如果得到这种结构，那查找的性能将大打折扣，几乎变成了线性查找。为了解决这种失衡的情况，红黑树应运而生，它除了符合二叉查找树的基本特征外，还必须满足以下规则（除了红黑树外，平衡的二叉查找树（AVL）也能解决失衡，它通过旋转来保证左右子树的深度差绝对值不超过 1，但这种相对严格的平衡条件导致插入数据时可能要进行大量的数据移动，虽然提高了查询性能，却损失了插入性能，红黑树的平衡条件相对宽松，在查询性能与插入性能之间实现了均衡）：</p>
 <ul>
 <li>每个节点非红即黑；</li>
 <li>根节点必须是黑色；</li>
@@ -214,16 +214,17 @@
 <li>每个节点中的元素均按升序排列；</li>
 <li>若节点包含元素 K1、K2，则左、中、右三个子树的元素值范围分别为（-∞，K1）、（K1，K2）、（K2，+∞）。</li>
 </ul>
-<p>树的高度会对 I&#x2F;O 读写的次数造成直接影响，而多路查找树的这种设计正好有效降低了树的高度，查询效率大大提高。而且它能存储的数据量也很大，3 层的多路查找树就可以存储 2 千多万行记录，相当于 20G 左右。B 树（也叫做 B-Tree，B 是 Balanced 的缩写）和 B+ 树都是多路查找树中的一种，是基础版本的进阶，下图是 B+ 树的结构：</p>
+<p>磁盘 I&#x2F;O 是一个耗时操作，因为不管是从磁盘读数据到内存，还是从内存写数据到磁盘，通常要经过<u>寻道</u>、<u>旋转</u>和<u>传输</u>三个步骤，而树的高度会对 I&#x2F;O 读写的次数造成直接影响，多路查找树的这种设计正好有效降低了树的高度，查询效率大大提高。B 树（也叫做 B-Tree，B 是 Balanced 的缩写）和 B+ 树都是多路查找树中的一种，下图是 B+ 树的结构：</p>
 <img src="/images/2025-03-07/B_plus_tree.png" width="65%" />
 
 <p>B+ 树与 B 树相比，在实现索引时主要有两个区别：</p>
 <ul>
 <li>B+ 树只在叶子节点存储数据，非叶子节点只存储索引，而 B 树在叶子节点和非叶子节点都会存储数据；</li>
-<li>B+ 树的叶子节点间通过指针链接，形成了一个单向的链表，通过遍历叶子节点即可获取所有数据。</li>
+<li>B+ 树的叶子节点间通过指针链接，形成了一个双向的链表，通过遍历叶子节点即可获取所有数据（但单个叶子节点内部的数据是通过单向链表组织）。</li>
 </ul>
 <img src="/images/2025-03-07/B_plus_and_B.png" width="65%" />
 
+<p>B+ 树能存储的数据量也很大，Page 是 InnoDB 磁盘管理的最小单位，俗称数据页，默认大小为 16KB，每个 Page 对应 B+ 树的一个节点，那么 3 层的 B+ 树就可以存储 2 千万条左右的行记录，相当于 20G 左右。</p>
 <p>B+ 树的自平衡通过节点的分裂和合并操作来维持，这里推荐一个<a target="_blank" rel="noopener" href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html">数据结构的演示网站</a>，在页面上找到 B+ 树后多操作几遍，理解会更加深刻。插入新数据时，通过逐层与非叶子节点的值作比较，找到待插入位置的叶子节点，然后自底向上插入，当节点变满时，进行分裂操作，删除数据时则可能又需要将节点合并。</p>
 
       
@@ -449,11 +450,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -465,11 +466,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
