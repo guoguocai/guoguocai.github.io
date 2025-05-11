@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/combine_index.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-05-09T13:12:59.260Z">
+<meta property="article:modified_time" content="2025-05-11T10:34:32.032Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -192,8 +192,8 @@
 <p><span style="background-color:green;"><font color=white>（5）</font></span>反射是通过在 JVM 中加载 .class 文件，然后<strong>通过这些 .class 文件反编译出对应的 Java 代码</strong>实现的，这个过程是在程序运行时动态进行的，因此可以实现动态加载和操作类。每个类都有一个与之对应的 Class 对象，这个 Class 对象包含了该类的所有信息，包括它的属性和方法，因此 JVM 可以通过这个 Class 对象来获取该类的所有信息，并可以动态地创建对象、调用方法、获取和设置属性等，而不需要提前在编译期就知道运行的对象是谁。</p>
 <p>反射机制的好处是能提高应用的扩展性，有时也能简化代码。坏处是可能会破坏类的封装性，因为反射允许访问私有成员，这会使类变得不那么安全；另外它有一定的性能开销，在性能敏感的场景中应尽量避免使用。</p>
 <p><span style="background-color:green;"><font color=white>（6）</font></span>虚拟内存的好处：<br>（A）<u>提高系统性能</u>：当物理内存不足时，操作系统可以自动将部分数据暂时存储到硬盘上的虚拟内存区域，以释放物理内存空间供其他应用程序使用，从而提高系统响应速度和稳定性；<br>（B）<u>扩大内存空间</u>：在不增加物理内存的情况下扩大内存空间，使计算机能够处理更多的数据；<br>（C）<u>提高数据安全性</u>：可以将敏感数据暂时存储到硬盘上，而不是直接暴露在物理内存中，可防止数据泄露。</p>
-<p>它的实现方式包括<u>请求分页存储管理</u>（Page）、<u>请求分段存储管理</u>（Segment）、<u>请求段页式存储管理</u>等，实现过程都涉及内存页面或者段的划分、页表或段表的建立、请求调页或调段、页面或分段置换算法、内存和硬盘之间的数据交换等步骤（在程序开始运行之前，仅装入当前要执行的部分页面或者部分段即可运行，若在运行过程中发现要访问的页面或者段不在内存，则将所需页面或者段从硬盘的虚拟内存区域调入物理内存，若物理内存不足，则操作系统根据置换算法（如 FIFO、LRU 等）选择一个页面或者一个段将其置换出去）。</p>
-<p>虚拟内存是一种重要的计算机系统内存管理技术，它允许操作系统使用硬盘空间来模拟额外的 RAM（随机访问存储器），通俗的说，就是当物理内存不够用时，为避免系统故障，系统就分出一部分硬盘空间来当内存使用，存放暂时还没有被访问到的代码和数据，一般设置为物理内存的 1 至 1.5 倍最佳（根据代码的<strong>局部性原理</strong>，被高频访问的代码往往只有一小部分，所以可以把暂时不运行的代码放到硬盘的虚拟内存区域，用的时候再分块加载到物理内存，反之，如果物理内存已满，则把物理内存中已经运行完的代码写回硬盘的虚拟内存区域，以便腾出空间）。它的缺点就是会占用一定的物理硬盘空间，加大对硬盘的读写，如果设置不当会影响整机稳定。</p>
+<p>它可通过内存<strong>分页</strong>（Page，通常为 4KB）、<strong>分段</strong>（Segment，根据逻辑划分，常分为代码段、数据段、堆栈段等）、或者<strong>分页 + 分段</strong>的方式实现，过程包括页或段的划分、页表或段表的建立、请求调页或调段、页或段的置换算法、内存和硬盘之间的数据交换等步骤（在程序开始运行之前，仅装入当前要执行的部分页或者部分段即可运行，若在运行过程中发现要访问的页或者段不在内存，则将所需页或者段从硬盘的虚拟内存区域调入物理内存，若物理内存不足，则操作系统根据置换算法（如 FIFO、LRU 等）选择一个页或者一个段将其置换出去）。存放在硬盘虚拟内存区域的程序指令使用的也是虚拟的内存地址，它需要 <u>CPU 中的内存管理单元（MMU，借助寄存器）将虚拟内存地址转换成实际物理地址‌</u>才能运行，虚拟地址与物理地址之间通过页表或段表来映射（页表或段表存储在内存中），如果采用的是段页式，则先通过段表转换出一个线性地址，然后再通过页表得到物理地址。</p>
+<p>虚拟内存是一种重要的计算机系统内存管理技术，它允许操作系统使用硬盘空间来模拟额外的 RAM（随机访问存储器），通俗的说，就是当物理内存不够用时，为避免系统故障，系统就分出一部分硬盘空间来当内存使用，存放暂时还没有被访问到的代码和数据，一般设置为物理内存的 1 至 1.5 倍最佳（根据代码的<strong>局部性原理</strong>，被高频访问的代码往往只有一小部分，所以可以把暂时不运行的代码放到硬盘的虚拟内存区域，用的时候再分块加载到物理内存，反之，如果物理内存已满，则把物理内存中已经运行完的代码写回硬盘的虚拟内存区域，以便腾出空间）。它的缺点就是会占用一定的物理硬盘空间，加大对硬盘的读写，如果设置不当也会影响整机稳定。</p>
 <p><span style="background-color:green;"><font color=white>（7）</font></span>select 和 epoll 都是 Linux 下实现 <strong>I&#x2F;O 多路复用</strong>的机制，也就是说能用单个线程同时监视多个文件描述符的 I&#x2F;O 事件。</p>
 <p><strong>select 的工作过程</strong>：应用程序调用 select 函数时，会将文件描述符（fd）和超时时间传给它，然后 select 会将接收到的这些文件描述符都阻塞在当前线程，并将它们作为一个 fd_set 集合传给内核，内核再以线性扫描的方式检查这些文件描述符是否就绪（即是否有数据可读、可写或发生异常）或者超时，如果有任何文件描述符就绪或超时，select 就返回相应的文件描述符，应用程序就可以根据返回的结果无阻塞地进行读取、写入或其他操作了。</p>
 <p><strong>epoll 的工作过程</strong>：与 select 不同的是，epoll 会在内核空间中维护一个事件表（用 epoll_create 创建，用 epoll_ctl 操作），然后通过这个事件表来跟踪每个文件描述符的状态，而不是每次都线性检查所有的文件描述符。当调用 epoll_wait 函数时，它同样会将所有的 fd 阻塞在当前线程，直到事件表跟踪到某个文件描述符上有事件发生或超时，epoll 就返回给应用程序去处理，这种事件驱动的方式可以确保应用程序在等待时只占用较少的资源。</p>
@@ -259,7 +259,7 @@
 <p>为解决这些问题，数据库提供了几种隔离级别（由低到高，已解决的问题在更高的隔离级别中自然也被解决）：<br>（A）读未提交：允许读取其他事务未提交的数据，解决丢失更新；<br>（B）读已提交：只能读取其他事务已提交的数据，解决脏读，是 Oracle 的默认隔离级别；<br>（C）可重复读：同一事务重复读取同一记录结果一致，解决不可重复读，是 MySQL 的默认隔离级别；<br>（D）串行化：强制事务串行执行，解决幻读，但其性能开销很大，影响并发效率，因此实际用得较少。<br>为了兼顾数据一致性与并发性能，在可能出现不可重复读或幻读的场合，可由应用程序用乐观锁或悲观锁控制。</p>
 <p>数据库事务的 ACID 实现原理：</p>
 <ul>
-<li>原子性：通过 <strong>undo log（回滚日志）</strong>实现。记录事务修改前的旧数据，若事务执行失败或显式调用 ROLLBACK，则可根据 undo log 逆向操作，将数据恢复到事务开始前的状态。</li>
+<li>原子性：通过 <strong>undo log（回滚日志）</strong>实现。在执行真正的操作之前，记录事务修改前的旧数据，若事务执行失败或显式调用 ROLLBACK，则可根据 undo log 逆向操作，将数据恢复到事务开始前的状态。包括遇到断电或系统崩溃的情况，也可在系统重启后读 undo log 恢复。</li>
 <li>持久性：通过 <strong>redo log（重做日志）</strong>实现。事务提交时，修改操作会先写入 redo log，再异步刷入磁盘数据页；如果数据库崩溃，恢复时也会通过 redo log 重放未落盘的修改操作，确保已提交事务的修改不丢失。</li>
 <li>隔离性：通过<strong>锁机制‌</strong>和 <strong>MVCC（多版本并发控制）</strong>实现，隔离级别越高，锁粒度越大或 MVCC 快照范围越严格，性能损耗越高。MVCC 能为每个事务生成一个数据快照，并用生成时的时间戳作为版本的唯一标识，通过时间戳管理历史版本，数据库系统为每个事务也会分配一个唯一的时间戳，事务只能访问时间戳早于自身时间戳的历史版本（每个行记录会存储指向 undo log 的指针，由此形成版本链，可以回溯历史数据），这样一来，不同事务读到的是不同版本，避免冲突发生。MVCC 的优势是实现无锁化操作，提升了并发性能。<br>（I）读未提交：写操作使用排他锁，读操作不加锁。<br>（II）读已提交：写操作使用<u>排他锁</u>（X 锁，阻止其他事务读写，如 SELECT … FOR UPDATE，持续到事务结束），读操作使用<u>共享锁</u>（S 锁，允许多个事务同时读取，如 SELECT … LOCK IN SHARE MODE，读取后立即释放）或 MVCC（<u>每次 SELECT … 查询时</u>，MVCC 会生成一个<u>新的行数据快照</u>，读取已提交的最新数据）。<br>（III）可重复读：写操作使用<u>排他锁</u>（持续到事务结束）；读操作使用 MVCC，<u>事务启动时</u>，MVCC 生成一个当前时间点上的<u>固定快照</u>，后续整个事务期间读取同一快照（比如事务 A 在时间点 10:00 读取数据，之后事务 B 修改了数据，事务 A 再次读取时‌看到的依然是时间点 10:00 的版本）；在此基础上使用<u>间隙锁</u>，可解决幻读（Gap Lock 锁定索引记录之间的空间，而不是锁定具体的记录，从而防止其他事务在这些间隙中插入新的数据行）。<br>（IV）串行化：<u>全锁机制‌</u>，所有写操作使用排他锁（持续到事务结束），读操作使用共享锁（持续到事务结束）。</li>
 <li>一致性：由原子性、持久性、隔离性和数据库约束共同保障。</li>
@@ -566,11 +566,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -582,11 +582,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
