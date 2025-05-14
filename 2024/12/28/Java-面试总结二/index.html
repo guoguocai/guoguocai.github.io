@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/combine_index.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-05-11T10:34:32.032Z">
+<meta property="article:modified_time" content="2025-05-14T08:47:49.851Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -184,8 +184,8 @@
 <p><span style="background-color:green;"><font color=white>（2）</font></span>HashMap 中数组的长度是固定的，当存放的元素越来越多的时候，哈希冲突的几率也越来越高，所以当 HashMap 中的元素数量超过阈值时（当前容量与负载因子的乘积），就会进行扩容。默认情况下，HashMap 的负载因子为 0.75，这意味着当 HashMap 中的元素数量达到其容量的 75% 时，就会触发扩容操作，新容量通常是旧容量的两倍（比如 16 * 2 &#x3D; 32），但不会超过 HashMap 允许的最大容量 2^30（数组扩容这个操作在 ArrayList 中也有）。</p>
 <p>扩容的过程也是非原子性的，在多线程并发时会有问题。它包括<strong>创建新数组</strong>、<strong>重新计算所有 key 的哈希值</strong>、<strong>将原数组中的元素迁移到新数组中</strong>、<strong>设置新阈值</strong>等步骤，如果原数组中存在链表或红黑树结构的哈希冲突，这些结构在扩容过程中也会被拆分并重新分配到新数组上。扩容是一个昂贵的操作，很消耗性能，因为它涉及到大量的内存分配和元素重新映射，因此，为了避免频繁的扩容，可以通过预估 HashMap 要存放的元素个数，然后设置合适的初始容量，或者设置合理的负载因子来提高性能。</p>
 <p><span style="background-color:green;"><font color=white>（3）</font></span>泛型是通过‌<strong>类型擦除‌</strong>来实现的，这是一种在编译期将泛型类型替换为原始类型（通常是 Object）的机制，使得泛型代码在不支持泛型的 JVM 上也可以运行。</p>
-<p>所谓泛型，就是指宽泛的数据类型、任意的数据类型，它是 JDK 1.5 的新特性，其本质是将数据类型参数化（用尖括号标识），可以用在类、接口和方法的创建中。在 Java 中，泛型信息只存在于编译阶段，当编译器遇到泛型代码时，它会进行类型检查，确保类型参数的使用是合法的，然后，编译器会将泛型代码中的类型参数替换为它们的原始类型（通常是 Object），并插入必要的类型转换和检查代码。因此，在运行期，JVM 中并没有泛型类型的信息，也称之为伪泛型。</p>
-<p>泛型的好处是使用简单，可以提高代码的安全性、复用性和可读性。其局限性是不能在运行时检查到泛型的信息，比如无法用 instanceof 判断一个对象是否是一个 List&lt;Integer&gt; 的实例；不能创建泛型数组；也不能使用基本类型作为泛型参数（如 int、char），而只能使用它们的包装类型（如 Integer、Character）。此外，由于类型擦除，反射机制可以绕过编译期的类型检查，从而执行不安全的操作。</p>
+<p>所谓泛型，就是指宽泛的数据类型、任意的数据类型，它是 JDK 1.5 的新特性，其本质是将数据类型参数化（用尖括号标识），可以用在类、接口和方法的创建中。在 Java 中，泛型信息只存在于编译阶段，当编译器遇到泛型代码时，它会先进行类型检查，确保类型参数的使用是合法的，然后，编译器会将泛型代码中的类型参数替换为它们的原始类型（通常是 Object），并插入必要的类型转换和检查代码（强转的类型就是那个被擦除掉的类型），这些工作都是在生成 .class 文件之前完成的。因此，在运行期间，JVM 中并没有泛型类型的信息，也称之为伪泛型。</p>
+<p>泛型的好处是使用简单，可以提高代码的安全性、复用性和可读性。其局限性是不能在运行时检查到泛型的信息，比如无法用 instanceof 判断一个对象是否是一个 List&lt;Integer&gt; 的实例；不能创建泛型数组；也不能使用基本类型作为泛型参数（如 int、char）。此外，由于类型擦除，反射机制可以绕过编译期的类型检查，从而执行不安全的操作。</p>
 <p><span style="background-color:green;"><font color=white>（4）</font></span>JMM 是在多线程环境下变量访问和内存交互的规范，旨在解决多线程并发中的‌可见性‌、原子性‌和‌有序性‌问题。首先它在逻辑上分为主内存和工作内存，这与 JVM 的内存结构（堆、栈等）无直接对应关系，主内存大致对应堆中的对象实例部分，而工作内存可能对应栈、CPU 缓存、寄存器：<br><strong>主内存</strong>：所有线程共享，存储所有共享变量，包括实例字段、静态字段、数组元素等；<br><strong>工作内存</strong>：线程私有，保存了该线程使用到的变量的副本，线程对变量的所有操作都必须在工作内存中进行，而不能直接操作主内存中的变量。</p>
 <p>（A）<strong>可见性‌</strong>：一个线程修改共享变量后，其他线程能够立即看到这个修改。可见性出现问题的原因是，变量的副本未及时同步到主内存，解决方案为通过 volatile（写操作立即刷新到主内存，读操作从主内存读取）、synchronized 关键字或 Lock 类来保证可见性（释放锁前，将工作内存变量同步到主内存；获取锁时，从主内存重新加载变量）。<br>（B）<strong>原子性‌</strong>：一个操作不可中断。原子性出现问题的原因是，一个操作包含了多个子步骤，比如自增操作就包含读取、修改、写入三步，解决方案为通过 synchronized 关键字或 Lock、AtomicInteger 等类来保证原子性。<br>（C）<strong>有序性‌</strong>：程序执行顺序要符合代码顺序。有序性‌出现问题的原因是，现代计算机为了优化性能，编译器和处理器可能对指令进行重排序，解决方案为通过 volatile（通过插入内存屏障）、synchronized 关键字（限制了单线程执行）或 Happens-Before 原则来保证有序性‌。<strong>内存屏障</strong>能保证有序性和可见性，它是 Java 编译器在生成指令序列时，在适当位置插入的一种特殊指令，能够阻止重排序。</p>
 <p><strong>Happens-Before 原则</strong>定义了两个操作间的有序性和可见性，主要包括：<br><u>程序顺序规则‌</u>：同一线程内的操作按代码顺序执行；<br><u>锁规则</u>：解锁操作先于后续的加锁操作；<br><u>volatile 规则</u>：volatile 变量的写操作先于后续的读操作；<br><u>传递性规则‌</u>：若 A 先于 B，且 B 先于 C，则 A 先于 C；<br><u>‌线程启动规则</u>：Thread.start() 先于线程内的任何操作；<br><u>线程终止规则</u>：线程的所有操作先于其他线程检测到它已经终止。</p>

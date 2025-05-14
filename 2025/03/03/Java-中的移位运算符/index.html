@@ -16,7 +16,7 @@
 <meta property="og:description" content="位运算符可以直接对二进制位进行操作，比使用乘除法的效率更高‌，Java 中常用的移位运算符包括 &lt;&lt;、&gt;&gt;、&gt;&gt;&gt;。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-03-03T09:20:44.000Z">
-<meta property="article:modified_time" content="2025-03-16T13:57:22.913Z">
+<meta property="article:modified_time" content="2025-05-13T16:02:22.564Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -157,7 +157,7 @@
 <span id="more"></span>
 
 <h3 id="1-lt-lt"><a href="#1-lt-lt" class="headerlink" title="1 &lt;&lt;"></a>1 &lt;&lt;</h3><p><strong>&lt;&lt; 表示左移，左移时不管正负，低位补 0。</strong></p>
-<p>为了使运算过程看得更清楚，下文的示例只取 8 位，但在实际的计算机中，如果操作数是 short（占 2 字节）、byte（占 1 字节）、char 类型（占 2 字节），则在进行位运算前会自动将其转为 int 类型，即会自动扩大位数过小的数据类型，以便在移位过程中不会丢失信息，运算的结果也为 int 类型‌。另外注意：<u>操作数是以补码的形式存储在计算机中的。</u></p>
+<p>为了使运算过程看得更清楚，下文的示例只取 8 位，但在实际的计算机中，如果操作数是 short（占 2 字节）、byte（占 1 字节）、char 类型（占 2 字节），则在进行位运算前会自动将其转为 int 类型，即会自动扩大位数过小的数据类型，以便在移位过程中不会丢失信息，运算的结果也为 int 类型‌。另外注意：<u>操作数是以补码的形式存储在计算机中的，使用补码的原因是它可以让计算机统一处理加法和减法，运算时不需要区分正数和负数，加法器既可以进行加法运算，也可以进行减法运算，简化了运算和硬件设计。</u></p>
 <p>正数：result &#x3D; 20 &lt;&lt; 2<br>20 的二进制补码：0001 0100<br>向左移动两位后：0101 0000<br>结果：result &#x3D; 80</p>
 <p>负数：result &#x3D; -20 &lt;&lt; 2<br>-20 的二进制原码：1001 0100<br>-20 的二进制反码：1110 1011<br>-20 的二进制补码：1110 1100<br>左移两位后的补码：1011 0000<br>反码：1010 1111<br>原码：1101 0000<br>结果：result &#x3D; -80</p>
 <p>左移时，操作数的所有位（包括符号位）都会向左移动指定的位数，移动位数的不同，有可能影响结果的正负：</p>
