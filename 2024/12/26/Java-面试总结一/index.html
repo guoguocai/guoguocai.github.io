@@ -16,7 +16,7 @@
 <meta property="og:description" content="这些都是我在真实面试时被问到的问题，当时可能因为知识储备不足或其他原因，没能答上来。现在重新整理一下，希望能对以后的面试有所帮助。注意文中的前半部分都是问题，答案统一放在最后，这样方便先在脑海中思考一遍，快速过掉简单的问题，想不出来的再去看参考答案。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2024-12-26T03:03:24.000Z">
-<meta property="article:modified_time" content="2025-05-05T09:55:48.869Z">
+<meta property="article:modified_time" content="2025-05-16T13:59:22.536Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -159,7 +159,7 @@
 <h3 id="选择题"><a href="#选择题" class="headerlink" title="选择题"></a>选择题</h3><p>（1）在一台 Linux 服务器上运行一个高并发的在线支付系统时，发现系统性能下降严重，CPU 负载高，支付处理速度变慢。通过使用 vmstat 命令，观察到 si（swap in）和 so（swap out）频繁增加，内存的 free 值很低。此时应该优先采取哪种措施来提升系统性能？<br>A. 增加系统的虚拟内存空间<br>B. 调整 CPU 的运行频率<br>C. 降低系统的进程优先级<br>D. 增加物理内存</p>
 <p>（2）如果要在多线程 Java 应用程序中保证线程安全，ArrayList 应该怎么做？下面说法正确的是：<br>A. 自己写个包装类，根据业务一般是 add&#x2F;update&#x2F;remove 加锁<br>B. ArrayList 本身就是线程安全的，不用做其他操作<br>C. 使用 Collections.synchronizedList(new ArrayList&lt;&gt;()); 内部使用了 synchronized 加锁<br>D. 使用 CopyOnWriteArrayList&lt;&gt;(); 内部使用了 ReentrantLock 加锁</p>
 <p>（3）以下关于 Java 垃圾收集的叙述，哪些是对的：<br>A. 开发者必须自己创建一个线程进行内存释放的工作<br>B. 垃圾收集将检查并释放不再使用的内存<br>C. 垃圾收集允许开发者明确指定并立即释放该内存<br>D. 垃圾收集能够在期望的时间释放内存</p>
-<h3 id="问答题"><a href="#问答题" class="headerlink" title="问答题"></a>问答题</h3><p>（4）有一个日志文件，里面记录了访问过某网站的 IP 地址，现在想找出某一天访问该网站次数最多的 IP 地址，但由于此文件过大而无法直接读取，请你提供统计方法。</p>
+<h3 id="问答题"><a href="#问答题" class="headerlink" title="问答题"></a>问答题</h3><p>（4）有一个日志文件，里面记录了访问过某网站的 IP 地址，现在想找出访问该网站次数最多的 IP 地址，但由于此文件过大而无法直接读取，请你提供统计方法。</p>
 <p>（5）设计一个抢红包程序。比如：领红包人数 6，总金额 10.00。红包金额分别为：0.42 元、1.95 元、2.03 元、1.71 元、2.16 元、1.73 元（备注：红包精确到分），请回答以下问题：<br>（5.1）简述你的方案和用到的技术&#x2F;组件。<br>（5.2）你如何保证并发抢红包的情况下，大家能够获得正确的红包数字而不会产生问题？<br>（5.3）如果同时有数千个红包，每个红包最多可能一千个人抢，你会如何设计这个系统，为什么？<br>（5.4）还有什么需要注意的细节？</p>
 <h3 id="编程题"><a href="#编程题" class="headerlink" title="编程题"></a>编程题</h3><p>（6）假设你是一家电商公司的 Java 开发工程师，最近公司的业务量迅速增长，需要开发一个线程安全的商品库存管理系统。系统需要满足以下要求：</p>
 <ul>
@@ -184,7 +184,7 @@
 <h3 id="参考答案"><a href="#参考答案" class="headerlink" title="参考答案"></a>参考答案</h3><p><span style="background-color:green;"><font color=white>（1）</font></span>D</p>
 <p><span style="background-color:green;"><font color=white>（2）</font></span>ACD</p>
 <p><span style="background-color:green;"><font color=white>（3）</font></span>B<br>分析：Java 是自动管理内存，虽然它提供了一些与垃圾收集器交互的方法，比如 System.gc()，但这只是建议 JVM 进行垃圾收集，并不能保证立即执行，更不能保证释放特定的内存，垃圾收集器的工作时间是不确定的。此外，过度调用 System.gc() 可能会影响性能。</p>
-<p><span style="background-color:green;"><font color=white>（4）</font></span><strong>思路一</strong>：用<strong>分块读取</strong>的思想，将大文件按照一定的块大小进行分块，每次只读取一块数据到内存中进行处理，处理完后再读取下一块数据。这样可以避免一次性读入整个文件造成内存不足的问题。<br><strong>思路二</strong>：用 <strong>MapReduce</strong> 的思想，将 IP 地址按照某种 hash 映射规则，映射到不同的单独小文件，再把这 n 个小文件载入内存进行统计（Map 的过程），找出每个小文件中访问量前十的 IP 地址，最后汇总数据找出访问次数最多的 IP 地址（Reduce 的过程）。</p>
+<p><span style="background-color:green;"><font color=white>（4）</font></span><strong>思路一</strong>：用流式读取加<strong>分块读取</strong>的思想，将大文件按照一定的块大小进行分块，然后每次只读取一块数据到内存中进行处理，处理完后再读取下一块数据。这样可以避免一次性读入整个文件造成内存不足的问题。<br><strong>思路二</strong>：用流式读取加 <strong>MapReduce</strong> 的思想，将大文件中的 IP 地址按照某种 hash 映射规则，映射到不同的单独小文件，再将每个小文件载入内存进行统计（Map 的过程），找出每个小文件中访问量前十的 IP 地址，最后汇总数据找出访问次数最多的 IP 地址（Reduce 的过程）。</p>
 <p><span style="background-color:green;"><font color=white>（5）</font></span>这里不以回答问题为主，而是借助这个题目，正好整体了解下红包系统的架构该如何设计，可能会跟题目要问的有所出入。红包是一种瞬时流量很大的应用，以 2017 年除夕为例，微信红包峰值 QPS 在 76w 左右，除夕当天收发微信红包的数量为 142 亿个。抢红包比秒杀有更海量的并发要求，而且整个系统核心功能和支付相关，需要做好高并发、高可用、高可靠。</p>
 <p>（5.1）主要包含三部分：<strong>发红包、抢红包、拆红包</strong>。需要的数据库表主要有两张：红包表（红包 ID - 主键、发送红包的用户 ID、红包总金额、红包剩余金额、红包总数、剩余红包总数）、红包领取记录表（记录 ID - 主键、红包 ID、用户 ID、抢到的金额）。而红包金额的分配有两种方案：预先生成和实时拆分，一般选择实时拆分：<br><strong>发红包：</strong>接收两个参数：红包个数和总金额，再调用支付接口，支付成功后，在红包表中新增一条数据，为了保证实时性和抢红包的效率，在 Redis 中也增加一条记录，保存红包 ID 和总个数 n，然后把红包消息发送到群中。<br><strong>抢红包：</strong>用户点开红包，此动作存在高并发。首先校验红包是否被抢完、是否过期，如果还能抢，则原子递减保存在 Redis 中的红包个数，个数递减为 0 时说明已抢光。<br><strong>拆红包：</strong>用户拆开红包，红包的金额也在此时实时计算出来，系统会在拆红包时取 0.01 到剩余金额平均值 * 2 之间的数值作为红包金额（二倍均值法），这种实时计算的方式基于内存进行，不需要额外的存储空间，且计算效率很高。用户获取到红包金额后，通过 MQ 异步进行数据库的事务操作，累加已经领取的个数和金额，更新红包表和领取记录表。为了提升效率，最终的转账也用 MQ 异步操作，即异步调用支付接口，将领取到的红包金额更新到钱包里，同时增加对账机制，保证资金的最终一致性。注意，核心流程外的步骤都可考虑异步化。</p>
 <p>（5.2）要保证操作的原子性：<br><strong>思路一</strong>：在拆红包过程中使用 JVM 的 <strong>CAS</strong>（Compare-and-Set）乐观锁算法，确保每次只有一个并发用户拆红包成功，如果拆红包 CAS 失败，系统自动进行重试，但可能在重试过程中被其他用户抢得先机而空手而归。<br><strong>思路二</strong>：使用 Redis 的 <strong>Lua</strong> 脚本，它本身具备原子性，可用它来实时计算红包金额。</p>

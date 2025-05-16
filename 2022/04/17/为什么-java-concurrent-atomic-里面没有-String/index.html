@@ -16,7 +16,7 @@
 <meta property="og:description" content="首先说结论，String 是线程安全的，不会造成多线程读写冲突问题。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-04-17T01:54:10.000Z">
-<meta property="article:modified_time" content="2025-05-14T14:59:56.957Z">
+<meta property="article:modified_time" content="2025-05-16T08:49:54.562Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -156,8 +156,8 @@
         <p>首先说结论，String 是线程安全的，不会造成多线程读写冲突问题。</p>
 <span id="more"></span>
 
-<p>原因如下：String 不是基础类型，而是一个不可变类，我们无法改变一个 String 对象的内容，而只能创建一个新的 String 对象。atomic 包是一个工具包，并不能替代原来的基础类型和对象的使用，因此用 atomic 去封装 String 没有任何用处。atomic 包中常用的类有 AtomicInteger、AtomicIntegerArray、AtomicStampedReference（在 AtomicReference 的基础上加入一个版本号，可避免对复杂数据结构（比如可复用节点的链表）使用 AtomicReference 时引发的 ABA 问题），常用的方法有 compareAndSet()、getAndIncrement()。</p>
-<p>Atomic 原子类用的不是传统的锁机制（悲观锁），而是用的无锁化的 CAS 机制（乐观锁），通过 CAS 机制保证多线程修改的安全性，CAS 的全称是：Compare and Set，也就是先比较再设置的意思（有的也叫 Compare and Swap，Compare and Swap 是一条硬件指令，操作系统和硬件能保证原子执行，由于 Java 不能直接操作内存和硬件，所以它是通过 JNI 调用其他语言写的操作硬件指令的方法来实现的）。</p>
+<p>原因如下：String 不是基础类型，而是一个不可变类，我们无法改变一个 String 对象的内容，而只能创建一个新的 String 对象。atomic 包是一个工具包，并不能替代原来的基础类型和对象的使用，因此用 atomic 去封装 String 没有任何用处。atomic 包中常用的类有 AtomicInteger、AtomicIntegerArray、AtomicStampedReference（在 AtomicReference 的基础上加入了一个版本号，可避免对复杂数据结构（比如可复用节点的链表）使用 AtomicReference 时引发的 ABA 问题），常用的方法有 compareAndSet()、getAndIncrement()。</p>
+<p>Atomic 原子类用的不是传统的锁机制（悲观锁），而是用的无锁化的 CAS 机制（乐观锁），通过 CAS 机制保证多线程修改的安全性，CAS 的全称是：Compare and Set，也就是先比较再设置的意思（有的地方也叫 Compare and Swap，Compare and Swap 本质是一条硬件指令，由操作系统和硬件保证原子执行，由于 Java 不能直接操作硬件和内存，所以它是通过 JNI 调用其他语言写的硬件操作指令来实现的）。</p>
 <ul>
 <li><p>悲观锁：假设冲突一定会发生，因此<strong>在访问数据前就先加锁</strong>（如 synchronized、ReentrantLock、数据库的行级锁（SELECT … FOR UPDATE）、表级锁等），确保操作期间数据是被独占的，其他线程需等待锁释放；缺点为可能导致线程阻塞、死锁。适用于需要确保强一致性的场景，比如转账时，通过行级锁锁定账户记录，确保同一时间仅一个线程能修改余额。严格来说，只有数据库层面提供的锁机制才能真正保证数据访问的排他性，因为即使在本系统的数据访问层中实现了加锁机制，也无法保证外部系统不会修改数据。</p>
 <p>关于在 MySQL 中使用 SELECT … FOR UPDATE：<br>（I）需要关闭自动提交模式（set autocommit &#x3D; 0;），然后手动控制事务（begin; 开始，commit; 提交）；<br>（II）后面开始的事务必须也用 SELECT … FOR UPDATE 格式操作同一数据，它才会等待前面的事务结束；<br>（III）只有明确指定主键或者索引列进行条件查询，才会使用行级锁（查无结果时不会锁）， 否则会用表级锁。  </p>
