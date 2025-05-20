@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/combine_index.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-05-19T15:22:59.167Z">
+<meta property="article:modified_time" content="2025-05-20T09:39:27.487Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -270,14 +270,18 @@
 <p>2PC 的优点是逻辑简单，缺点是存在单点故障的风险‌，如果协调者出现问题，则各个数据库都会同步阻塞住，而且还有可能因为网络问题导致部分参与者收不到协调者发的提交命令，进而导致数据不一致，因此 2PC 不适合高并发场景。它适用于传统的银行转账，因为银行转账要求原子性操作要绝对可靠（也就是要求强一致性），且银行内部的网络环境可靠，转账的参与者数量也有限，这些特点弥补了 2PC 的缺陷。</p>
 <p>（B）<strong>三阶段提交（3PC）</strong>：细化了 2PC 中的 Prepare 阶段，分为<u>预检查阶段</u>（CanCommit，协调者询问所有参与者是否具备事务执行的条件，目的是在不锁定资源的前提下预判事务可行性，避免后续因资源不足回滚）、<u>预提交阶段</u>（PreCommit，若所有参与者都返回 Yes，则协调者通知所有参与者开始执行本地事务，但不提交，随后向协调者报告）和<u>提交阶段</u>（DoCommit，若所有参与者都返回 Yes，则协调者通知所有参与者正式提交，释放本地资源）。3PC 可缩短资源占用时间，同时引入了超时机制，若协调者宕机或参与者未收到指令，参与者可基于超时策略自行提交或回滚事务；缺点是实现复杂度增加，仍存在因参与者的超时策略差异导致的部分提交问题。</p>
 <p>（II）保证最终一致性：</p>
-<p>（C）<strong>TCC（Try-Confirm-Cancel）</strong>：通过业务代码实现事务操作的三个阶段，在 <u>Try 阶段进行资源预留</u>（如锁定库存），尝试执行事务操作但不提交，若 Try 阶段成功，则进入 <u>Confirm 阶段提交</u>（如扣减库存）；若 Try 阶段失败，则进入 <u>Cancel 阶段撤销操作</u>（如释放库存）。TCC 的这种设计使它能够支持细粒度的事务控制，且不依赖底层数据库的 XA 协议，适合复杂的高并发场景，如电商促销；缺点是每个操作都必须手动编写 TCC 三个阶段的代码，代码侵入性强，开发成本高。</p>
+<p>（C）<strong>TCC（Try-Confirm-Cancel）</strong>：通过业务代码实现事务操作的三个阶段，在 <u>Try 阶段进行资源预留</u>（如锁定库存），尝试执行事务操作但不提交，若 Try 阶段成功，则进入 <u>Confirm 阶段提交</u>（如扣减库存）；若 Try 阶段失败，则进入 <u>Cancel 阶段撤销操作</u>（如释放库存）。TCC 的这种设计使它能够支持细粒度的事务控制，灵活度高，且不依赖底层数据库的 XA 协议，适合复杂的高并发场景，如电商促销；缺点是每个操作都必须手动编写 TCC 三个阶段的代码，代码侵入性强，开发成本高。</p>
 <p>（D）<strong>‌消息队列事务消息</strong>：使用<u>支持事务的消息队列</u>（如 RocketMQ、Kafka），生产者将消息标记为「半消息」状态发送至 MQ，此时消息对消费者不可见，MQ 将半消息持久化存储，并返回确认给生产者，生产者收到半消息存储成功的 ACK 后触发本地事务，根据本地事务执行结果，生产者向 MQ 发送 Commit（将半消息标记为可消费状态）或 Rollback 指令（直接删除半消息）。若 MQ 未收到指令（如生产者宕机），则 MQ 会主动向生产者发起请求，回查本地事务的最终状态，MQ 再根据返回结果决定是提交还是回滚。此方案适用于对实时性要求不高的场景‌，如发放活动积分、发送通知。</p>
 <p>RabbitMQ 不原生支持分布式事务，但可通过本地事件表加定时任务的方式实现最终一致性：在生产者的本地数据库中创建一张事件表，然后生产者就能直接用本地事务完成两件事情，一是在本地数据库中要完成的正常业务，二是向事件表中插入一条记录，用于记录相关的其他分布式数据库要完成的操作，记录状态为「待发送」。接下来新增一个异步的定时任务，负责从事件表中取出待发送记录，然后将其写入消息队列，通过确认回调更新记录的状态为「已发送」，如果消息投递失败，则进行补发，节点间通过对账最终状态修复数据不一致的问题。</p>
 <p>（E）<strong>Saga 模式</strong>：核心思想是将长事务<u>拆分为多个子事务</u>，每个子事务提交后触发下一个子事务，若某子事务失败，则触发补偿操作，适用于复杂的跨服务长流程业务，如物流状态更新。根据架构设计的不同，Saga 又可分为两种模式：编排式（去中心化设计‌，耦合度低，故障排查难度高，服务间基于事件驱动通信，采用无锁化设计）和协调式（中心化设计‌，耦合度高，故障排查难度低，由协调器统一管理流程）。</p>
 <ul>
-<li><strong>事务补偿</strong>：是分布式事务中用于<strong>回滚已提交操作</strong>的一种机制（<u>传统数据库事务无法回滚已提交的操作</u>）。当分布式事务中的某一步失败时，通过执行<strong>与原始操作逻辑相反</strong>的补偿操作，将系统状态恢复到事务执行前的状态，确保最终一致性（如订单创建成功后支付失败，则需取消订单，若存在未支付之类的中间状态，也要做相应处理）。一般通过超时机制和事务状态轮询来触发补偿，不同的模式有不同的补偿方式：<br>（I）显式补偿（TCC 模式）：在业务代码中手动实现补偿逻辑，需显式调用 Cancel 等接口。<br>（II）隐式补偿（Saga 模式）：预先定义好正向事务对应的逆向补偿操作，并记录事务日志，失败时自动触发。<br>（III）基于消息的补偿（消息队列事务消息）：服务监听到失败后触发，将补偿操作封装为消息，让相关节点消费。</li>
+<li><strong>事务补偿</strong>：是分布式事务中用于<strong>回滚已提交操作</strong>的一种机制（<u>传统数据库事务无法回滚已提交的操作</u>）。当分布式事务中的某一步失败时，通过执行<strong>与原始操作逻辑相反</strong>的补偿操作，将系统状态恢复到事务执行前的状态，确保最终一致性（如订单创建成功后支付失败，则需取消订单，若存在未支付之类的中间状态，也要做相应处理）。一般通过超时机制和事务状态轮询来触发补偿，不同的模式有不同的补偿方式：<br>（I）显式补偿（TCC 模式）：在业务代码中手动实现补偿逻辑，需显式调用 Cancel 等接口。<br>（II）隐式补偿（Saga 模式）：先预定义好正向事务对应的逆向补偿操作，并记录事务日志，失败时自动触发。<br>（III）基于消息的补偿（消息队列事务消息）：服务监听到失败后触发，将补偿操作封装为消息，让相关节点消费。</li>
 </ul>
-<p>Spring Cloud 主要通过 ‌Seata‌ 框架实现分布式事务，同时兼容 Saga 和 2PC 等方案。Seata‌ 支持 AT、TCC 等模式，AT 模式基于数据库事务，利用全局锁保证隔离性，事务失败时通过数据库代理自动生成反向 SQL 实现补偿（undo_log 表），优点为无需侵入业务代码，缺点为可能产生锁冲突。</p>
+<p>Spring Cloud 主要通过 ‌Seata‌ 组件实现分布式事务，主要支持 <strong>AT（默认）</strong>、TCC、Saga、XA 四种模式。AT 模式是 Seata 提出的一种解决方案，采用了 2PC 的思想并对其进行了改进（AT 模式会在一阶段直接提交并释放锁，降低了锁竞争），它基于数据库事务，保证的是最终一致性。优点为无需侵入业务代码，只需添加 @GlobalTransactional 注解即可生效。</p>
+<ul>
+<li>AT 一阶段：TM 通知 TC 开启全局事务，RM 向 TC 注册分支事务，RM 拦截业务 SQL，在操作数据前生成 undo log（数据快照）存储到本地的 undo_log 表中，然后执行业务 SQL 并直接提交本地事务，释放数据库锁，RM 将分支事务的执行结果上报给 TC。</li>
+<li>AT 二阶段：TM 通知 TC 结束全局事务，TC 检查所有分支事务的状态，若所有分支事务都成功执行，则通知所有 RM 异步删除掉一阶段记录的 undo log，完成‌全局事务提交；若有分支事务执行失败，则通知已成功执行的 RM <strong>根据 undo_log 自动生成反向更新 SQL</strong> 并执行，完成后再清除 undo log，完成‌全局事务回滚。</li>
+</ul>
 <p><span style="background-color:green;"><font color=white>（14）</font></span>当场的解题思路：直接写不出来，那就从最简单的 2 * 2 表格开始，一共有多少种走法可以直接数出来，然后逐渐扩大表格，慢慢找出规律，如下：</p>
 <table>
 <thead>
@@ -573,11 +577,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
