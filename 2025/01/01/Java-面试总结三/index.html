@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-05-23T12:41:21.194Z">
+<meta property="article:modified_time" content="2025-05-25T04:49:02.632Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -315,7 +315,7 @@
 <li>集成 Prometheus + Grafana 监控慢查询、锁等待等关键指标‌。</li>
 </ul>
 <p><span style="background-color:green;"><font color=white>（15）</font></span>防止被提前读取的方案有：<br>（A）目标文件上传完成后（服务端是不知道何时传完的），再上传一个跟它文件名相同，但后缀不同的临时文件，通过这个临时文件来判断目标文件的上传情况。比如要上传的目标文件是 users.xlsx，上传完成后另外再上传一个文件 users.tmp，这样一来，服务端如果想要读文件 users.xlsx，就要先判断文件 users.tmp 是否存在，若存在，则说明文件 users.xlsx 已经上传完成，可以放心去读了。<br>（B）改目标文件名：比如要上传的目标文件是 data.txt，那么在文件上传完成前，我们可以用脚本将文件名改为类似 data.txt.uploading 这样的格式，等文件上传完成后，再将其改回原来的 data.txt 即可，外部程序仅监控正式文件 data.txt，避免读取未完成文件‌。<br>（C）将上传中的文件存放在临时目录（如 &#x2F;temp），并设置严格的访问权限（如仅上传进程可读写），待文件上传完成后，再将其移动至正式存储目录‌，确保服务端的文件仅在完整上传后才可见‌。</p>
-<p>进一步了解下客户端与服务端通信时，防止消息被中途抓包的方法：<br>（A）强制使用 HTTPS &#x2F; TLS 协议，加密传输数据，防止明文被拦截；并对敏感数据（如账号、交易信息）使用 AES、RSA 等算法进行二次加密，这样即使 HTTPS 被破解也仍然无法解密业务数据；<br>（B）增加数字签名，服务端校验签名与数据完整性，防止篡改‌；<br>（C）增加数字证书，客户端与服务端互相验证证书，避免单向认证导致中间人攻击；<br>（D）自定义私有的二进制协议并增加校验位，替代 JSON &#x2F; XML 等明文协议；<br>（E）将数据包拆分并乱序传输，接收端按预设规则重组，降低抓包工具解析成功率‌；<br>（F）关键算法（如 AES 密钥派生）通过 JNI 调用 C++ 实现，增加逆向分析难度；<br>（G）通过自动化工具模拟抓包攻击，检测协议漏洞并及时修复，必要时更新加密算法和证书‌。</p>
+<p>进一步了解下客户端与服务端通信时，防止消息被中途抓包的方法：<br>（A）强制使用 HTTPS（内部使用了数字签名和数字证书）加密传输数据，防止明文被拦截；并对敏感数据（如账号、交易信息）使用 AES、RSA 等算法进行二次加密，这样即使 HTTPS 被破解也仍然无法解密业务数据；<br>（B）在使用 HTTPS 的基础上，再对数据加一层数字签名和数字证书机制，对身份进行二次验证；<br>（C）自定义私有的二进制协议并增加校验位，替代 JSON &#x2F; XML 等明文协议；<br>（D）将数据包拆分并乱序传输，接收端按预设规则重组，降低抓包工具解析成功率‌；<br>（E）关键算法（如 AES 密钥派生）通过 JNI 调用 C++ 实现，增加逆向分析难度；<br>（F）通过自动化工具模拟抓包攻击，检测协议漏洞并及时修复，必要时更新加密算法和证书‌。</p>
 
       
 
@@ -549,11 +549,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">

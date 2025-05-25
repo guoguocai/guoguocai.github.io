@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080918.png">
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080920.png">
 <meta property="article:published_time" content="2019-03-19T13:25:45.000Z">
-<meta property="article:modified_time" content="2025-03-11T15:25:54.394Z">
+<meta property="article:modified_time" content="2025-05-25T05:00:59.942Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -191,13 +191,15 @@
 <p>11<br><br><img src="/images/2019-03-19/bg2011080911.png" width="45%" /><br>后来，苏珊感觉不对劲，发现自己无法确定公钥是否真的属于鲍勃。她想到了一个办法，要求鲍勃去找「证书中心」（Certificate Authority，简称 CA），为公钥做认证。证书中心用自己的私钥，对鲍勃的公钥和一些相关信息一起加密，生成「数字证书」（Digital Certificate）。</p>
 <p>12<br><br><img src="/images/2019-03-19/bg2011080912.png" width="45%" /><br>鲍勃拿到数字证书以后，就可以放心了。以后再给苏珊写信，只要在签名的同时，再附上数字证书就行了。</p>
 <p>13<br><br><img src="/images/2019-03-19/bg2011080913.png" width="45%" /><br>苏珊收信后，用 CA 的公钥解开数字证书，就可以拿到鲍勃真实的公钥了，然后就能证明「数字签名」是否真的是鲍勃签的。</p>
-<p>14<br><br><img src="/images/2019-03-19/bg2011080914.jpg" width="45%" /><br>下面，我们看一个应用「数字证书」的实例：HTTPS 协议，这个协议主要用于网页加密。</p>
+<p>14<br><br><img src="/images/2019-03-19/bg2011080914.jpg" width="45%" /><br>下面，我们看一个应用「数字证书」的实例：HTTPS 协议（HTTPS &#x3D; HTTP + TLS），这个协议主要用于网页加密。</p>
 <p>15<br><br><img src="/images/2019-03-19/bg2011080915.png" width="45%" /><br>首先，客户端向服务器发出加密请求。</p>
-<p>16<br><br><img src="/images/2019-03-19/bg2011080916.png" width="45%" /><br>服务器用自己的私钥加密网页以后，连同本身的数字证书，一起发送给客户端。</p>
-<p>17<br><br><img src="/images/2019-03-19/bg2011080917.png" width="45%" /><br>客户端（浏览器）的「证书管理器」，有「受信任的根证书颁发机构」列表。客户端会根据这张列表，查看解开数字证书的公钥是否在列表之内。</p>
-<p>18<br><br><img src="/images/2019-03-19/bg2011080919.jpg" width="45%" /><br>如果这张数字证书不是由受信任的机构颁发，则浏览器会发出警告。</p>
-<p>19<br><br><img src="/images/2019-03-19/bg2011080918.png" width="45%" /><br>如果数字证书中记载的网址，与你正在浏览的网址不一致，则说明这张证书可能被冒用，浏览器会发出另一种警告。</p>
-<p>20<br><br><img src="/images/2019-03-19/bg2011080920.png" width="45%" /><br>如果数字证书是可靠的，客户端就可以使用证书中的服务器公钥，对信息进行解密，然后与服务器交换加密信息。</p>
+<p>16<br><br><img src="/images/2019-03-19/bg2011080916.png" width="45%" /><br>服务器用自己的私钥加密网页以后，连同本身的数字证书（包含服务器的公钥），一起发送给客户端。</p>
+<p>17<br><br><img src="/images/2019-03-19/bg2011080917.png" width="45%" /><br>客户端（浏览器）的「证书管理器」，有「受信任的根证书颁发机构」列表。客户端会根据这个列表，查看解开数字证书的公钥是否在列表之内。</p>
+<p>18<br><br><img src="/images/2019-03-19/bg2011080919.jpg" width="45%" /><br>如果不在列表之内，则说明这张数字证书不是由受信任的机构颁发，浏览器会发出警告。</p>
+<p>19<br><br><img src="/images/2019-03-19/bg2011080918.png" width="45%" /><br>如果数字证书中记录的网址与正在浏览的网址不一致，则说明这张证书可能被冒用，浏览器会发出另一种警告。</p>
+<p>20<br><br><img src="/images/2019-03-19/bg2011080920.png" width="45%" /><br>如果数字证书是可靠的，客户端就可以安全获取到证书中的服务器公钥，对信息进行解密。</p>
+<p>21<br>接着客户端生成随机的对称密钥，用服务器的公钥加密，然后将其发送给服务器，服务器用自己的私钥进行解密，得到对称密钥。此时双方都知道了对称密钥，就可以用它来进行加密通信了（长期使用同一对称密钥可能泄露，因此 TLS 协议支持在特定时间或达到数据量阈值后重新协商对称密钥）。</p>
+<p>22<br>也就是说，HTTPS 结合了非对称加密和对称加密两种方式，服务器通过非对称加密算法分发公钥，但最后实际通信使用的是对称加密算法。因为非对称加密虽然安全性很高，但速度却很慢，对称加密算法的加解密速度要比非对称加密算法快上百倍，适合处理大量数据，将两者配合使用，可以兼顾安全与性能。</p>
 
       
 
@@ -418,11 +420,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
