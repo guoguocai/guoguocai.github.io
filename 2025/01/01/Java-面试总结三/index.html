@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-05-30T14:26:59.699Z">
+<meta property="article:modified_time" content="2025-06-02T14:59:29.754Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -240,7 +240,7 @@
 <li><p><strong>Redis 的 SETNX</strong>（SET if Not eXists）：是 Redis 提供的原子性命令，用于在指定键（Key）不存在时设置，若键已存在，则不执行任何操作。当多个客户端并发调用时，它确保仅有一个客户端能成功设置键值，是分布式锁的基础，为避免死锁（如客户端崩溃未释放锁），需设置键的过期时间。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">基本用法</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 1：键不存在，设置成功</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 0：键已存在，未执行操作</span></span><br><span class="line">SETNX key value</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分布式锁用法：为保证原子性，NX（不存在才设置）和 PX（过期时间，单位：毫秒）必须同时设置</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 1：获取锁成功</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 0：锁已被其他客户端持有</span></span><br><span class="line">SET key value NX PX 30000</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong>Redisson 分布式锁</strong>：跟 SETNX 的作用类似，区别在于它通过 Lua 脚本执行 Redis 命令，确保加锁、解锁、重入等操作的原子性，在调用 lock() 方法时会默认启动看门狗机制延长锁的过期时间，防止业务未执行完锁已超时释放。使用不当可能会引发<u>死锁</u>（比如看门狗无限续期或客户端发生故障，解决办法为设置一个合理的锁过期时间或在 finally 块中显式释放锁）、<u>误释放锁</u>（比如线程 A 释放了线程 B 的锁，解决办法为在获取锁时为其生成一个唯一标识作为锁的值，如 UUID，释放锁时先校验锁的值是否与自己的标识一致）、<u>数据不一致</u>（比如线程 A 更新缓存的逻辑未在锁过期时间之前完成，紧接着线程 B 获取到锁并对同一缓存进行更新，解决办法为使用可重入锁，获取锁时增加持有次数，释放锁时减少持有次数，只有当持有次数为 0 且持有者是当前线程时才真正释放锁）等问题。</p>
+<li><p><strong>Redisson 分布式锁</strong>：跟 SETNX 的作用类似，区别在于它通过 Lua 脚本执行 Redis 命令，确保加锁、解锁、重入等操作的原子性，在调用 lock() 方法时会默认启动看门狗机制延长锁的过期时间，防止业务未执行完锁已超时释放。使用不当可能会引发的问题有：（a）<u>死锁</u>：比如看门狗无限续期或客户端发生故障，解决办法为设置一个合理的锁过期时间或在 finally 块中显式释放锁；（b）<u>误释放锁</u>：比如线程 A 释放了线程 B 的锁，解决办法为在获取锁时为其生成一个唯一标识作为锁的值，如 UUID，释放锁时先校验锁的值是否与自己的标识一致；（c）<u>数据不一致</u>：比如线程 A 更新缓存的逻辑未在锁过期时间之前完成，紧接着线程 B 获取到锁并对同一缓存进行更新，解决办法为使用可重入锁，获取锁时增加持有次数，释放锁时减少持有次数，只有当持有次数为 0 且持有者是当前线程时才真正释放锁。</p>
 </li>
 </ul>
 <p>（II）雪崩指的是<strong>缓存中大量数据同时失效</strong>，或 Redis 宕机，导致所有请求直接访问数据库，可能引发数据库崩溃。比如大促期间缓存集中过期，解决方法：<br>（A）<u>对缓存数据的过期时间添加随机值</u>，避免批量数据同时失效‌；<br>（B）<u>增加二级缓存</u>（如 Memcached），当 Redis 缓存失效时，可从二级缓存读取；<br>（C）<u>部署 Redis 主从集群以及哨兵模式</u>（更高阶用 Redis Cluster），防止单点故障导致服务不可用‌；<br>（D）<u>对关键数据开启持久化功能</u>，配合 Hystrix 等<u>熔断</u>工具，在数据库压力过大时暂时拒绝部分请求‌。</p>
@@ -555,6 +555,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
@@ -571,11 +575,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
