@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080918.png">
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080920.png">
 <meta property="article:published_time" content="2019-03-19T13:25:45.000Z">
-<meta property="article:modified_time" content="2025-06-01T12:39:28.419Z">
+<meta property="article:modified_time" content="2025-06-04T04:24:23.016Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -189,9 +189,9 @@
 <p>9<br><br><img src="/images/2019-03-19/bg2011080909.png" width="45%" /><br>苏珊再对信件本身使用同样的 Hash 函数，将得到的结果，与上一步得到的摘要进行对比。如果两者一致，就证明这封信未被修改过。</p>
 <p>10<br><br><img src="/images/2019-03-19/bg2011080910.png" width="45%" /><br>有趣的情况出现了：道格想欺骗苏珊，他偷偷使用了苏珊的电脑，用自己的公钥换走了鲍勃的公钥。此时，苏珊实际拥有的是道格的公钥，但是还以为这是鲍勃的公钥。因此，道格就可以冒充鲍勃写信给苏珊，用自己的私钥做「数字签名」，让苏珊用假的鲍勃公钥进行解密。</p>
 <p>【线下给密钥效率太低，实际还是通过网络分发密钥，所以在鲍勃分发公钥给帕蒂、道格、苏珊的时候（第 2 步），鲍勃的公钥就有可能被网络中间人截取，然后中间人把自己的公钥给这三个人，从而冒充鲍勃。后续这三个人加密消息都是用的中间人的公钥，中间人自然就可以解密看到消息，中间人解密消息以后可以再用鲍勃的公钥加密，转头发给鲍勃，而这些对鲍勃和他的朋友们来说根本意识不到。】</p>
-<p>11<br><br><img src="/images/2019-03-19/bg2011080911.png" width="45%" /><br>后来，苏珊感觉不对劲，发现自己无法确定公钥是否真的属于鲍勃。她想到了一个办法，要求鲍勃去找「证书中心」（Certificate Authority，简称 CA），为公钥做认证。CA 会将鲍勃的公钥和一些相关信息放在一起（原始数据），对它们进行哈希运算生成摘要，随后 CA 再用自己的私钥对该摘要进行加密，得到 CA 的数字签名，原始数据和 CA 的数字签名共同组成「数字证书」（Digital Certificate）。</p>
+<p>11<br><br><img src="/images/2019-03-19/bg2011080911.png" width="45%" /><br>后来，苏珊感觉不对劲，发现自己无法确定公钥是否真的属于鲍勃。她想到了一个办法，要求鲍勃去找有公信力的「证书中心」（Certificate Authority，简称 CA），为公钥做认证。CA 会将鲍勃的公钥和一些相关信息放在一起（原始数据），对它们进行哈希运算生成摘要，随后 CA 再用自己的私钥对该摘要进行加密，得到 CA 的数字签名，原始数据和 CA 的数字签名共同组成「数字证书」（Digital Certificate）。</p>
 <p>12<br><br><img src="/images/2019-03-19/bg2011080912.png" width="45%" /><br>鲍勃拿到数字证书以后，就可以放心了。以后再给苏珊写信，只要在签名的同时，再附上数字证书就行了。</p>
-<p>13<br><br><img src="/images/2019-03-19/bg2011080913.png" width="45%" /><br>苏珊收信后，与之前类似，先用 CA 的公钥解开数字证书中的签名，得到 CA 创建的摘要，然后对数字证书中的原始数据用同样的哈希算法再次生成摘要，两者一对比，如果一致，就说明原始数据未被篡改过，也就说明其中的公钥确实是鲍勃的，接着就可以用鲍勃的公钥对信件的签名进行解密、对比了。</p>
+<p>13<br><br><img src="/images/2019-03-19/bg2011080913.png" width="45%" /><br>苏珊收信后，与之前类似，先用 CA 的公钥解开数字证书中的签名，得到 CA 创建的摘要，然后对数字证书中的原始数据用同样的哈希算法再次生成摘要，两者一对比，如果一致，就说明原始数据未被篡改过，也就说明其中的公钥确实是鲍勃的，接着就可以用鲍勃的公钥对信件本身的签名进行解密、对比了。</p>
 <p>14<br><br><img src="/images/2019-03-19/bg2011080914.jpg" width="45%" /><br>下面，我们看一个应用「数字证书」的实例：HTTPS 协议（HTTPS &#x3D; HTTP + TLS），这个协议主要用于网页加密。</p>
 <p>15<br><br><img src="/images/2019-03-19/bg2011080915.png" width="45%" /><br>首先，客户端向服务器发出加密请求。</p>
 <p>16<br><br><img src="/images/2019-03-19/bg2011080916.png" width="45%" /><br>服务器用自己的私钥加密网页以后，连同本身的数字证书（包含服务器的公钥、域名、有效期等，这些信息以明文形式存在，因为它们本身就是公开的，通过 CA 的数字签名可以验证这些明文信息是否被篡改过），一起发送给客户端。</p>
@@ -441,11 +441,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
