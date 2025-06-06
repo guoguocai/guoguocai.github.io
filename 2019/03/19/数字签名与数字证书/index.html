@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080918.png">
 <meta property="og:image" content="http://yoursite.com/images/2019-03-19/bg2011080920.png">
 <meta property="article:published_time" content="2019-03-19T13:25:45.000Z">
-<meta property="article:modified_time" content="2025-06-04T04:24:23.016Z">
+<meta property="article:modified_time" content="2025-06-06T05:01:39.443Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -199,7 +199,7 @@
 <p>18<br><br><img src="/images/2019-03-19/bg2011080919.jpg" width="45%" /><br>如果不在列表之内，则说明这张数字证书不是由受信任的机构颁发，浏览器会发出警告。</p>
 <p>19<br><br><img src="/images/2019-03-19/bg2011080918.png" width="45%" /><br>如果数字证书中记录的域名与你正在浏览的域名不一致，则说明这张证书可能被冒用，浏览器会发出另一种警告。</p>
 <p>20<br><br><img src="/images/2019-03-19/bg2011080920.png" width="45%" /><br>如果数字证书是可靠的，客户端就可以安全获取到证书中的服务器公钥。</p>
-<p>21<br>接着客户端生成随机的对称密钥，再用服务器的公钥加密，将其发送给服务器，服务器用自己的私钥进行解密，得到对称密钥。此时双方都知道了对称密钥，就可以用它来进行加密通信了（长期使用同一对称密钥可能泄露，因此 TLS 协议支持在特定时间或达到数据量阈值后重新协商对称密钥）。</p>
+<p>21<br>接着客户端生成随机的对称密钥，再用服务器的公钥加密，将其发送给服务器，服务器用自己的私钥进行解密，得到对称密钥。此时双方都知道了对称密钥，就可以用它来进行加密通信了（长期使用同一对称密钥可能泄露，因此 TLS 协议支持在特定时间或达到数据量阈值后重新协商对称密钥，第 15 到 21 步即为 TLS 的四次握手）。</p>
 <p>22<br>也就是说，HTTPS 结合了非对称加密和对称加密两种方式，服务器通过非对称加密算法分发公钥，但最后实际通信使用的是对称加密算法。因为非对称加密虽然安全性很高，但速度却很慢，对称加密算法的加解密速度要比非对称加密算法快上百倍，适合处理大量数据，将两者配合使用，可以兼顾安全与性能。</p>
 
       
@@ -421,15 +421,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
