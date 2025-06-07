@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-06-05T06:13:47.644Z">
+<meta property="article:modified_time" content="2025-06-07T06:09:40.827Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -278,7 +278,7 @@
 <p>当用户请求数据时，系统会首先检查缓存中是否存在所需的数据，如果存在，则直接返回缓存中的数据，从而大大缩短数据访问时间，如果不存在，则查询并添加至缓存。常见的缓存类型有本地缓存（Spring Cache）、分布式缓存（Redis、Memcached）、CDN 缓存（内容分发网络，是一种通过‌分布式节点服务器‌将图片、视频、网页等内容缓存到全球多个地理位置，使用户能够从离自己最近的节点快速获取资源的技术）、数据库缓存（EHCache、OSCache）等，常见的缓存失效策略有 LRU、LFU、‌FIFO 等。</p>
 <p>缓存技术的缺点：<br>（A）额外的硬件支出：缓存需要额外的磁盘空间和内存空间来存储数据，增加了硬件成本；<br>（B）数据一致性问题：缓存与数据库之间可能存在数据不一致的问题，需要采取额外的措施来保证数据一致性；<br>（C）高并发缓存失效问题‌：在高并发场景下，缓存失效可能会导致数据库访问量瞬间增大，甚至导致数据库崩溃。</p>
 <p>缓存的数据一致性问题主要由以下原因引起：<br>（B1）‌数据更新与缓存同步不一致：更新数据源后，缓存中的数据未能及时更新（Cache-Aside、Write-Through）；<br>（B2）‌并发更新：多个并发的更新操作导致缓存中的数据更新顺序与数据源中的更新顺序不一致（使用分布式锁）；<br>（B3）缓存失效策略不当：缓存中的数据已过期，但由于没有有效的失效策略而仍然存在（设置合理的失效策略）。</p>
-<p><span style="background-color:green;"><font color=white>（13）</font></span>Spring Boot 集成并自动配置了 Spring MVC，因此与 Spring MVC 的过程类似：<br>（A）请求首先<u>到达 Servlet 容器</u>（如 Tomcat，已被内嵌在 Spring Boot 中，简化开发流程）；<br>（B）然后依次经过过滤器链（Filter Chain），每个过滤器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 chain.doFilter() 方法之前的代码</u>，如对请求进行认证、校验等）；<br>（C）<u>到达核心控制器 DispatcherServlet</u>，它负责分发请求，根据请求的 URL 和请求方式找到对应的控制器；<br>（D）依次经过拦截器链（Interceptor Chain），每个拦截器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 preHandle() 方法</u>中的代码，如对请求进行权限校验、参数绑定等，<u>但这步是可选的</u>，因为拦截器目前只在 Spring MVC 中有效）；<br>（E）<u>执行 Controller 中的具体方法</u>，并返回响应数据；<br>（F）响应数据逆向经过拦截器链，<u>执行 postHandle() 方法</u>中的代码，进行后置处理；<br>（G）执行异常解析器来<u>处理异常</u>（如全局异常处理），然后渲染视图（可选，因为可能是纯 JSON）；<br>（H）响应数据逆向经过过滤器链，<u>执行 chain.doFilter() 方法之后的代码</u>，最终返回给客户端。</p>
+<p><span style="background-color:green;"><font color=white>（13）</font></span>Spring Boot 集成并自动配置了 Spring MVC，因此与 Spring MVC 的过程类似：<br>（A）请求首先<u>到达 Servlet 容器</u>（如 Tomcat，已被内嵌在 Spring Boot 中，简化开发流程）；<br>（B）然后依次经过过滤器链（Filter Chain），每个过滤器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 chain.doFilter() 方法之前的代码</u>，如对请求进行认证、校验等）；<br>（C）<u>到达核心控制器 DispatcherServlet</u>，它负责分发请求，根据请求的 URL 和请求方式找到对应的控制器；<br>（D）依次经过拦截器链（Interceptor Chain），每个拦截器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 preHandle() 方法</u>中的代码，如对请求进行权限校验、参数绑定等，<u>但这步是可选的</u>，因为拦截器目前只在 Spring MVC 中有效）；<br>（E）<u>执行 Controller 中的具体方法</u>，并返回响应数据；<br>（F）响应数据逆向经过拦截器链，<u>执行 postHandle() 方法</u>中的代码，进行后置处理；<br>（G）响应到达 DispatcherServlet，由 DispatcherServlet 统一调度视图解析器并<u>渲染视图</u>（可选，因为响应可能是纯 JSON），若有异常抛出，也由 DispatcherServlet 调用异常处理器来<u>处理异常</u>（如全局异常处理）；<br>（H）响应数据逆向经过过滤器链，<u>执行 chain.doFilter() 方法之后的代码</u>，最终返回给客户端。</p>
 <img src="/images/2025-01-01/api_life.jpg" width="90%" />
 
 <p><span style="background-color:green;"><font color=white>（14）</font></span>措施如下：<br>（A）定位问题：<br>（a）启用慢查询日志：通过设置阈值来记录执行时间过长的 SQL，以快速定位高频慢查询语句‌。</p>
@@ -564,11 +564,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
