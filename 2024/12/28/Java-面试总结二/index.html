@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/combine_index.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-06-05T06:16:32.719Z">
+<meta property="article:modified_time" content="2025-06-08T10:27:10.947Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -197,13 +197,13 @@
 <p><span style="background-color:green;"><font color=white>（7）</font></span>select 和 epoll 都是 Linux 下实现 <strong>I&#x2F;O 多路复用</strong>的机制，也就是说能用单个线程同时监视多个文件描述符的 I&#x2F;O 事件。</p>
 <p><strong>select 的工作过程</strong>：应用程序调用 select 函数时，会将文件描述符（fd）和超时时间传给它，然后 select 会将接收到的这些文件描述符都阻塞在当前线程，并将它们作为一个 fd_set 集合传给内核，内核再以线性扫描的方式检查这些文件描述符是否就绪（即是否有数据可读、可写或发生异常）或者超时，如果有任何文件描述符就绪或超时，select 就返回相应的文件描述符，应用程序就可以根据返回的结果无阻塞地进行读取、写入或其他操作了。</p>
 <p><strong>epoll 的工作过程</strong>：与 select 不同的是，epoll 会在内核空间中维护一个事件表（用 epoll_create 创建，用 epoll_ctl 操作），然后通过这个事件表来跟踪每个文件描述符的状态，而不是每次都线性检查所有的文件描述符。当调用 epoll_wait 函数时，它同样会将所有的 fd 阻塞在当前线程，直到事件表跟踪到某个文件描述符上有事件发生或超时，epoll 就返回给应用程序去处理，这种事件驱动的方式可以确保应用程序在等待时只占用较少的资源。</p>
-<p><span style="background-color:green;"><font color=white>（8）</font></span><strong>Mysql 默认用的是 InnoDB</strong>。数据库引擎是用于存储、处理和保护数据的核心服务，当我们访问数据库时，不管是手动访问，还是程序访问，都不是直接读写数据库文件，而是通过数据库引擎访问数据库文件。主流的有：<br>（A）<u>InnoDB</u>：基于聚集索引，支持事务，默认使用行级锁，支持外键约束，适合需要高可靠性和高并发处理的场景‌，如售票系统，缺点是占用的数据库空间较大。<br>（B）<u>MyISAM</u>：基于非聚集索引，默认使用表级锁，适合读多写少的场景‌，如数据仓库，缺点是不支持事务。<br>（C）<u>Memory</u>（也称为 Heap）：将数据存储在内存中，读写速度非常快，适合需要高性能但不需要持久化的场景，如会话管理或缓存，缺点是服务器重启时数据会丢失。</p>
+<p><span style="background-color:green;"><font color=white>（8）</font></span><strong>Mysql 默认用的是 InnoDB</strong>。数据库引擎是用于存储、处理和保护数据的核心服务，当我们访问数据库时，不管是手动访问，还是程序访问，都不是直接读写数据库文件，而是通过数据库引擎访问数据库文件。主流的有：<br>（A）<u>InnoDB</u>：基于聚集索引，支持事务，默认使用行级锁，支持外键约束，适合需要高可靠性和高并发处理的场景‌，如售票系统，缺点是占用的数据库空间较大。<br>（B）<u>MyISAM</u>：基于非聚集索引，默认使用表级锁，适合读多写少的场景‌，如数据仓库，缺点是不支持事务。<br>（C）<u>Memory</u>（也称为 Heap）：将数据存储在内存中，读写速度非常快，适合需要高性能但不需要持久化的场景。</p>
 <p>聚集索引和非聚集索引的区别（两者的索引结构都是使用 B+ 树存储）：<br>（A）聚集索引：将完整数据与索引存到一起，找到索引也就找到了数据，索引结构的叶子节点存储的是索引键值和完整的行数据（整张表的行数据都按顺序存储在了叶子节点中），本质是根据每张表的主键构造出了一棵 B+ 树。在 InnoDB 中，聚集索引等价于主键索引，一张表只能有一个聚集索引。<br><img src="/images/2024-12-28/InnoDB_clustered.png" width="65%" /></p>
 <p>（B）非聚集索引：将完整数据与索引分开存储，索引结构的叶子节点存储的是索引键值和指向数据行的地址，因此，查询过程需要经过两次扫描，导致速度相对较慢‌，适用于频繁查询但不经常修改的列，一张表可以有多个非聚集索引。比如在 InnoDB 中，非聚集索引的叶子节点存储的是主键索引值，查询时会先找到主键索引值，然后再到主键索引上查找对应的数据，这个过程也叫做回表，使用覆盖索引可以减少回表次数。<br><img src="/images/2024-12-28/InnoDB_non_clustered.png" width="65%" /><br>在 MyISAM 中，所有索引（包括主键索引）都是非聚集索引结构：<br><img src="/images/2024-12-28/MyISAM_non_clustered.png" width="65%" /></p>
 <p>这里再介绍一下索引，<strong>索引是一种用于提高查询效率的数据结构，数据库的索引就像书的目录</strong>，如果书没有目录，那么找某一章的时候就只能从第一页开始，一页一页翻，而有了目录后，我们就可以先翻到目录，然后根据页码快速找到想看的章节，‌这里的「目录」就是数据库中的索引‌，它通过某种规律（比如按字母排序）帮我们快速定位数据的位置，避免逐行查找（还比如图书馆的书籍指引）。<strong>索引的代价是需要占用额外空间，且新增或者修改数据时要维护索引（类似图书馆新进书后要更新目录）</strong>。‌一句话总结：用空间换时间——牺牲一些存储空间和维护成本，换来查询速度的飞跃提升。</p>
 <p>索引的分类：<br>（A）若按数据结构分，索引分为 B+ 树索引、哈希索引、全文索引、空间索引；<br>（B）若按功能分，索引分为主键索引、唯一索引、‌普通索引、组合索引、‌覆盖索引；<br>（C）若按物理存储分，索引分为聚集索引、非聚集索引（也被称为辅助索引或二级索引‌）。</p>
 <ul>
-<li><p>主键索引：唯一且非空，标识行数据。MySQL 规定每张表都必须有主键索引，且只能有一个，因此，若显式指定了表的主键列（Primary Key），则数据库引擎会为其自动创建主键索引；若未指定主键列，但表中存在非空的唯一索引列（UNIQUE NOT NULL），则数据库引擎会自动选择该列为主键并为其生成主键索引；若既没有指定主键列，也没有非空的唯一索引列，则数据库引擎会自动创建一个隐式主键及其索引，但对用户不可见，<u>显式指定主键仍是数据库设计的最佳实践</u>。</p>
+<li><p>主键索引：唯一且非空，标识行数据。MySQL 规定每张表都必须有主键索引，且只能有一个，因此，若显式指定了表的主键列（Primary Key），则数据库引擎会为其自动创建主键索引；若未指定主键列，但表中存在非空的唯一索引列（UNIQUE NOT NULL），则数据库引擎会自动选择该列为主键并为其生成主键索引；若前两种情况都不是，则数据库引擎会自动创建一个隐式主键及其索引，但对用户不可见，<u>显式指定主键仍是数据库设计的最佳实践</u>。</p>
 </li>
 <li><p>唯一索引：唯一但允许 NULL，确保字段唯一性。</p>
 </li>
@@ -578,11 +578,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
