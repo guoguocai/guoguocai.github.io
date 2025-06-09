@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/combine_index.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-06-08T10:27:10.947Z">
+<meta property="article:modified_time" content="2025-06-09T14:19:08.946Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -260,10 +260,15 @@
 <p>为解决这些问题，数据库提供了几种隔离级别（由低到高，已解决的问题在更高的隔离级别中自然也被解决）：<br>（A）读未提交：允许读取其他事务未提交的数据，解决丢失更新；<br>（B）读已提交：只能读取其他事务已提交的数据，解决脏读，是 Oracle 的默认隔离级别；<br>（C）可重复读：同一事务重复读取同一记录结果一致，解决不可重复读，是 MySQL 的默认隔离级别；<br>（D）串行化：强制事务串行执行，解决幻读，但其性能开销很大，影响并发效率，因此实际用得较少。<br>为了兼顾数据一致性与并发性能，在可能出现不可重复读或幻读的场合，可由应用程序用乐观锁或悲观锁控制。</p>
 <p>数据库事务的 ACID 实现原理：</p>
 <ul>
-<li>原子性：通过 <strong>undo log（回滚日志）</strong>实现。在执行真正的操作之前，记录事务修改前的旧数据，若事务执行失败或显式调用 ROLLBACK，则可根据 undo log 逆向操作，将数据恢复到事务开始前的状态。包括遇到断电或系统崩溃的情况，也可在系统重启后读 undo log 恢复。</li>
-<li>持久性：通过 <strong>redo log（重做日志）</strong>实现。事务提交时，修改操作会先写入 redo log，再异步刷入磁盘数据页；如果数据库崩溃，恢复时也会通过 redo log 重放未落盘的修改操作，确保已提交事务的修改不丢失。</li>
-<li>隔离性：通过<strong>锁机制‌</strong>和 <strong>MVCC（多版本并发控制）</strong>实现，隔离级别越高，锁粒度越大或 MVCC 快照范围越严格，性能损耗越高。MVCC 能为每个事务生成一个数据快照，并用生成时的时间戳作为版本的唯一标识，通过时间戳管理历史版本，数据库系统为每个事务也会分配一个唯一的时间戳，事务只能访问时间戳早于自身时间戳的历史版本（每个行记录会存储指向 undo log 的指针，由此形成版本链，可以回溯历史数据），这样一来，不同事务读到的是不同版本，避免冲突发生。MVCC 的优势是实现无锁化操作，提升了并发性能。<br>（I）读未提交：写操作使用排他锁，读操作不加锁。<br>（II）读已提交：写操作使用<u>排他锁</u>（X 锁，阻止其他事务读写，如 SELECT … FOR UPDATE，持续到事务结束），读操作使用<u>共享锁</u>（S 锁，允许多个事务同时读取，如 SELECT … LOCK IN SHARE MODE，读取后立即释放）或 MVCC（<u>每次 SELECT … 查询时</u>，MVCC 会生成一个<u>新的行数据快照</u>，读取已提交的最新数据）。<br>（III）可重复读：写操作使用<u>排他锁</u>（持续到事务结束）；读操作使用 MVCC，<u>事务启动时</u>，MVCC 生成一个当前时间点上的<u>固定快照</u>，后续整个事务期间读取同一快照（比如事务 A 在时间点 10:00 读取数据，之后事务 B 修改了数据，事务 A 再次读取时‌看到的依然是时间点 10:00 的版本）；在此基础上使用<u>间隙锁</u>，可解决幻读（Gap Lock 锁定索引记录之间的空间，而不是锁定具体的记录，从而防止其他事务在这些间隙中插入新的数据行）。<br>（IV）串行化：<u>全锁机制‌</u>，所有写操作使用排他锁（持续到事务结束），读操作使用共享锁（持续到事务结束）。</li>
-<li>一致性：由原子性、持久性、隔离性和数据库约束共同保障。</li>
+<li><p>原子性：通过 <strong>undo log（回滚日志）</strong>实现。在执行真正的操作之前，记录事务修改前的旧数据，若事务执行失败或显式调用 ROLLBACK，则可根据 undo log 逆向操作，将数据恢复到事务开始前的状态。包括遇到断电或系统崩溃的情况，也可在系统重启后读 undo log 恢复。</p>
+</li>
+<li><p>持久性：通过 <strong>redo log（重做日志）</strong>实现。事务提交时，修改操作会先写入 redo log，再异步刷入磁盘数据页，即 WAL 机制（Write-Ahead Logging，预写日志）；如果数据库崩溃，恢复时也会通过 redo log 重放未落盘的修改操作，确保已提交事务的修改不丢失。</p>
+</li>
+<li><p>隔离性：通过<strong>锁机制‌</strong>和 <strong>MVCC（多版本并发控制）</strong>实现，隔离级别越高，锁粒度越大或 MVCC 快照范围越严格，性能损耗越高。MVCC 能为每个事务生成一个数据快照，并用生成时的时间戳作为版本的唯一标识，通过时间戳管理历史版本，数据库系统为每个事务也会分配一个唯一的时间戳，事务只能访问时间戳早于自身时间戳的历史版本（每个行记录会存储指向 undo log 的指针，由此形成版本链，可以回溯历史数据），这样一来，不同事务读到的是不同版本，避免冲突发生。MVCC 的优势是实现无锁化操作，提升了并发性能。<br>（I）读未提交：写操作使用排他锁，读操作不加锁。<br>（II）读已提交：写操作使用<u>排他锁</u>（X 锁，阻止其他事务读写，如 SELECT … FOR UPDATE，持续到事务结束），读操作使用<u>共享锁</u>（S 锁，允许多个事务同时读取，如 SELECT … LOCK IN SHARE MODE，读取后立即释放）或 MVCC（<u>每次 SELECT … 查询时</u>，MVCC 会生成一个<u>新的行数据快照</u>，从中读取已提交的最新数据）。<br>（III）可重复读：写操作使用<u>排他锁</u>（持续到事务结束）；读操作使用 MVCC，<u>事务首次 SELECT 时</u>，MVCC 生成一个当前时间点上的<u>固定快照</u>，后续整个事务期间读取同一快照（比如事务 A 在时间点 10:00 读取数据，之后事务 B 修改了数据，事务 A 再次读取时‌看到的依然是时间点 10:00 的版本）；在此基础上使用<u>间隙锁</u>，可解决幻读（Gap Lock 锁定索引记录之间的空间，而不是锁定具体的记录，从而防止其他事务在这些间隙中插入新的数据行）。<br>（IV）串行化：<u>全锁机制‌</u>，所有写操作使用排他锁（持续到事务结束），读操作使用共享锁（持续到事务结束）。</p>
+<p>扩展：在 MySQL 中，执行 DELETE 后不会立即释放磁盘空间，而是仅将数据行逻辑标记为已删除，这样做的好处一是便于未提交的事务快速回滚，二是便于 MVCC 保留被删数据的旧版本，三是后续插入的新数据可直接复用这些空间，避免大量的 I&#x2F;O 操作。</p>
+</li>
+<li><p>一致性：由原子性、持久性、隔离性和数据库约束共同保障。</p>
+</li>
 </ul>
 <p>（13.2）对于分布式事务，则是需要协调多个独立的服务或组件之间的一致性操作，涉及多个分布式的数据库。例如，在电商系统中，用户下单的操作可能涉及库存服务、支付服务和订单服务，分布式事务要确保库存扣减、支付扣款和订单生成这三个操作要么全部成功，要么全部失败，以防止出现用户支付成功但库存未扣减或订单未生成的情况‌。分布式事务的 BASE 模型概括了三个核心思想：基本上可用（Basically Available，部分节点发生故障时核心功能仍然可用）、软状态（Soft State，允许存在暂时的不一致状态）和最终一致性（Eventually Consistent，数据最终会达到一致状态‌）‌‌。常见的分布式事务解决方案有：</p>
 <p>（I）保证强一致性（实时一致性）：</p>
@@ -578,7 +583,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -586,7 +591,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
