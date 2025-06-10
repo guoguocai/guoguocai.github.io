@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-06-09T15:16:34.974Z">
+<meta property="article:modified_time" content="2025-06-10T13:53:16.420Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -230,8 +230,10 @@
 </ul>
 <p>针对不同的应用场景，这三者可以相互配合同时使用，比如在一个应用里，一些功能需要保持会话状态，另一些功能又需要请求是无状态的，那就可以同时用 Session 和 Token，利用各自的优势，满足多样化的需求。</p>
 <ul>
-<li><p><strong>单点登录（SSO）</strong>：只需登录一次，就能访问一个企业内部所有的系统，从而消除不同系统有不同账号的问题，与之对应的为单点退出。由于浏览器的‌同源策略，通常情况下 cookie 是不能跨域共享的（在同一主域下可以），这里介绍一个常用的解决方案 CAS（Central Authentication Service），即建立一个独立的认证中心，所有的用户注册和认证都在那里完成，大致流程为：<br>（I）用户通过浏览器访问子系统 A 的资源，发现需要登录，于是重定向到认证中心去登录；<br>（II）登录成功后，认证中心会创建<u>一个全局的 session</u> 和<u>一个 ticket</u>，然后再重定向回子系统 A，ticket 附在重定向 URL 中给子系统 A，全局的 sessionId 则通过 cookie 发送给浏览器，浏览器将其保存下来；<br>（III）子系统 A 将收到的 ticket 再次发送给认证中心验证有效性（防止有人截取伪造），若验证通过，则说明用户确实已经登录且这个 ticket 的确是由认证中心颁发，接着在认证中心注册子系统 A；<br>（IV）子系统 A 为用户创建属于自己的 session，返回被访问的资源，同时也将自己的 sessionId 通过 cookie 发送给浏览器，<u>此时浏览器有两个 cookie，一个是认证中心的，一个是子系统 A 的</u>，后续访问子系统 A 其他资源的时候，浏览器会带上子系统 A 的 cookie，子系统 A 就知道用户已经登录；<br>（V）然后用户访问另一个子系统 B 的资源，由于此时还没有子系统 B 的 cookie，所以仍会提示未登录，但浏览器已经有了认证中心的 cookie，因此重定向时会将其携带给认证中心，认证中心收到后得知用户已经全局登录了，所以直接生成一个新的 ticket 返回给子系统 B，无需再次登录；<br>（VI）接下来子系统 B 的流程与子系统 A 的一样；<br>（VII）<u>最终，浏览器保存了一个认证中心的全局 cookie 和多个子系统的 cookie</u>；<br>（VIII）注册子系统是为单点退出做准备，当用户在某个子系统退出时，认证中心需要把自己的全局会话和 cookie 删除，然后还要通知各个子系统，让它们也把自己的会话和 cookie 统统删除。</p>
-<p>还有一个解决方案为通过标准化协议 SAML &#x2F; OIDC 实现更安全的跨域 SSO，工作流程与 CAS 类似：用户访问 SP（服务提供者，各子系统） -&gt; 重定向至 IdP（身份提供者，负责集中认证，如 Keycloak） -&gt; 完成认证（可集成 MFA 提升安全性，如生物识别） -&gt; IdP 返回加密令牌（如 Token，替代 sessionId，减少服务端状态存储） -&gt; SP 验证令牌并建立会话。</p>
+<li><p><strong>单点登录（SSO）</strong>：只需登录一次，就能访问一个企业内部所有的系统，从而消除不同系统有不同账号的问题，与之对应的为单点退出。由于浏览器的‌同源策略，通常情况下 cookie 是不能跨域共享的（在同一主域下可以），这里介绍一个常用的解决方案 CAS（Central Authentication Service），即建立一个独立的认证中心，所有的用户注册和认证都在那里完成，大致流程为：<br>（I）用户通过浏览器访问子系统 A 的资源，发现需要登录，于是<u>重定向</u>到认证中心去登录；<br>（II）登录成功后，认证中心会创建<u>一个全局的 session</u> 和<u>一个 ticket</u>，然后再重定向回子系统 A，ticket 附在重定向 URL 中给子系统 A，全局的 sessionId 则通过 cookie 发送给浏览器，浏览器将其保存下来；<br>（III）子系统 A 将收到的 ticket 再次发送给认证中心验证有效性（防止有人截取伪造），若验证通过，则说明用户确实已经登录且这个 ticket 的确是由认证中心颁发，接着在认证中心注册子系统 A；<br>（IV）子系统 A 为用户创建属于自己的 session，返回被访问的资源，同时也将自己的 sessionId 通过 cookie 发送给浏览器，<u>此时浏览器有两个 cookie，一个是认证中心的，一个是子系统 A 的</u>，后续访问子系统 A 其他资源的时候，浏览器会带上子系统 A 的 cookie，子系统 A 就知道用户已经登录；<br>（V）然后用户访问另一个子系统 B 的资源，由于此时还没有子系统 B 的 cookie，所以仍会提示未登录，但浏览器已经有了认证中心的 cookie，因此重定向时会将其携带给认证中心，认证中心收到后得知用户已经全局登录了，所以直接生成一个新的 ticket 返回给子系统 B，无需再次登录；<br>（VI）接下来子系统 B 的流程与子系统 A 的一样；<br>（VII）<u>最终，浏览器保存了一个认证中心的全局 cookie 和多个子系统的 cookie</u>；<br>（VIII）注册子系统是为单点退出做准备，当用户在某个子系统退出时，认证中心需要把自己的全局会话和 cookie 删除，然后还要通知各个子系统，让它们也把自己的会话和 cookie 统统删除。</p>
+<p>还有一个解决方案为通过标准化协议 SAML &#x2F; OIDC 实现更安全的跨域 SSO，工作流程与 CAS 类似：用户访问 SP（服务提供者，各子系统） -&gt; 重定向至 IdP（身份提供者，负责集中认证，如 Keycloak） -&gt; 完成认证（可集成 MFA 提升安全性，如生物识别） -&gt; IdP 返回加密令牌（如 token，替代 sessionId，减少服务端状态存储） -&gt; SP 验证令牌并建立会话。</p>
+</li>
+<li><p><strong>授权码</strong>：为了读取必要数据，很多第三方应用支持用其他平台的账号登录，比如用 QQ、微信的账号登，此时为保障原始密码安全，会在使用这些第三方应用时不直接输账号密码，而是<u>重定向到目标平台的官方认证中心</u>去登录和授权，成功后<u>返回一个授权码</u>给第三方（在前端&#x2F;浏览器得到，由于授权码会跟第三方自己在官方认证中心注册的 app_id、app_secret 关联，所以泄露也没事），第三方再<u>用这个授权码去申请 token</u>（在后端申请得到，防止泄漏），有了 token 后每次请求都带上，就能访问到数据了。</p>
 </li>
 </ul>
 <p><span style="background-color:green;"><font color=white>（6）</font></span>线程间通信指的是在多线程编程中，不同线程之间如何交换信息或协调执行。常见的实现方式有：<br>（A）共享内存：多个线程可访问同一块内存，通过读写这块内存实现数据交换，如全局变量，但要注意同步问题；<br>（B）消息传递：线程之间通过发送和接收消息来进行通信，比如使用消息队列；<br>（C）条件变量‌：通过条件变量实现线程间的等待和唤醒，适用于线程需要等待某个条件成立才能继续执行的场景；<br>（D）信号量：这是一种用于线程同步和互斥的机制，它维护一个计数器，表示可用资源的数量，线程通过等待（P 操作）和释放（V 操作）信号量来实现同步，适用于需要控制对共享资源的访问的场景；<br>（E）事件：线程需要等待某个事件（如 I&#x2F;O 操作完成）才能继续执行。</p>
@@ -239,7 +241,7 @@
 <p>并发编程的最佳实践：<br>（A）减少共享变量的使用：通过设计，将对共享变量的访问降到最低，尽量使用不可变对象和局部变量；<br>（B）使用线程安全的集合类：比如 ConcurrentHashMap、CopyOnWriteArrayList 等，这些类是线程安全的；<br>（C）选择合适的同步工具：比如 synchronized、ReentrantLock 或 java.util.concurrent 包中的工具类。<br>（D）确保所有线程都以相同的加锁顺序获取锁，避免死锁；<br>（E）使用线程池。</p>
 <p>synchronized 和 Lock 的区别：<br>（A）synchronized：是一个内置的关键字，可用于方法和代码块，不需要显式地获取和释放锁，当线程进入一个 synchronized 方法或代码块时，会自动获得锁，退出时自动释放锁，只支持抢占式的非公平锁，适用于简单的同步场景；<br>（B）Lock：是一个接口，常用的实现类有 ReentrantLock，需要显式地调用 lock() 方法获取锁，通常在 finally 块中调用 unlock() 方法确保锁的释放，还提供了 tryLock()、isLocked() 等方法实现更灵活的控制，支持公平锁和非公平锁，可在创建对象时指定，适用于复杂的同步场景。</p>
 <p><span style="background-color:green;"><font color=white>（7）</font></span>超时处理的优化策略如下：<br>（A）提高任务执行效率：通过优化算法、减少不必要的 I&#x2F;O 操作等方式，缩短执行时间；<br>（B）合理分配资源：确保系统有足够的资源来处理任务（如内存、网络带宽等）；<br>（C）使用缓存：对于频繁访问但不经常变化的数据，可使用缓存来减少时间；<br>（D）异步处理：使用异步编程来处理任务（如 CompletableFuture），减少等待时间；<br>（E）使用更高效的超时检测机制：比如使用 ScheduledThreadPoolExecutor 定期检查状态，取代阻塞式的 get；<br>（F）快速失败：如果可以检测到任务不可能在超时时间内完成，就尽快取消任务并释放资源；<br>（G）友好的错误提示：发生超时时，向用户显示清晰的错误提示和可能的解决方案；<br>（H）重试机制‌：提供重试按钮或自动重试功能，让用户可以方便地重新尝试操作；<br>（I）进度条或加载指示器：在操作进行时显示进度条或加载指示器，让用户知道并非无响应。</p>
-<p><span style="background-color:green;"><font color=white>（8）</font></span>适合存储的数据类型包括：<br>（A）<strong>String</strong>：适合存储任何形式的字符串（如 JSON），存软件版本号、接口执行结果、用户语种（SET &#x2F; GET）；<br>（B）<strong>Hash</strong>：适合存储具有多个属性的对象信息，比如数据字典、用户信息、商品信息（HSET &#x2F; HGETALL）；<br>（C）<strong>List</strong>：适合存储需要有一定顺序的数据集合，比如任务列表、操作日志、消息通知（LPUSH &#x2F; RPOP）；<br>（D）<strong>Set</strong>：适合存储无序不重复的数据集合，如在线用户、标签、类别、抽奖参与人员（SADD &#x2F; SMEMBERS）；<br>（E）<strong>SortedSet</strong>：适合存储需要根据分数进行排序的数据集合，比如排行榜、时间线（ZADD &#x2F; ZRANGE，OTA 时，用收到终端心跳时的当前时间作为分数，每收到一次心跳就更新分数，这样就能根据分数删除心跳超时的终端 ID，以此获取当前在线的终端列表）。</p>
+<p><span style="background-color:green;"><font color=white>（8）</font></span>适合存储的数据类型包括：<br>（A）<strong>String</strong>：适合存储任何形式的字符串（如 JSON），存软件版本号、接口执行结果、用户语种（SET &#x2F; GET）；<br>（B）<strong>Hash</strong>：适合存储具有多个属性的对象信息，比如数据字典、用户信息、商品信息（HSET &#x2F; HGETALL）；<br>（C）<strong>List</strong>：适合存储需要有一定顺序的数据集合，比如任务列表、操作日志、消息通知（LPUSH &#x2F; RPOP）；<br>（D）<strong>Set</strong>：适合存储无序不重复的数据集合，如在线用户、标签、类别、抽奖参与人员（SADD &#x2F; SMEMBERS）；<br>（E）<strong>SortedSet</strong>：适合存储有序不重复的数据集合，顺序根据给予的分数进行排列，比如排行榜、时间线（ZADD &#x2F; ZRANGE，OTA 时，用收到终端心跳时的当前时间作为分数，每收到一次心跳就更新分数，这样就能根据分数删除心跳超时的终端 ID，以此获取当前在线的终端列表）。</p>
 <p>（I）击穿指的是<strong>缓存中某个热点数据突然失效</strong>（因过期或被淘汰），导致大量请求直接访问数据库，造成数据库压力骤增‌。比如秒杀商品、热点新闻的缓存突然失效，解决方法：<br>（A）<u>使用一个互斥锁</u>（比如 Redis 的 SETNX 或 Redisson 分布式锁），仅允许一个线程访问数据库并重建缓存，其他线程等待锁释放后读取新缓存；<br>（B）<u>不设置数据的物理过期时间，而是在数据中添加一个逻辑过期字段</u>，当发现数据过期时，再异步更新缓存；<br>（C）<u>在热点数据快过期前主动异步更新</u>，降低击穿概率‌。</p>
 <ul>
 <li><p><strong>Redis 的 SETNX</strong>（SET if Not eXists）：是 Redis 提供的原子性命令，用于在指定键（Key）不存在时设置，若键已存在，则不执行任何操作。当多个客户端并发调用时，它确保仅有一个客户端能成功设置键值，是分布式锁的基础，为避免死锁（如客户端崩溃未释放锁），需设置键的过期时间。</p>
@@ -275,9 +277,9 @@
 <p>SOA 与微服务的区别：SOA 注重复用性和统一的架构，倾向于通过统一的服务总线（ESB）将所有服务连接起来，使用统一的数据存储，服务之间有一定的依赖关系，通常需要一起部署，相比于微服务来说更加复杂。微服务更加强调服务的自治，每个服务都有自己独立的环境、数据存储和技术栈等，倾向于创建更加小型、轻量级的服务，服务之间没有依赖关系，支持独立部署和持续集成，相比于 SOA 来说更加轻量。</p>
 <p><span style="background-color:green;"><font color=white>（12）</font></span>缓存技术是提高系统性能和响应速度的关键组件，在高并发的场景下尤为重要。它的作用有：<br>（A）<u>减轻数据库压力</u>：通过缓存频繁访问的数据，减少查询数据库的次数，可避免数据库成为性能瓶颈；<br>（B）<u>提高数据读取速度</u>：缓存通常存储在内存中，而内存的访问速度远快于磁盘；<br>（C）<u>降低网络延迟</u>：对于需要从远程服务器获取的数据，缓存可以减少对远程服务器的请求次数。</p>
 <p>为什么需要缓存（Cache）？本质原因是速度的不匹配。缓存技术的核心原理是<strong>将频繁访问的数据存储在读写速度更快的存储介质中（如内存）</strong>，以减少 CPU 对慢速存储介质的访问次数（如磁盘或数据库），那么哪些数据会被频繁访问呢？基于<strong>数据的局部性原理</strong>，最近被访问过的数据很可能在不久的将来再次被访问，并且与它相邻的数据也很可能被访问，这个原理在计算机系统内部也有用到，即读取某块数据到内存的同时也一并读取与之相邻的数据，以减少磁盘 IO 次数。</p>
-<p>当用户请求数据时，系统会首先检查缓存中是否存在所需的数据，如果存在，则直接返回缓存中的数据，从而大大缩短数据访问时间，如果不存在，则查询并添加至缓存。常见的缓存类型有本地缓存（Spring Cache）、分布式缓存（Redis、Memcached）、CDN 缓存（内容分发网络，是一种通过‌分布式节点服务器‌将图片、视频、网页等内容缓存到全球多个地理位置，使用户能够从离自己最近的节点快速获取资源的技术）、数据库缓存（EHCache、OSCache）等，常见的缓存失效策略有 LRU、LFU、‌FIFO 等。</p>
+<p>当用户请求数据时，系统会首先检查缓存中是否存在所需的数据，如果存在，则直接返回缓存中的数据，从而大大缩短数据访问时间，如果不存在，则查询并添加至缓存。常见的缓存类型有<u>本地缓存</u>（将数据缓存在进程内存中，如 Caffeine、Guava Cache‌、EHCache）、<u>分布式缓存</u>（Redis、Memcached）、<u>CDN 缓存</u>（内容分发网络，是一种通过‌分布式节点服务器‌将图片、视频、网页等内容缓存到全球多个地理位置，使用户能够从离自己最近的节点快速获取资源的技术）、<u>数据库缓存</u>（如 Buffer Pool，它将磁盘数据页缓存到内存）等。Spring Cache 是一个缓存抽象层，支持集成上面提到的多种缓存技术，通过注解统一管理（如 @Cacheable、@CachePut），通过 CacheManager 接口切换实现。</p>
 <p>缓存技术的缺点：<br>（A）额外的硬件支出：缓存需要额外的磁盘空间和内存空间来存储数据，增加了硬件成本；<br>（B）数据一致性问题：缓存与数据库之间可能存在数据不一致的问题，需要采取额外的措施来保证数据一致性；<br>（C）高并发缓存失效问题‌：在高并发场景下，缓存失效可能会导致数据库访问量瞬间增大，甚至导致数据库崩溃。</p>
-<p>缓存的数据一致性问题主要由以下原因引起：<br>（B1）‌数据更新与缓存同步不一致：更新数据源后，缓存中的数据未能及时更新（Cache-Aside、Write-Through）；<br>（B2）‌并发更新：多个并发的更新操作导致缓存中的数据更新顺序与数据源中的更新顺序不一致（使用分布式锁）；<br>（B3）缓存失效策略不当：缓存中的数据已过期，但由于没有有效的失效策略而仍然存在（设置合理的失效策略）。</p>
+<p>缓存的数据一致性问题主要由以下原因引起：<br>（B1）‌数据更新与缓存同步不一致：更新数据源后，缓存中的数据未能及时更新，常见的缓存更新策略有：<br>Cache-Aside‌（<strong>首选</strong>）：应用层‌管理缓存读写（读：先查缓存，未命中查库并回填；写：直接写库，再删除缓存）；<br>Write-Through：写操作‌先更新缓存，由缓存层更新数据库‌，Guava Cache 的 CacheLoader.write 采用；<br>Read-Through：缓存层‌自动加载数据库数据，应用层仅与缓存交互，注解 @Cacheable 采用此策略；<br>Write-Back（慎用）：写操作‌仅更新缓存，由缓存层标记脏数据，再异步批量刷入数据库。<br>（B2）‌并发更新：多个并发的更新操作导致缓存中的数据更新顺序与数据源中的更新顺序不一致（使用分布式锁）。<br>（B3）缓存失效策略不当：缓存中的数据已过期，但由于没有有效的失效策略而仍然存在（设置合理的失效策略，常见的缓存失效策略有 LRU（最近最少使用）、LFU（最不经常使用）、‌FIFO（先进先出）、TTL（设置过期时间））。</p>
 <p><span style="background-color:green;"><font color=white>（13）</font></span>Spring Boot 集成并自动配置了 Spring MVC，因此与 Spring MVC 的过程类似：<br>（A）请求首先<u>到达 Servlet 容器</u>（如 Tomcat，已被内嵌在 Spring Boot 中，简化开发流程）；<br>（B）然后依次经过过滤器链（Filter Chain），每个过滤器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 chain.doFilter() 方法之前的代码</u>，如对请求进行认证、校验等）；<br>（C）<u>到达核心控制器 DispatcherServlet</u>，它负责分发请求，根据请求的 URL 和请求方式找到对应的控制器；<br>（D）依次经过拦截器链（Interceptor Chain），每个拦截器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 preHandle() 方法</u>中的代码，如对请求进行权限校验、参数绑定等，<u>但这步是可选的</u>，因为拦截器目前只在 Spring MVC 中有效）；<br>（E）<u>执行 Controller 中的具体方法</u>，并返回响应数据；<br>（F）响应数据逆向经过拦截器链，<u>执行 postHandle() 方法</u>中的代码，进行后置处理；<br>（G）响应到达 DispatcherServlet，由 DispatcherServlet 统一调度视图解析器并<u>渲染视图</u>（可选，因为响应可能是纯 JSON），若有异常抛出，也由 DispatcherServlet 调用异常处理器来<u>处理异常</u>（如全局异常处理）；<br>（H）响应数据逆向经过过滤器链，<u>执行 chain.doFilter() 方法之后的代码</u>，最终返回给客户端。</p>
 <img src="/images/2025-01-01/api_life.jpg" width="90%" />
 
@@ -285,9 +287,9 @@
 <ul>
 <li>（I）连接：客户端认证并建立连接。</li>
 <li>（II）解析：对 SQL 进行：<br>词法分析：识别 SQL 关键字、表名、列名等；<br>语法分析：验证 SQL 结构是否符合规范；<br>语义分析：验证表&#x2F;列是否存在、检查用户是否有访问权限等。</li>
-<li>（III）优化：选择索引、确定 JOIN 顺序等，生成执行计划。</li>
-<li>（IV）执行：调用存储引擎接口，按执行计划执行，通过索引定位到目标位置：<br>读操作（FROM-&gt;WHERE-&gt;GROUP BY-&gt;SELECT-&gt;ORDER BY‌）：缓存池中有则直接返回，否则从磁盘加载；<br>写操作（UPDATE&#x2F;INSERT&#x2F;DELETE）：写 undo log（INSERT 不用写 undo log）、更新缓存池、写 redo log。</li>
-<li>（V）读操作组装结果集返回给客户端，写操作提交事务。</li>
+<li>（III）优化：选择索引、确定多表 JOIN 顺序等，生成执行计划。</li>
+<li>（IV）执行：调用数据库引擎接口，按执行计划执行，数据库引擎通过索引结构定位到目标位置：<br>读操作（FROM-&gt;WHERE-&gt;GROUP BY-&gt;SELECT-&gt;ORDER BY‌）：缓存池中有则直接返回，否则从磁盘加载；<br>写操作（UPDATE&#x2F;INSERT&#x2F;DELETE）：写 undo log（INSERT 不用写 undo log）、更新缓存池、写 redo log。</li>
+<li>（V）读操作组装结果集返回给客户端；写操作提交事务。</li>
 </ul>
 <p>优化措施如下：<br>（A）定位问题：<br>（a）启用慢查询日志：通过设置阈值来记录执行时间过长的 SQL，以快速定位高频慢查询语句‌。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- MySQL示例</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> slow_query_log <span class="operator">=</span> <span class="string">&#x27;ON&#x27;</span>;</span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> long_query_time <span class="operator">=</span> <span class="number">1</span>; <span class="comment">-- 记录超过1秒的查询</span></span><br></pre></td></tr></table></figure>
@@ -568,7 +570,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -576,7 +578,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
