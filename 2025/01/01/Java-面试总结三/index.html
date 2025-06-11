@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-06-10T13:53:16.420Z">
+<meta property="article:modified_time" content="2025-06-11T15:05:32.733Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -233,7 +233,7 @@
 <li><p><strong>单点登录（SSO）</strong>：只需登录一次，就能访问一个企业内部所有的系统，从而消除不同系统有不同账号的问题，与之对应的为单点退出。由于浏览器的‌同源策略，通常情况下 cookie 是不能跨域共享的（在同一主域下可以），这里介绍一个常用的解决方案 CAS（Central Authentication Service），即建立一个独立的认证中心，所有的用户注册和认证都在那里完成，大致流程为：<br>（I）用户通过浏览器访问子系统 A 的资源，发现需要登录，于是<u>重定向</u>到认证中心去登录；<br>（II）登录成功后，认证中心会创建<u>一个全局的 session</u> 和<u>一个 ticket</u>，然后再重定向回子系统 A，ticket 附在重定向 URL 中给子系统 A，全局的 sessionId 则通过 cookie 发送给浏览器，浏览器将其保存下来；<br>（III）子系统 A 将收到的 ticket 再次发送给认证中心验证有效性（防止有人截取伪造），若验证通过，则说明用户确实已经登录且这个 ticket 的确是由认证中心颁发，接着在认证中心注册子系统 A；<br>（IV）子系统 A 为用户创建属于自己的 session，返回被访问的资源，同时也将自己的 sessionId 通过 cookie 发送给浏览器，<u>此时浏览器有两个 cookie，一个是认证中心的，一个是子系统 A 的</u>，后续访问子系统 A 其他资源的时候，浏览器会带上子系统 A 的 cookie，子系统 A 就知道用户已经登录；<br>（V）然后用户访问另一个子系统 B 的资源，由于此时还没有子系统 B 的 cookie，所以仍会提示未登录，但浏览器已经有了认证中心的 cookie，因此重定向时会将其携带给认证中心，认证中心收到后得知用户已经全局登录了，所以直接生成一个新的 ticket 返回给子系统 B，无需再次登录；<br>（VI）接下来子系统 B 的流程与子系统 A 的一样；<br>（VII）<u>最终，浏览器保存了一个认证中心的全局 cookie 和多个子系统的 cookie</u>；<br>（VIII）注册子系统是为单点退出做准备，当用户在某个子系统退出时，认证中心需要把自己的全局会话和 cookie 删除，然后还要通知各个子系统，让它们也把自己的会话和 cookie 统统删除。</p>
 <p>还有一个解决方案为通过标准化协议 SAML &#x2F; OIDC 实现更安全的跨域 SSO，工作流程与 CAS 类似：用户访问 SP（服务提供者，各子系统） -&gt; 重定向至 IdP（身份提供者，负责集中认证，如 Keycloak） -&gt; 完成认证（可集成 MFA 提升安全性，如生物识别） -&gt; IdP 返回加密令牌（如 token，替代 sessionId，减少服务端状态存储） -&gt; SP 验证令牌并建立会话。</p>
 </li>
-<li><p><strong>授权码</strong>：为了读取必要数据，很多第三方应用支持用其他平台的账号登录，比如用 QQ、微信的账号登，此时为保障原始密码安全，会在使用这些第三方应用时不直接输账号密码，而是<u>重定向到目标平台的官方认证中心</u>去登录和授权，成功后<u>返回一个授权码</u>给第三方（在前端&#x2F;浏览器得到，由于授权码会跟第三方自己在官方认证中心注册的 app_id、app_secret 关联，所以泄露也没事），第三方再<u>用这个授权码去申请 token</u>（在后端申请得到，防止泄漏），有了 token 后每次请求都带上，就能访问到数据了。</p>
+<li><p><strong>授权码</strong>：为了读取必要数据，很多第三方应用支持用其他平台的账号登录，比如用 QQ、微信的账号登，此时为保障原始密码安全，在使用这些第三方应用时不会直接输账号密码，而是<u>重定向到目标平台的官方认证中心</u>去登录和授权，成功后<u>返回一个授权码</u>给第三方（在前端&#x2F;浏览器得到，由于授权码会跟第三方自己在官方认证中心注册的 app_id、app_secret 关联，所以泄露也没事），第三方再<u>用这个授权码去申请 token</u>（在后端调用接口得到，防止泄漏），有了 token 后每次请求都带上，就能正常访问了。</p>
 </li>
 </ul>
 <p><span style="background-color:green;"><font color=white>（6）</font></span>线程间通信指的是在多线程编程中，不同线程之间如何交换信息或协调执行。常见的实现方式有：<br>（A）共享内存：多个线程可访问同一块内存，通过读写这块内存实现数据交换，如全局变量，但要注意同步问题；<br>（B）消息传递：线程之间通过发送和接收消息来进行通信，比如使用消息队列；<br>（C）条件变量‌：通过条件变量实现线程间的等待和唤醒，适用于线程需要等待某个条件成立才能继续执行的场景；<br>（D）信号量：这是一种用于线程同步和互斥的机制，它维护一个计数器，表示可用资源的数量，线程通过等待（P 操作）和释放（V 操作）信号量来实现同步，适用于需要控制对共享资源的访问的场景；<br>（E）事件：线程需要等待某个事件（如 I&#x2F;O 操作完成）才能继续执行。</p>
@@ -241,22 +241,22 @@
 <p>并发编程的最佳实践：<br>（A）减少共享变量的使用：通过设计，将对共享变量的访问降到最低，尽量使用不可变对象和局部变量；<br>（B）使用线程安全的集合类：比如 ConcurrentHashMap、CopyOnWriteArrayList 等，这些类是线程安全的；<br>（C）选择合适的同步工具：比如 synchronized、ReentrantLock 或 java.util.concurrent 包中的工具类。<br>（D）确保所有线程都以相同的加锁顺序获取锁，避免死锁；<br>（E）使用线程池。</p>
 <p>synchronized 和 Lock 的区别：<br>（A）synchronized：是一个内置的关键字，可用于方法和代码块，不需要显式地获取和释放锁，当线程进入一个 synchronized 方法或代码块时，会自动获得锁，退出时自动释放锁，只支持抢占式的非公平锁，适用于简单的同步场景；<br>（B）Lock：是一个接口，常用的实现类有 ReentrantLock，需要显式地调用 lock() 方法获取锁，通常在 finally 块中调用 unlock() 方法确保锁的释放，还提供了 tryLock()、isLocked() 等方法实现更灵活的控制，支持公平锁和非公平锁，可在创建对象时指定，适用于复杂的同步场景。</p>
 <p><span style="background-color:green;"><font color=white>（7）</font></span>超时处理的优化策略如下：<br>（A）提高任务执行效率：通过优化算法、减少不必要的 I&#x2F;O 操作等方式，缩短执行时间；<br>（B）合理分配资源：确保系统有足够的资源来处理任务（如内存、网络带宽等）；<br>（C）使用缓存：对于频繁访问但不经常变化的数据，可使用缓存来减少时间；<br>（D）异步处理：使用异步编程来处理任务（如 CompletableFuture），减少等待时间；<br>（E）使用更高效的超时检测机制：比如使用 ScheduledThreadPoolExecutor 定期检查状态，取代阻塞式的 get；<br>（F）快速失败：如果可以检测到任务不可能在超时时间内完成，就尽快取消任务并释放资源；<br>（G）友好的错误提示：发生超时时，向用户显示清晰的错误提示和可能的解决方案；<br>（H）重试机制‌：提供重试按钮或自动重试功能，让用户可以方便地重新尝试操作；<br>（I）进度条或加载指示器：在操作进行时显示进度条或加载指示器，让用户知道并非无响应。</p>
-<p><span style="background-color:green;"><font color=white>（8）</font></span>适合存储的数据类型包括：<br>（A）<strong>String</strong>：适合存储任何形式的字符串（如 JSON），存软件版本号、接口执行结果、用户语种（SET &#x2F; GET）；<br>（B）<strong>Hash</strong>：适合存储具有多个属性的对象信息，比如数据字典、用户信息、商品信息（HSET &#x2F; HGETALL）；<br>（C）<strong>List</strong>：适合存储需要有一定顺序的数据集合，比如任务列表、操作日志、消息通知（LPUSH &#x2F; RPOP）；<br>（D）<strong>Set</strong>：适合存储无序不重复的数据集合，如在线用户、标签、类别、抽奖参与人员（SADD &#x2F; SMEMBERS）；<br>（E）<strong>SortedSet</strong>：适合存储有序不重复的数据集合，顺序根据给予的分数进行排列，比如排行榜、时间线（ZADD &#x2F; ZRANGE，OTA 时，用收到终端心跳时的当前时间作为分数，每收到一次心跳就更新分数，这样就能根据分数删除心跳超时的终端 ID，以此获取当前在线的终端列表）。</p>
-<p>（I）击穿指的是<strong>缓存中某个热点数据突然失效</strong>（因过期或被淘汰），导致大量请求直接访问数据库，造成数据库压力骤增‌。比如秒杀商品、热点新闻的缓存突然失效，解决方法：<br>（A）<u>使用一个互斥锁</u>（比如 Redis 的 SETNX 或 Redisson 分布式锁），仅允许一个线程访问数据库并重建缓存，其他线程等待锁释放后读取新缓存；<br>（B）<u>不设置数据的物理过期时间，而是在数据中添加一个逻辑过期字段</u>，当发现数据过期时，再异步更新缓存；<br>（C）<u>在热点数据快过期前主动异步更新</u>，降低击穿概率‌。</p>
+<p><span style="background-color:green;"><font color=white>（8）</font></span>适合存储的数据类型包括：<br>（A）<strong>String</strong>：适合存储任何形式的字符串（如 JSON），存软件版本号、接口执行结果、用户语种（SET &#x2F; GET）；<br>（B）<strong>Hash</strong>：适合存储具有多个属性的对象信息，比如数据字典、用户信息、商品信息（HSET &#x2F; HGETALL）；<br>（C）<strong>List</strong>：适合存储需要有一定顺序的数据集合，比如任务列表、操作日志、消息通知（LPUSH &#x2F; RPOP）；<br>（D）<strong>Set</strong>：适合存储无序不重复的数据集合，如在线用户、标签、类别、抽奖参与人员（SADD &#x2F; SMEMBERS）；<br>（E）<strong>SortedSet</strong>：适合存储有序不重复的数据集合，根据赋予的分数排列顺序，比如排行榜、时间线（ZADD &#x2F; ZRANGE，OTA 时，用收到终端心跳时的当前时间作为分数，每收到一次心跳就更新分数，这样就能根据分数删除心跳超时的终端 ID，以此获取当前在线的终端列表）。</p>
+<p>（I）击穿指的是<strong>缓存中某个热点数据突然失效</strong>（因过期或被淘汰），导致大量请求直接访问数据库，造成数据库压力骤增‌。比如秒杀商品、热点新闻的缓存突然失效，解决方法：<br>（A）<u>使用一个互斥锁</u>（比如 Redis 的 SETNX 或 Redisson 分布式锁），保证失效时仅允许一个线程访问数据库并重建缓存，其他线程等待锁释放后读取新缓存；<br>（B）<u>不设置 key 的过期时间，在 value 中存一个逻辑过期时间</u>，当发现数据过期时，再异步更新缓存；<br>（C）<u>不设置 key 的过期时间，通过后台任务、消息队列或订阅机制在数据变更时主动更新缓存</u>。</p>
 <ul>
 <li><p><strong>Redis 的 SETNX</strong>（SET if Not eXists）：是 Redis 提供的原子性命令，用于在指定键（Key）不存在时设置，若键已存在，则不执行任何操作。当多个客户端并发调用时，它确保仅有一个客户端能成功设置键值，是分布式锁的基础，为避免死锁（如客户端崩溃未释放锁），需设置键的过期时间。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">基本用法</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 1：键不存在，设置成功</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 0：键已存在，未执行操作</span></span><br><span class="line">SETNX key value</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分布式锁用法：为保证原子性，NX（不存在才设置）和 PX（过期时间，单位：毫秒）必须同时设置</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 1：获取锁成功</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 0：锁已被其他客户端持有</span></span><br><span class="line">SET key value NX PX 30000</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong>Redisson 分布式锁</strong>：跟 SETNX 的作用类似，区别在于它通过 Lua 脚本执行 Redis 命令，确保加锁、解锁、重入等操作的原子性，在调用 lock() 方法时会默认启动看门狗机制延长锁的过期时间，防止业务未执行完锁已超时释放。使用不当可能会引发的问题有：（a）<u>死锁</u>：比如看门狗无限续期或客户端发生故障，解决办法为设置一个合理的锁过期时间或在 finally 块中显式释放锁；（b）<u>误释放锁</u>：比如线程 A 释放了线程 B 的锁，解决办法为在获取锁时为其生成一个唯一标识作为锁的值，如 UUID，释放锁时先校验锁的值是否与自己的标识一致；（c）<u>数据不一致</u>：比如线程 A 更新缓存的逻辑未在锁过期时间之前完成，紧接着线程 B 获取到锁并对同一缓存进行更新，解决办法为使用可重入锁，获取锁时增加持有次数，释放锁时减少持有次数，只有当持有次数为 0 且持有者是当前线程时才真正释放锁。</p>
+<li><p><strong>Redisson 分布式锁</strong>：跟 SETNX 的作用类似，区别在于它通过 Lua 脚本确保加锁、解锁、重入等操作的原子性，在调用 lock() 方法时会默认启动看门狗机制延长锁过期时间，防止业务未执行完锁却超时释放。使用不当可能会引发的问题有：（a）<u>死锁</u>：比如看门狗无限续期或客户端发生故障，解决办法是设置一个合理的锁过期时间或在 finally 块中显式释放锁；（b）<u>误释放锁</u>：比如线程 A 释放了线程 B 的锁，解决办法是在获取锁时为其生成一个唯一标识作为锁的值，如 UUID，释放锁时先校验锁的值是否与自己保存的标识一致；（c）<u>数据不一致</u>：比如线程 A 更新缓存的逻辑未在锁过期时间之前完成，紧接着线程 B 获取到锁并对同一缓存进行更新，解决办法为使用可重入锁，获取锁时增加持有次数，释放锁时减少持有次数，只有当持有次数为 0 且持有者是当前线程时才真正释放锁。</p>
 </li>
 </ul>
-<p>（II）雪崩指的是<strong>缓存中大量数据同时失效</strong>，或 Redis 宕机，导致所有请求直接访问数据库，可能引发数据库崩溃。比如大促期间缓存集中过期，解决方法：<br>（A）<u>对缓存数据的过期时间添加随机值</u>，避免批量数据同时失效‌；<br>（B）<u>增加二级缓存</u>（如 Memcached），当 Redis 缓存失效时，可从二级缓存读取；<br>（C）<u>部署 Redis 主从集群以及哨兵模式</u>（更高阶用 Redis Cluster），防止单点故障导致服务不可用‌；<br>（D）<u>对关键数据开启持久化功能</u>，配合 Hystrix 等<u>熔断</u>工具，在数据库压力过大时暂时拒绝部分请求‌。</p>
+<p>（II）雪崩指的是<strong>缓存中大量数据同时失效</strong>，或 Redis 宕机，导致所有请求直接访问数据库，可能引发数据库崩溃。比如大促期间缓存集中过期，解决方法：<br>（A）<u>对缓存数据的过期时间添加随机值</u>，避免批量数据同时失效‌；<br>（B）<u>增加二级缓存</u>（如 Memcached），当 Redis 缓存失效时，可从二级缓存读取；<br>（C）<u>部署 Redis Cluster</u>，支持数据备份和故障转移，防止单点故障导致服务不可用‌；<br>（D）<u>对关键数据开启持久化功能</u>，配合 Hystrix 等<u>熔断</u>工具，在数据库压力过大时暂时拒绝部分请求‌。</p>
 <ul>
 <li><strong>RDB 持久化</strong>：<u>生成某一时刻内存数据的二进制快照文件</u>（默认名为 dump.rdb），可通过 SAVE（阻塞主线程） 或 BGSAVE（后台异步子线程） 命令手动生成，也可通过配置让其自动生成。</li>
 <li><strong>AOF 持久化</strong>：<u>以日志的形式记录 Redis 服务器处理过的每一个写操作命令</u>（默认名为 appendonly.aof，且默认的 appendfsync 同步频率为每秒同步一次），然后在 Redis 服务器重启时通过执行该文件中的命令来恢复数据‌。可与 RDB 混合使用，结合 RDB 的快速恢复和 AOF 的低数据丢失风险，兼顾性能与安全性。</li>
 <li><strong>哨兵模式</strong>：<u>负责监控主从节点的健康状况</u>（发送 PING 命令检测），并在主节点故障时自动触发故障转移（需多个哨兵节点投票确认主节点是否下线，通常哨兵节点为奇数个），将合适的从节点提升为新的主节点（多个哨兵节点选举产生），同时通过发布订阅模式通知客户端更新主节点地址‌，确保服务持续可用。</li>
 <li><strong>主从集群</strong>：基于<u>数据复制</u>和<u>读写分离</u>，采用「一主多从」架构，通过 SLAVEOF 命令指定主节点地址建立连接，主节点（Master）负责处理写请求，从节点（Slave）默认只处理读请求。数据同步由从节点主动发起，全量同步（首次连接）为主节点生成 RDB 快照文件发给从节点加载，增量同步（断线重连）为主节点根据从节点提供的复制偏移量，把复制缓冲区中对应的增量写命令发给从节点执行。</li>
-<li><strong>Redis Cluster</strong>：<u>通过数据分片（Sharding &#x2F; Partitioning）将大规模数据集按一定规则（如哈希）拆分为多个子集（即分片）</u>，每个分片存储在不同的节点，且每个分片包含主节点和从节点，主节点处理读写，从节点复制数据并提供故障接管能力。节点间通过 Gossip 协议通信，自动检测故障并执行主从切换，无需依赖哨兵系统。</li>
+<li><strong>Redis Cluster</strong>：由多组服务器组成，每组服务器包含一个主节点 通过<u>哈希槽（Hash Slot）</u>的数据分片机制（Sharding &#x2F; Partitioning），将大规模数据集按一定规则（如哈希）拆分为多个子集（即分片），每个分片存储在不同的节点，且每个分片包含主节点和从节点，主节点处理读写，从节点复制数据并提供故障接管能力。节点间通过 Gossip 协议通信，自动检测故障并执行主从切换，无需依赖哨兵系统。</li>
 </ul>
 <p>（III）穿透指的是<strong>请求的数据在缓存和数据库中均不存在</strong>，导致请求持续绕过缓存直接访问数据库‌。比如攻击者发送恶意或异常请求，故意查询不存在的数据，解决方法：<br>（A）<u>对请求参数进行合法性校验</u>，拦截明显无效的请求‌；<br>（B）<u>使用布隆过滤器判断数据是否存在，若不存在，则直接返回</u>，需预加载合法数据到过滤器（如有效用户 ID）；<br>（C）<u>当查询结果为「数据不存在」时，将空值（如 NULL 或特定标记字符串）写入缓存</u>并设置较短过期时间（如 5 - 30 分钟），后续相同请求直接返回缓存中的空值，需注意监控空值缓存的内存占用，防止恶意攻击导致内存溢出‌。</p>
 <ul>
@@ -574,11 +574,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
