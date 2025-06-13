@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-06-12T08:16:44.224Z">
+<meta property="article:modified_time" content="2025-06-13T14:13:54.407Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -178,20 +178,20 @@
 <p><span style="background-color:green;"><font color=white>（2）</font></span>可使用以下 JVM 参数进行调优：<br>（A）‌堆内存设置：</p>
 <ul>
 <li><strong>-Xms</strong>：设置初始堆空间。由于服务器内存只有 1G，建议设置为较小值，如 -Xms256m 或 -Xms512m，确保程序启动时不会占用过多内存‌；另外，由于资源受限，建议将初始堆空间（-Xms）和最大堆空间（-Xmx）设置为相同的值，以避免堆内存的动态扩展和收缩带来的性能开销。</li>
-<li><strong>-Xmx</strong>：设置最大堆空间。同样地，考虑到内存受限和性能开销，应设置为一个合适的值，且最好与 -Xms 设置的值相同，如 -Xmx256m 或 -Xmx512m，也能避免内存溢出，同时留出一定空间供操作系统和其他程序使用‌，确保服务器的稳定。</li>
+<li><strong>-Xmx</strong>：设置最大堆空间。同样地，考虑到内存受限和性能开销，应设置为一个合适的值，且最好与 -Xms 设置的值相同，如 -Xmx256m 或 -Xmx512m，留出一定空间供操作系统和其他程序使用‌，确保服务器的稳定。</li>
 </ul>
 <p>（B）垃圾回收器选择：</p>
 <ul>
-<li><strong>-XX:+UseG1GC</strong>：启用 G1 垃圾回收器。G1 回收器能够更灵活地管理内存，减少垃圾回收带来的停顿，提高程序的响应速度‌。</li>
+<li><strong>-XX:+UseG1GC</strong>：G1 垃圾回收器能够更灵活地管理内存，减少垃圾回收带来的停顿，提高程序的响应速度‌。</li>
 <li><strong>-XX:+UseSerialGC</strong>：使用串行垃圾回收器。在单核 CPU 和有限内存的环境中，串行垃圾回收器是一个合理的选择，因为它不需要额外的线程来处理垃圾回收，从而减少了 CPU 和内存的消耗。</li>
 </ul>
 <p>（C）线程栈大小设置：</p>
 <ul>
-<li><strong>‌-Xss</strong>：设置每个线程的栈大小。在内存有限的情况下，将其设置为较小值，如 -Xss256k 或 -Xss512k，以节省内存并允许创建更多的线程‌，提高线程创建和管理的效率。但也要注意不能设置得过小，如果方法调用的深度过大，可能会导致栈溢出错误。</li>
+<li><strong>‌-Xss</strong>：设置每个线程的栈大小。在内存有限的情况下，将其设置为较小值，如 -Xss256k 或 -Xss512k，以节省内存并允许创建更多的线程‌，提高线程创建和管理的效率。但也要注意不能设置得过小，如果方法调用的深度过大，可能会导致栈溢出。</li>
 </ul>
 <p>（D）性能监控参数：</p>
 <ul>
-<li><strong>‌-XX:+PrintGCDetails‌</strong>：输出详细的 GC 日志。这有助于了解垃圾回收的行为和性能瓶颈，从而进行针对性的优化。</li>
+<li><strong>‌-XX:+PrintGCDetails‌</strong>：输出详细的 GC 日志。有助于了解垃圾回收的行为和性能瓶颈，从而进行针对性的优化。</li>
 <li><strong>-XX:+PrintGCDateStamps</strong>：在 GC 日志中添加时间戳。可以更准确地分析 GC 事件的时间分布。</li>
 <li><strong>-Xloggc:</strong>：将 GC 日志输出到指定文件。便于收集和分析 GC 数据，如 -Xloggc:log&#x2F;gc.log。</li>
 </ul>
@@ -209,7 +209,7 @@
 <li>应用程序通过调用 Selector 的方法获取已经到达的事件列表；</li>
 <li>根据不同的事件类型，应用程序进行相应的读取、写入或其他操作。</li>
 </ul>
-<p>以 <strong>Netty</strong> 为例，它的调优技巧有：<br>（A）线程池：根据应用负载和硬件配置，设置合适的线程池大小，如核心线程数、最大线程数；BossGroup 通常设置为单线程，负责处理连接请求；WorkerGroup 负责处理 I&#x2F;O 操作，可以设置为 CPU 核心数 × 2；<br>（B）内存：启用 Netty 的内存池功能，通过循环利用 ByteBuf 对象来减少内存分配和回收的开销；<br>（C）协议：根据具体的应用场景选择合适的协议（如 UDP、WebSocket、TCP 等），并使用更加高效的序列化框架，比如选择 Protobuf 来替代 JSON；<br>（D）I&#x2F;O 模型：根据应用场景和操作系统选择合适的 I&#x2F;O 模型，比如在 Linux 系统上用 epoll 会更加高效；<br>（E）编解码器：选择合适的编解码器，对于大数据量传输，使用 Netty 自带的工具处理粘包和拆包问题，如 LengthFieldBasedFrameDecoder 和 DelimiterBasedFrameDecoder；<br>（F）日志：调整日志级别来减少不必要的日志输出，提升性能；<br>（G）网络配置：开启 TCP_NODELAY 选项，减少延迟，提高小数据包的传输效率；调整 SO_BACKLOG 选项，增加等待连接队列的长度；<br>（H）使用压缩：对于大数据量的 I&#x2F;O，可以考虑使用压缩技术（如 Gzip）来减少数据传输量，提高 I&#x2F;O 性能。</p>
+<p>以 <strong>Netty</strong> 为例，它的调优技巧有：<br>（A）线程池：根据应用负载和硬件配置，设置合适的线程池大小，如核心线程数、最大线程数；BossGroup 通常设置为单线程，负责处理连接请求；WorkerGroup 负责处理 I&#x2F;O 操作，可以设置为 CPU 核心数 × 2；<br>（B）内存：启用 Netty 的内存池功能，通过循环利用 ByteBuf 对象来减少内存分配和回收的开销；<br>（C）协议：根据具体的应用场景选择合适的通信协议（如 UDP、WebSocket、TCP 等），并使用更加高效的序列化框架，比如选择 Protobuf 来替代 JSON；<br>（D）I&#x2F;O 模型：根据应用场景和操作系统选择合适的 I&#x2F;O 模型，比如在 Linux 系统上用 epoll 会更加高效；<br>（E）编解码器：选择合适的编解码器，对于大数据量传输，使用 Netty 自带的工具处理粘包和拆包问题，如 LengthFieldBasedFrameDecoder 和 DelimiterBasedFrameDecoder；<br>（F）日志：调整日志级别来减少不必要的日志输出，提升性能；<br>（G）网络配置：开启 TCP_NODELAY 选项，减少延迟，提高小数据包的传输效率；调整 SO_BACKLOG 选项，增加等待连接队列的长度；<br>（H）使用压缩：对于大数据量的 I&#x2F;O，可以考虑使用压缩技术（如 Gzip）来减少数据传输量，提高 I&#x2F;O 性能。</p>
 <p><span style="background-color:green;"><font color=white>（4）</font></span>线程池通过复用线程，避免频繁创建和销毁线程，减少系统资源的浪费。它的配置项及作用有：<br>（A）核心线程数：<u>始终保持存活的线程数量</u>，即使线程池处于空闲状态，核心线程也不会被回收；<br>（B）最大线程数：<u>允许创建的最大线程数量</u>，任务队列满了之后会创建新的非核心线程，直至达到该值；<br>（C）非核心线程存活时间：<u>非核心线程在空闲时能存活的最长时间</u>，超时后会被回收，与单位（unit）配合使用；<br>（D）任务队列：<u>当任务数量超出核心线程数时，选择合适的队列类型来存放待执行的任务</u>，比如有界队列（ArrayBlockingQueue）、无界队列（LinkedBlockingQueue）或同步队列（SynchronousQueue，是一个不存储任何元素的阻塞队列，更像一种信号机制，比如添加元素时，如果没有线程在等待从这个队列中移除元素，那么添加操作将会阻塞，直到有线程从队列中移除元素，反之亦然）；<br>（E）线程工厂：用于<u>自定义线程创建逻辑</u>，可以设置线程的名称、优先级、是否是守护线程‌等属性‌（守护线程在后台运行，通过调用 setDaemon(true) 设置，其作用是为其他线程提供服务，如垃圾回收、日志记录、监控等，当所有的非守护线程结束时，守护线程会自动结束）；<br>（F）拒绝策略：<u>当任务队列已满且线程池达到最大线程数时，选择合适的策略来处理新提交的任务</u>，比如抛出异常（AbortPolicy，默认策略）、直接丢弃任务（DiscardPolicy，静默丢弃，不抛异常）、由提交任务的线程处理任务（CallerRunsPolicy‌）或通过实现 RejectedExecutionHandler 接口来自定义策略。</p>
 <p>创建线程池主要有两种方式：<strong>ThreadPoolExecutor 构造函数（推荐）</strong>和 Executors 工具类（快速但需谨慎使用）。优先使用 ThreadPoolExecutor 来自定义配置参数，以实现粒度更细的控制，用 Executors 工具类创建的线程池可能因默认参数导致资源耗尽（比如使用无界队列导致 OOM）。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ExecutorService</span> <span class="variable">executor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(</span><br><span class="line">    <span class="number">5</span>, <span class="comment">// 核心线程数</span></span><br><span class="line">    <span class="number">10</span>, <span class="comment">// 最大线程数</span></span><br><span class="line">    <span class="number">60L</span>, TimeUnit.SECONDS, <span class="comment">// 非核心线程存活时间</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">100</span>), <span class="comment">// 任务队列</span></span><br><span class="line">    Executors.defaultThreadFactory(), <span class="comment">// 线程工厂</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>.AbortPolicy() <span class="comment">// 拒绝策略</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
@@ -256,12 +256,12 @@
 </li>
 <li><p><strong>AOF 持久化</strong>：<u>以日志的形式记录 Redis 服务器处理过的每一个写操作命令</u>（默认名为 appendonly.aof，且默认的 appendfsync 同步频率为每秒同步一次），然后在 Redis 服务器重启时通过执行该文件中的命令来恢复数据‌。可与 RDB 混合使用，结合 RDB 的快速恢复和 AOF 的低数据丢失风险，兼顾性能与安全性。</p>
 </li>
-<li><p><strong>Redis Cluster</strong>：由多组服务器组成，每组服务器包含一个主节点（Master，处理读写）和至少一个从节点（Slave，只读，手动绑定到主节点的命令为 CLUSTER REPLICATE &lt;主节点 ID&gt;），每个主节点负责管理分配给它的一个<u>哈希槽</u>的子集；从节点负责备份对应主节点的数据，提供故障转移能力，即主节点挂掉时，自动从对应的从节点中选取一个当作新的主节点（官方要求最小的集群为 3 主 3 从）。</p>
+<li><p><strong>Redis Cluster</strong>：由多组服务器组成，每组服务器包含一个主节点（Master，处理读写）和至少一个从节点（Slave，只读，手动绑定到主节点的命令为 CLUSTER REPLICATE &lt;主节点 ID&gt;），每个主节点负责管理分配给它的一个<u>哈希槽</u>的子集；从节点负责备份对应主节点的数据，提供故障转移能力，即主节点挂掉时，自动从它的从节点中选取一个当作新的主节点（官方要求最小的集群为 3 主 3 从）。</p>
 <p>数据同步由从节点主动发起（从节点向主节点发送 PSYNC 命令，并携带自身的复制 ID 和复制偏移量），分为全量同步和增量同步：全量同步（首次连接或复制偏移量不在主节点的‌复制缓冲区范围内）为主节点生成 RDB 快照文件发给从节点，从节点清空旧数据后加载；增量同步（断线重连且复制偏移量在主节点的‌复制缓冲区范围内）为主节点把复制缓冲区中位于偏移量之后的增量写命令发给从节点执行。</p>
-<p>故障转移通过节点间的 Gossip 协议和分布式共识‌实现：每个节点通过 ‌PING&#x2F;PONG 消息检测其他节点的状态，若某节点在超时时间内无响应，则被标记为「疑似故障」，但只有主节点拥有投票权‌，只有多数主节点认为该节点失效时（&gt; 50%），该节点状态才升级为「确认故障」。若故障节点为主节点，则其从节点发起竞选，向其他主节点广播，收到请求的主节点基于‌复制偏移量投票（最新数据优先），获得多数票的从节点晋升为新主节点。</p>
+<p>故障转移通过节点间的 Gossip 协议和分布式共识‌实现：每个节点每秒发送 ‌PING&#x2F;PONG 消息检测其他节点的状态，若某节点在超时时间内无响应，则被标记为「疑似故障」，但只有主节点拥有投票权‌，只有多数主节点认为该节点失效时（&gt; 50%），该节点状态才升级为「确认故障」。若故障节点为主节点，则它的从节点发起竞选，向其他主节点广播，收到请求的主节点基于‌复制偏移量投票（最新数据优先），获得多数票的从节点晋升为新主节点。</p>
 </li>
-<li><p><strong>哈希槽（Hash Slot）</strong>：一共 16384 个槽，每个主节点分管其中一部分，保存 (key, value) 的时候，对 key 使用 CRC16 哈希算法得到一个整数值，然后对 16384 求余数（CRC16(key) % 16384），看余数落在哪个槽里，就放到对应的主节点中（即数据分片）。当要添加新的主节点服务器时，就从现有主节点负责的槽中各自分出一些给新的主节点，对应的数据也搬过去；查询缓存数据时，客户端可以向任意一个节点发出请求，如果查不到，它会告诉我们该去哪个节点查。</p>
-<p>为什么不选择一致性哈希算法？更加均匀</p>
+<li><p><strong>哈希槽（Hash Slot）</strong>：共有固定的 16384 个槽，每个主节点分管其中一部分（2^14，槽位过少负载不均、过多开销过大，每个槽内部结构为数组加链表），保存 (key, value) 的时候，对 key 使用 CRC16 算法得到一个整数值，然后再对 16384 求余数（CRC16(key) % 16384），看余数落在哪个槽里，就放到对应的主节点中（即数据分片）。当要添加新的主节点时，就从现有主节点负责的槽中各自分出一些给新的主节点，对应数据也搬过去；查询缓存数据时，客户端可以向任意一个节点发出请求，如果查不到，该节点会告诉我们该去哪个节点查，因为每个节点都保存了槽位与节点的关系映射表 slots_to_nodes（位图 + 节点 ID 列表，仅需 2KB 内存空间，带宽友好），心跳包携带着映射表在节点间同步。</p>
+<p>为什么不选择一致性哈希算法？一致性哈希在服务器较少时可能出现严重的数据倾斜问题，常通过将一台真实的服务器看成多台虚拟的服务器来解决（求「真实服务器的 IP 加编号」的哈希值），以此增加它们分布在圆圈上的均匀性，而 Hash Slot 强制每个主节点管理近乎相等的槽数量，天然规避了数据倾斜。另外，当需要添加或删除服务器时，虽然一致性哈希能把缓存失效控制在特定的区间，但它需要重新计算大量 key 的落点（从 Hash(key) 的位置开始，放入顺时针找到的第一台服务器中），这与 Hash Slot 直接迁移特定槽位的方式相比成本更高。</p>
 </li>
 </ul>
 <p>（III）穿透指的是<strong>请求的数据在缓存和数据库中均不存在</strong>，导致请求持续绕过缓存直接访问数据库‌。比如攻击者发送恶意或异常请求，故意查询不存在的数据，解决方法：<br>（A）<u>对请求参数进行合法性校验</u>，拦截明显无效的请求‌；<br>（B）<u>使用布隆过滤器判断数据是否存在，若不存在，则直接返回</u>，需预加载合法数据到过滤器（如有效用户 ID）；<br>（C）<u>当查询结果为「数据不存在」时，将空值（如 NULL 或特定标记字符串）写入缓存</u>并设置较短过期时间（如 5 - 30 分钟），后续相同请求直接返回缓存中的空值，需注意监控空值缓存的内存占用，防止恶意攻击导致内存溢出‌。</p>
@@ -576,15 +576,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
