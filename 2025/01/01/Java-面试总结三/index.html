@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-06-13T14:13:54.407Z">
+<meta property="article:modified_time" content="2025-06-14T10:11:45.675Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -261,7 +261,7 @@
 <p>故障转移通过节点间的 Gossip 协议和分布式共识‌实现：每个节点每秒发送 ‌PING&#x2F;PONG 消息检测其他节点的状态，若某节点在超时时间内无响应，则被标记为「疑似故障」，但只有主节点拥有投票权‌，只有多数主节点认为该节点失效时（&gt; 50%），该节点状态才升级为「确认故障」。若故障节点为主节点，则它的从节点发起竞选，向其他主节点广播，收到请求的主节点基于‌复制偏移量投票（最新数据优先），获得多数票的从节点晋升为新主节点。</p>
 </li>
 <li><p><strong>哈希槽（Hash Slot）</strong>：共有固定的 16384 个槽，每个主节点分管其中一部分（2^14，槽位过少负载不均、过多开销过大，每个槽内部结构为数组加链表），保存 (key, value) 的时候，对 key 使用 CRC16 算法得到一个整数值，然后再对 16384 求余数（CRC16(key) % 16384），看余数落在哪个槽里，就放到对应的主节点中（即数据分片）。当要添加新的主节点时，就从现有主节点负责的槽中各自分出一些给新的主节点，对应数据也搬过去；查询缓存数据时，客户端可以向任意一个节点发出请求，如果查不到，该节点会告诉我们该去哪个节点查，因为每个节点都保存了槽位与节点的关系映射表 slots_to_nodes（位图 + 节点 ID 列表，仅需 2KB 内存空间，带宽友好），心跳包携带着映射表在节点间同步。</p>
-<p>为什么不选择一致性哈希算法？一致性哈希在服务器较少时可能出现严重的数据倾斜问题，常通过将一台真实的服务器看成多台虚拟的服务器来解决（求「真实服务器的 IP 加编号」的哈希值），以此增加它们分布在圆圈上的均匀性，而 Hash Slot 强制每个主节点管理近乎相等的槽数量，天然规避了数据倾斜。另外，当需要添加或删除服务器时，虽然一致性哈希能把缓存失效控制在特定的区间，但它需要重新计算大量 key 的落点（从 Hash(key) 的位置开始，放入顺时针找到的第一台服务器中），这与 Hash Slot 直接迁移特定槽位的方式相比成本更高。</p>
+<p>为什么不选择一致性哈希算法？一致性哈希在服务器较少时可能出现严重的数据倾斜问题，常通过将一台真实的服务器看成多台虚拟的服务器来解决（用「真实服务器的 IP 加编号」的哈希值），以此增加它们在圆圈上分布的均匀性，而 Hash Slot 强制每个主节点管理近乎相等的槽数量，天然规避了数据倾斜。另外，当需要添加或删除服务器时，虽然一致性哈希只会让相邻节点的缓存失效，但它需要重新计算大量 key 的落点（从 Hash(key) 的位置开始，放入顺时针找到的第一台服务器中），这与 Hash Slot 直接迁移特定槽位的方式相比成本更高。</p>
 </li>
 </ul>
 <p>（III）穿透指的是<strong>请求的数据在缓存和数据库中均不存在</strong>，导致请求持续绕过缓存直接访问数据库‌。比如攻击者发送恶意或异常请求，故意查询不存在的数据，解决方法：<br>（A）<u>对请求参数进行合法性校验</u>，拦截明显无效的请求‌；<br>（B）<u>使用布隆过滤器判断数据是否存在，若不存在，则直接返回</u>，需预加载合法数据到过滤器（如有效用户 ID）；<br>（C）<u>当查询结果为「数据不存在」时，将空值（如 NULL 或特定标记字符串）写入缓存</u>并设置较短过期时间（如 5 - 30 分钟），后续相同请求直接返回缓存中的空值，需注意监控空值缓存的内存占用，防止恶意攻击导致内存溢出‌。</p>
@@ -333,8 +333,11 @@
 </ul>
 <p>（E）架构级优化：</p>
 <ul>
-<li>读写分离，建立集群，并通过主从分离将读请求分发到从库，降低主库压力‌；</li>
-<li>分库分表，对超大数据表进行水平拆分（如按时间或 ID 范围分），分散单表压力‌。</li>
+<li><p>读写分离，建立集群，分担主库压力，由一个可读可写的 master 库（以写为主）和多个只读的 slave 库组成，slave 库通过复制 master 库的数据与其保持一致（比如请求 MySQL 的 binlog 日志文件和 position 之后的内容，以获取数据更新事件），如果 master 库挂掉了，还可以将 slave 库升级为新的 master 库继续工作，提高可用性；</p>
+<p>随之而来的问题是需要把代码中的读操作和写操作区分开，区分开了才知道 SQL 是要发给 master 库还是发给 slave 库，而且由于 slave 库有多个，还得决定到底发给哪个 slave 库。为了避免大量修改已有代码，新增一个中间层 MySQL Proxy（分层可以隔离变化），它位于应用程序代码和数据库集群之间，由它来处理这些麻烦事。</p>
+</li>
+<li><p>分库分表，对超大数据表进行水平拆分（如按时间或 ID 范围分），分散单表压力‌。</p>
+</li>
 </ul>
 <p>（F）工具辅助：</p>
 <ul>
@@ -576,15 +579,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
