@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/sigaction.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/AIO.png">
 <meta property="article:published_time" content="2024-12-10T09:30:39.000Z">
-<meta property="article:modified_time" content="2025-05-30T03:34:27.103Z">
+<meta property="article:modified_time" content="2025-06-15T14:16:08.454Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -252,8 +252,8 @@
 <h4 id="2-5-选择-Netty"><a href="#2-5-选择-Netty" class="headerlink" title="2.5 选择 Netty"></a>2.5 选择 Netty</h4><p>实际开发时，为什么不用 JDK NIO 的原生类库，而选择 Netty？</p>
 <p>JDK NIO 有本身固有的复杂性和 Bug，开发出高质量的 NIO 程序并不是一件简单的事情。虽然用原生 JDK NIO 开发功能相对容易，但是其可靠性能力补足的工作量和难度都非常大，作为一个服务端，需要能够处理网络的闪断、客户端的重复接入、客户端的安全认证、消息的编解码、半包读写、失败缓存、网络拥塞、异常码流等情况，如果没有足够的编程经验积累，一个稳定的服务端往往需要一年甚至更长的时间。更为糟糕的是，一旦在生产环境发生问题，不但调试定位难度大，还可能带来巨大损失。</p>
 <p>而 Netty 经历了大规模的商业应用考验，质量得到验证。社区活跃，成熟稳定，已成为最流行的 NIO 框架之一。</p>
-<h5 id="2-5-1-粘包和拆包"><a href="#2-5-1-粘包和拆包" class="headerlink" title="2.5.1 粘包和拆包"></a>2.5.1 粘包和拆包</h5><p>产生粘包和拆包问题的主要原因是，操作系统在发送 TCP 数据的时候，底层会有一个缓冲区，例如它的大小为 1024 个字节，如果一次请求发送的数据量比较小，未达到缓冲区的大小，则 TCP 会将多个请求合并为一个请求进行发送，如此便形成了粘包问题；如果一次请求发送的数据量比较大，超过了缓冲区的大小，则 TCP 又会将其拆分为多个小包进行多次发送，这就是拆包问题。</p>
-<p>常见的解决方案有三种：<br>（1）<u>固定每个包的长度</u>，比如客户端在发送数据包的时候，固定为 1024 个字节，如果客户端发送的数据长度不足 1024 个字节，则通过补充空格的方式补全到指定长度；<br>（2）<u>使用固定的分隔符</u>，比如在每个数据包的末尾加上 \r\n，如果一个包被拆分了，则等待下一个包发送过来之后找到其中的 \r\n，然后与前一个包的剩余部分进行合并，就能得到完整的包；<br>（3）<u>将消息分为头部和消息体，在头部中保存当前整个消息的长度</u>，只有在读取到足够长度的消息之后才算是读到了一个完整的消息。</p>
+<h5 id="2-5-1-粘包和拆包"><a href="#2-5-1-粘包和拆包" class="headerlink" title="2.5.1 粘包和拆包"></a>2.5.1 粘包和拆包</h5><p>产生粘包和拆包问题的主要原因是，操作系统在发送 TCP 数据的时候，会先放到一个缓冲区，例如它的大小为 1024 个字节，如果一次请求发送的数据量比较小，未达到缓冲区的大小，则 TCP 会将多个请求合并为一个请求进行发送，如此便形成了粘包问题；如果一次请求发送的数据量比较大，超过了缓冲区的大小，则 TCP 又会将其拆分为多个小包进行多次发送，这就是拆包问题。</p>
+<p>常见的解决方案有三种：<br>（1）<u>固定每个包的长度</u>，比如将客户端发送的消息长度固定为 1024 个字节，不足则填充空格补齐；<br>（2）<u>使用特定的分隔符</u>，比如在每条消息的末尾加上 \r\n，接收方就根据数据中的 \r\n 切分或者合并数据；<br>（3）<u>将一条消息分为头部和消息体，在头部中保存消息体的长度</u>，接收方先读取头部中的长度字段，然后根据其值精确读取后续的字节数作为完整消息体（Netty 的默认方案）。</p>
 
       
 
@@ -487,15 +487,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">

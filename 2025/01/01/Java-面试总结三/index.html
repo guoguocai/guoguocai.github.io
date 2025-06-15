@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-06-14T10:11:45.675Z">
+<meta property="article:modified_time" content="2025-06-15T13:44:26.191Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -209,7 +209,7 @@
 <li>应用程序通过调用 Selector 的方法获取已经到达的事件列表；</li>
 <li>根据不同的事件类型，应用程序进行相应的读取、写入或其他操作。</li>
 </ul>
-<p>以 <strong>Netty</strong> 为例，它的调优技巧有：<br>（A）线程池：根据应用负载和硬件配置，设置合适的线程池大小，如核心线程数、最大线程数；BossGroup 通常设置为单线程，负责处理连接请求；WorkerGroup 负责处理 I&#x2F;O 操作，可以设置为 CPU 核心数 × 2；<br>（B）内存：启用 Netty 的内存池功能，通过循环利用 ByteBuf 对象来减少内存分配和回收的开销；<br>（C）协议：根据具体的应用场景选择合适的通信协议（如 UDP、WebSocket、TCP 等），并使用更加高效的序列化框架，比如选择 Protobuf 来替代 JSON；<br>（D）I&#x2F;O 模型：根据应用场景和操作系统选择合适的 I&#x2F;O 模型，比如在 Linux 系统上用 epoll 会更加高效；<br>（E）编解码器：选择合适的编解码器，对于大数据量传输，使用 Netty 自带的工具处理粘包和拆包问题，如 LengthFieldBasedFrameDecoder 和 DelimiterBasedFrameDecoder；<br>（F）日志：调整日志级别来减少不必要的日志输出，提升性能；<br>（G）网络配置：开启 TCP_NODELAY 选项，减少延迟，提高小数据包的传输效率；调整 SO_BACKLOG 选项，增加等待连接队列的长度；<br>（H）使用压缩：对于大数据量的 I&#x2F;O，可以考虑使用压缩技术（如 Gzip）来减少数据传输量，提高 I&#x2F;O 性能。</p>
+<p>以 <strong>Netty</strong> 为例，它的调优技巧有：<br>（A）线程池：根据应用负载和硬件配置，设置合适的线程池大小，如核心线程数、最大线程数；BossGroup 通常设置为单线程，负责处理连接请求；WorkerGroup 负责处理 I&#x2F;O 操作，可以设置为 CPU 核心数 × 2；使用独立的线程池 EventExecutorGroup 异步执行耗时操作；<br>（B）内存：启用 Netty 的内存池功能，复用内存中的对象，减少内存分配和回收的开销；<br>（C）协议：根据应用场景选择合适的通信协议（如 UDP、WebSocket、TCP 等），对于 TCP 协议，将 TCP_NODELAY 设置为 true，降低延迟；并选择更加高效的序列化框架，比如用 Protobuf 替代 JSON；<br>（D）I&#x2F;O 模型：根据应用场景和操作系统选择合适的 I&#x2F;O 模型，比如在 Linux 系统上用 epoll 会更加高效；<br>（E）编解码器：选择合适的编解码器，比如使用 Netty 自带的工具处理粘包和拆包： LengthFieldBasedFrameDecoder（默认，基于消息头中的长度字段，灵活高效）、DelimiterBasedFrameDecoder（基于特定分隔符，兼容性强，适用于文本协议）；<br>（F）日志：调整日志级别来减少不必要的日志输出，提升性能；<br>（G）使用压缩：大数据量使用 Gzip 压缩，减少数据传输量，提高 I&#x2F;O 性能。</p>
 <p><span style="background-color:green;"><font color=white>（4）</font></span>线程池通过复用线程，避免频繁创建和销毁线程，减少系统资源的浪费。它的配置项及作用有：<br>（A）核心线程数：<u>始终保持存活的线程数量</u>，即使线程池处于空闲状态，核心线程也不会被回收；<br>（B）最大线程数：<u>允许创建的最大线程数量</u>，任务队列满了之后会创建新的非核心线程，直至达到该值；<br>（C）非核心线程存活时间：<u>非核心线程在空闲时能存活的最长时间</u>，超时后会被回收，与单位（unit）配合使用；<br>（D）任务队列：<u>当任务数量超出核心线程数时，选择合适的队列类型来存放待执行的任务</u>，比如有界队列（ArrayBlockingQueue）、无界队列（LinkedBlockingQueue）或同步队列（SynchronousQueue，是一个不存储任何元素的阻塞队列，更像一种信号机制，比如添加元素时，如果没有线程在等待从这个队列中移除元素，那么添加操作将会阻塞，直到有线程从队列中移除元素，反之亦然）；<br>（E）线程工厂：用于<u>自定义线程创建逻辑</u>，可以设置线程的名称、优先级、是否是守护线程‌等属性‌（守护线程在后台运行，通过调用 setDaemon(true) 设置，其作用是为其他线程提供服务，如垃圾回收、日志记录、监控等，当所有的非守护线程结束时，守护线程会自动结束）；<br>（F）拒绝策略：<u>当任务队列已满且线程池达到最大线程数时，选择合适的策略来处理新提交的任务</u>，比如抛出异常（AbortPolicy，默认策略）、直接丢弃任务（DiscardPolicy，静默丢弃，不抛异常）、由提交任务的线程处理任务（CallerRunsPolicy‌）或通过实现 RejectedExecutionHandler 接口来自定义策略。</p>
 <p>创建线程池主要有两种方式：<strong>ThreadPoolExecutor 构造函数（推荐）</strong>和 Executors 工具类（快速但需谨慎使用）。优先使用 ThreadPoolExecutor 来自定义配置参数，以实现粒度更细的控制，用 Executors 工具类创建的线程池可能因默认参数导致资源耗尽（比如使用无界队列导致 OOM）。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ExecutorService</span> <span class="variable">executor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(</span><br><span class="line">    <span class="number">5</span>, <span class="comment">// 核心线程数</span></span><br><span class="line">    <span class="number">10</span>, <span class="comment">// 最大线程数</span></span><br><span class="line">    <span class="number">60L</span>, TimeUnit.SECONDS, <span class="comment">// 非核心线程存活时间</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">100</span>), <span class="comment">// 任务队列</span></span><br><span class="line">    Executors.defaultThreadFactory(), <span class="comment">// 线程工厂</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>.AbortPolicy() <span class="comment">// 拒绝策略</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
@@ -269,16 +269,16 @@
 <li><strong>布隆过滤器</strong>：是一个由二进制位组成的固定长度数组（初始值全为 0‌），<u>能快速判断一个元素是否「一定不存在」或「可能存在」于集合中</u>，其优势在于空间效率高、查询速度快，但存在误判，且不支持删除操作。其原理为：先预加载所有的合法元素，将每个元素输入到多个独立的哈希函数中，然后将多个哈希值对应的位数组位置设置为 1（例如：元素 a 经过 3 个哈希函数映射到位置 2、5、10，则这三个位置置为 1），查询时，对于待查元素进行相同处理，然后检查位数组中的对应位置是否全为 1，若存在 0，则代表元素一定不在集合中，若全为 1，则代表元素可能存在（可能因哈希冲突误判），误判率与‌位数组长度、哈希函数数量、已插入元素数量‌相关，可通过增大位数组长度、调整哈希函数数量来优化。布隆过滤器是以空间换时间，建议选择可扩展的布隆过滤器应对数据动态增长‌，并定期重建过滤器，避免误判率随时间累积升高‌。</li>
 </ul>
 <p><span style="background-color:green;"><font color=white>（9）</font></span>可从以下几个方面进行说明：<br>（A）掌握 Linux 的基本命令，比如 mkdir、pwd、chmod、cp、mv、history、crontab、vi 编辑器的使用等等；<br>（B）能熟练使用 Linux 的系统管理命令，比如 useradd、passwd、ps、top、kill、systemctl、df、apt、yum 等；<br>（C）能熟练使用 Linux 的命令行工具，比如 tar、ping、ifconfig、netstat、grep、awk 等等；<br>（D）能编写 Shell 脚本实现自动化任务，常用语法包括：使用 #!&#x2F;bin&#x2F;bash 指定脚本解释器，使用 $ 符号引用变量值，使用 -eq、-lt、-gt 来比较数字大小，使用 echo 来输出字符串或覆盖文件内容等等；<br>（E）了解 Linux 的内存管理，它是 Linux 内核的一个关键部分，负责内存的分配与回收，使用了虚拟内存技术。</p>
-<p><span style="background-color:green;"><font color=white>（10）</font></span>RPC（Remote Procedure Call，远程过程调用）是一种用于实现分布式系统中不同节点之间通信和调用的技术。实现一个 RPC 框架通常包括以下步骤：<br>（A）<u>设计‌协议</u>：解决服务端与客户端通信的问题，包括网络传输协议、序列化协议和消息编码协议；<br>（B）<u>实现‌服务端</u>：实现代理对象，接收和处理客户端的请求，调用对应的本地方法，并将结果返回给客户端；<br>（C）<u>实现‌客户端</u>：实现代理对象，发起 RPC 调用，将调用参数打包成请求，并发送给远程服务器；<br>（D）<u>服务注册与发现</u>：将服务提供者的地址和接口等信息注册到注册中心，消费者能通过注册中心发现服务；<br>（E）<u>负载均衡与容错机制</u>：实现负载均衡策略来分配请求，以及容错机制来保证调用的稳定性。</p>
+<p><span style="background-color:green;"><font color=white>（10）</font></span>RPC（Remote Procedure Call，远程过程调用）是一种用于实现分布式系统中不同节点间通信的技术。实现一个 RPC 框架通常包括以下步骤：<br>（A）<u>设计‌协议</u>：约定好服务端与客户端双方代理的消息格式，包括网络传输协议、序列化协议和消息编码协议；<br>（B）<u>实现‌服务端代理</u>：接收和处理客户端代理的请求，调用对应的本地方法，将结果返回给客户端代理；<br>（C）<u>实现‌客户端代理</u>：发起调用，发送请求给远程服务器，然后接收并处理服务端代理返回的结果；<br>（D）<u>服务注册与发现</u>：将服务提供者的地址和端口等信息注册到注册中心，消费者通过注册中心发现服务；<br>（E）<u>负载均衡与容错机制</u>：实现负载均衡策略来分摊请求，增加容错机制保证调用的稳定性。</p>
 <p>一次完整的 RPC 调用流程如下：</p>
 <ul>
 <li>服务消费者（Client）以本地调用方式调用服务；</li>
-<li>Client stub 将调用的参数等信息封装为消息体，然后找到远程服务地址将消息发送；</li>
+<li>Client stub 将调用的参数等信息封装为消息体，然后找到远程服务地址，将消息发送；</li>
 <li>Server stub 收到消息后进行解码，根据解码结果调用服务提供者（Server）的方法；</li>
-<li>Server stub 将服务提供者的方法执行结果打包成消息发送给 Client stub；</li>
-<li>Client stub 收到返回消息后进行解码，将最终结果返回给服务消费者。</li>
+<li>Server stub 将服务提供者的执行结果打包成消息发送给 Client stub；</li>
+<li>Client stub 收到返回消息后进行解码，将结果发给服务消费者。</li>
 </ul>
-<p>RPC 框架的目标就是将上面 Client stub 和 Server stub 要做的事情都封装起来，让用户感知不到它们的存在，使用时就像在调用本地方法一样简单，而不用关心网络通信的细节。RPC 主要用到的技术有动态代理、序列化、NIO 等，常见的 RPC 框架有 Dubbo、gRPC（基于 HTTP&#x2F;2 实现，支持多路复用；支持多种编程语言，通过 .proto 文件定义的接口可以自动生成代码；使用 ProtoBuf 进行序列化，相比与 HTTP 常用的 JSON 文本来说传输效率更高）、Hessian（基于 Binary-RPC 协议，走二进制数据） 等，支持 RPC 功能的框架有 WebService、Spring Cloud 等。</p>
+<p>RPC 框架的目标就是将上面 Client stub 和 Server stub 要做的事情都封装起来，让用户感知不到它们的存在，使用时就像调用本地方法一样简单，无需关心网络通信的细节。RPC 主要用到的技术有动态代理、序列化、NIO 等，常见的 RPC 框架有 Dubbo、gRPC（基于 HTTP&#x2F;2 实现，支持多路复用；支持多种编程语言，通过 .proto 文件定义的接口可以自动生成代码；使用 ProtoBuf 进行序列化，相比与 HTTP 使用的 JSON 文本来说传输效率更高）等，支持 RPC 功能的框架有 WebService、Spring Cloud 等。</p>
 <p><span style="background-color:green;"><font color=white>（11）</font></span>SOA 为一种面向服务的架构（Service-Oriented Architecture），是一种软件设计和开发的方法，它将应用程序拆分成一组独立的服务，这些服务之间通过定义良好的接口进行通信。简单来说，可以把 SOA 想象成一套积木，每个积木都是一个独立的服务，都有自己的功能，它们可以组合在一起形成更大的应用程序。</p>
 <p>SOA 与微服务的区别：SOA 注重复用性和统一的架构，倾向于通过统一的服务总线（ESB）将所有服务连接起来，使用统一的数据存储，服务之间有一定的依赖关系，通常需要一起部署，相比于微服务来说更加复杂。微服务更加强调服务的自治，每个服务都有自己独立的环境、数据存储和技术栈等，倾向于创建更加小型、轻量级的服务，服务之间没有依赖关系，支持独立部署和持续集成，相比于 SOA 来说更加轻量。</p>
 <p><span style="background-color:green;"><font color=white>（12）</font></span>缓存技术是提高系统性能和响应速度的关键组件，在高并发的场景下尤为重要。它的作用有：<br>（A）<u>减轻数据库压力</u>：通过缓存频繁访问的数据，减少查询数据库的次数，可避免数据库成为性能瓶颈；<br>（B）<u>提高数据读取速度</u>：缓存通常存储在内存中，而内存的访问速度远快于磁盘；<br>（C）<u>降低网络延迟</u>：对于需要从远程服务器获取的数据，缓存可以减少对远程服务器的请求次数。</p>
@@ -579,15 +579,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
