@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/combine_index.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-06-11T15:24:05.635Z">
+<meta property="article:modified_time" content="2025-06-16T13:02:59.402Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -194,8 +194,8 @@
 <p><span style="background-color:green;"><font color=white>（6）</font></span>虚拟内存的好处：<br>（A）<u>提高系统性能</u>：当物理内存不足时，操作系统可以自动将部分数据暂时存储到硬盘上的虚拟内存区域，以释放物理内存空间供其他应用程序使用，从而提高系统响应速度和稳定性；<br>（B）<u>扩大内存空间</u>：在不增加物理内存的情况下扩大内存空间，使计算机能够处理更多的数据；<br>（C）<u>提高数据安全性</u>：可以将敏感数据暂时存储到硬盘上，而不是直接暴露在物理内存中，可防止数据泄露。</p>
 <p>它可通过内存<strong>分页</strong>（Page，通常为 4KB）、<strong>分段</strong>（Segment，根据逻辑划分，常分为代码段、数据段、堆栈段等）、或者<strong>分页 + 分段</strong>的方式实现，过程包括页或段的划分、页表或段表的建立、请求调页或调段、页或段的置换算法、内存和硬盘之间的数据交换等步骤（在程序开始运行之前，仅装入当前要执行的部分页或者部分段即可运行，若在运行过程中发现要访问的页或者段不在内存，则将所需页或者段从硬盘的虚拟内存区域调入物理内存，若物理内存不足，则操作系统根据置换算法（如 FIFO、LRU 等）选择一个页或者一个段将其置换出去）。存放在硬盘虚拟内存区域的程序指令使用的也是虚拟的内存地址，它需要 <u>CPU 中的内存管理单元（MMU，借助寄存器）将虚拟内存地址转换成实际物理地址‌</u>才能运行，虚拟地址与物理地址之间通过页表或段表来映射（页表或段表存储在内存中），如果采用的是段页式，则先通过段表转换出一个线性地址，然后再通过页表得到物理地址。</p>
 <p>虚拟内存是一种重要的计算机系统内存管理技术，它允许操作系统使用硬盘空间来模拟额外的 RAM（随机访问存储器），通俗的说，就是当物理内存不够用时，为避免系统故障，系统就分出一部分硬盘空间来当内存使用，存放暂时还没有被访问到的代码和数据，一般设置为物理内存的 1 至 1.5 倍最佳（根据代码的<strong>局部性原理</strong>，被高频访问的代码往往只有一小部分，所以可以把暂时不运行的代码放到硬盘的虚拟内存区域，用的时候再分块加载到物理内存，反之，如果物理内存已满，则把物理内存中已经运行完的代码写回硬盘的虚拟内存区域，以便腾出空间）。它的缺点就是会占用一定的物理硬盘空间，加大对硬盘的读写，如果设置不当也会影响整机稳定。</p>
-<p><span style="background-color:green;"><font color=white>（7）</font></span>select 和 epoll 都是 Linux 下实现 <strong>I&#x2F;O 多路复用</strong>的机制，也就是说能用单个线程同时监视多个文件描述符的 I&#x2F;O 事件。</p>
-<p><strong>select 的工作过程</strong>：应用程序调用 select 函数时，会将文件描述符（fd）和超时时间传给它，然后 select 会将接收到的这些文件描述符都阻塞在当前线程，并将它们作为一个 fd_set 集合传给内核，内核再以线性扫描的方式检查这些文件描述符是否就绪（即是否有数据可读、可写或发生异常）或者超时，如果有任何文件描述符就绪或超时，select 就返回相应的文件描述符，应用程序就可以根据返回的结果无阻塞地进行读取、写入或其他操作了。</p>
+<p><span style="background-color:green;"><font color=white>（7）</font></span>select 和 epoll 都是 Linux 下实现 <strong>I&#x2F;O 多路复用</strong>的机制，即能用单个线程同时监视多个文件描述符的 I&#x2F;O 事件。</p>
+<p><strong>select 的工作过程</strong>：应用程序调用 select 函数时，会将 socket fd 和超时时间传给它，然后 select 会将接收到的这些 socket fd 都阻塞在当前线程，并将它们作为一个 fd_set 集合传给内核，由内核负责（以线性扫描的方式）检查这些 socket fd 是否就绪（即是否有数据可读、可写或发生异常）或者超时，如果有 socket fd 就绪或超时，内核就对相应的 socket fd 做上标记，然后唤醒 select 函数遍历所有的 socket fd（也就是 fd_set），看看谁有标记，有标记的就做相应处理。</p>
 <p><strong>epoll 的工作过程</strong>：与 select 不同的是，epoll 会在内核空间中维护一个事件表（用 epoll_create 创建，用 epoll_ctl 操作），然后通过这个事件表来跟踪每个文件描述符的状态，而不是每次都线性检查所有的文件描述符。当调用 epoll_wait 函数时，它同样会将所有的 fd 阻塞在当前线程，直到事件表跟踪到某个文件描述符上有事件发生或超时，epoll 就返回给应用程序去处理，这种事件驱动的方式可以确保应用程序在等待时只占用较少的资源。</p>
 <p><span style="background-color:green;"><font color=white>（8）</font></span><strong>Mysql 默认用的是 InnoDB</strong>。数据库引擎是用于存储、处理和保护数据的核心服务，当我们访问数据库时，不管是手动访问，还是程序访问，都不是直接读写数据库文件，而是通过数据库引擎访问数据库文件。主流的有：<br>（A）<u>InnoDB</u>：基于聚集索引，支持事务，默认使用行级锁，支持外键约束，适合需要高可靠性和高并发处理的场景‌，如售票系统，缺点是占用的数据库空间较大。<br>（B）<u>MyISAM</u>：基于非聚集索引，默认使用表级锁，适合读多写少的场景‌，如数据仓库，缺点是不支持事务。<br>（C）<u>Memory</u>（也称为 Heap）：将数据存储在内存中，读写速度非常快，适合需要高性能但不需要持久化的场景。</p>
 <p>聚集索引和非聚集索引的区别（两者的索引结构都是使用 B+ 树存储）：<br>（A）聚集索引：将完整数据与索引存到一起，找到索引也就找到了数据，索引结构的叶子节点存储的是索引键值和完整的行数据（整张表的行数据都按顺序存储在了叶子节点中），本质是根据每张表的主键构造出了一棵 B+ 树。在 InnoDB 中，聚集索引等价于主键索引，一张表只能有一个聚集索引。<br><img src="/images/2024-12-28/InnoDB_clustered.png" width="65%" /></p>
@@ -583,11 +583,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -611,11 +611,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
+                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
               </li>
              
               <li class="article-tag-list-item">
