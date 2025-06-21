@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-06-16T07:04:22.824Z">
+<meta property="article:modified_time" content="2025-06-20T14:34:40.268Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -204,9 +204,11 @@
 <ul>
 <li>创建一个 Selector，并将其绑定到某个线程上；</li>
 <li>创建通道，并将其注册到 Selector 上，指定监听的事件类型；</li>
-<li>当通道上的事件到达时，Selector 就将该事件通知给应用程序；</li>
-<li>应用程序通过调用 Selector 的方法获取已经到达的事件列表；</li>
-<li>根据不同的事件类型，应用程序进行相应的读取、写入或其他操作。</li>
+<li>调用 Selector 的 select() 方法阻塞等待事件发生或者超时；</li>
+<li>若某通道上的事件发生，则 select() 方法返回；</li>
+<li>应用程序可通过调用 selectedKeys() 方法获取已就绪的事件列表；</li>
+<li>根据不同的事件类型，应用程序进行相应的读取、写入或其他操作；</li>
+<li>所有事情做完后释放资源，关闭通道和多路复用器。</li>
 </ul>
 <p>以 <strong>Netty</strong> 为例，它的调优技巧有：<br>（A）线程池：根据应用负载和硬件配置，设置合适的线程池大小，如核心线程数、最大线程数；BossGroup 通常设置为单线程，负责处理连接请求；WorkerGroup 负责处理 I&#x2F;O 操作，可以设置为 CPU 核心数 × 2；使用独立的线程池 EventExecutorGroup 异步执行耗时操作；<br>（B）内存：启用 Netty 的内存池功能，复用内存中的对象，减少内存分配和回收的开销；<br>（C）协议：根据应用场景选择合适的通信协议（如 UDP、WebSocket、TCP 等），对于 TCP 协议，将 TCP_NODELAY 设置为 true，降低延迟；并选择更加高效的序列化框架，比如用 Protobuf 替代 JSON；<br>（D）I&#x2F;O 模型：根据应用场景和操作系统选择合适的 I&#x2F;O 模型，比如在 Linux 系统上用 epoll 会更加高效；<br>（E）编解码器：选择合适的编解码器，比如使用 Netty 自带的工具处理粘包和拆包： LengthFieldBasedFrameDecoder（默认，基于消息头中的长度字段，灵活高效）、DelimiterBasedFrameDecoder（基于特定分隔符，兼容性强，适用于文本协议）；<br>（F）日志：调整日志级别来减少不必要的日志输出，提升性能；<br>（G）使用压缩：大数据量使用 Gzip 压缩，减少数据传输量，提高 I&#x2F;O 性能。</p>
 <p><span style="background-color:green;"><font color=white>（4）</font></span>线程池通过复用线程，避免频繁创建和销毁线程，减少系统资源的浪费。它的配置项及作用有：<br>（A）核心线程数：<u>始终保持存活的线程数量</u>，即使线程池处于空闲状态，核心线程也不会被回收；<br>（B）最大线程数：<u>允许创建的最大线程数量</u>，任务队列满了之后会创建新的非核心线程，直至达到该值；<br>（C）非核心线程存活时间：<u>非核心线程在空闲时能存活的最长时间</u>，超时后会被回收，与单位（unit）配合使用；<br>（D）任务队列：<u>当任务数量超出核心线程数时，选择合适的队列类型来存放待执行的任务</u>，比如有界队列（ArrayBlockingQueue）、无界队列（LinkedBlockingQueue）或同步队列（SynchronousQueue，是一个不存储任何元素的阻塞队列，更像一种信号机制，比如添加元素时，如果没有线程在等待从这个队列中移除元素，那么添加操作将会阻塞，直到有线程从队列中移除元素，反之亦然）；<br>（E）线程工厂：用于<u>自定义线程创建逻辑</u>，可以设置线程的名称、优先级、是否是守护线程‌等属性‌（守护线程在后台运行，通过调用 setDaemon(true) 设置，其作用是为其他线程提供服务，如垃圾回收、日志记录、监控等，当所有的非守护线程结束时，守护线程会自动结束）；<br>（F）拒绝策略：<u>当任务队列已满且线程池达到最大线程数时，选择合适的策略来处理新提交的任务</u>，比如抛出异常（AbortPolicy，默认策略）、直接丢弃任务（DiscardPolicy，静默丢弃，不抛异常）、由提交任务的线程处理任务（CallerRunsPolicy‌）或通过实现 RejectedExecutionHandler 接口来自定义策略。</p>
@@ -235,7 +237,7 @@
 <li><p><strong>授权码</strong>：为了读取必要数据，很多第三方应用支持用其他平台的账号登录，比如用 QQ、微信的账号登，此时为保障原始密码安全，在使用这些第三方应用时不会直接输账号密码，而是<u>重定向到目标平台的官方认证中心</u>去登录和授权，成功后<u>返回一个授权码</u>给第三方（在前端&#x2F;浏览器得到，由于授权码会跟第三方自己在官方认证中心注册的 app_id、app_secret 关联，所以泄露也没事），第三方再<u>用这个授权码去申请 token</u>（在后端调用接口得到，防止泄漏），有了 token 后每次请求都带上，就能正常访问了。</p>
 </li>
 </ul>
-<p><span style="background-color:green;"><font color=white>（6）</font></span>线程间通信指的是在多线程编程中，不同线程之间如何交换信息或协调执行。常见的实现方式有：<br>（A）共享内存：多个线程可访问同一块内存，通过读写这块内存实现数据交换，如全局变量，但要注意同步问题；<br>（B）消息传递：线程之间通过发送和接收消息来进行通信，比如使用消息队列；<br>（C）条件变量‌：通过条件变量实现线程间的等待和唤醒，适用于线程需要等待某个条件成立才能继续执行的场景；<br>（D）信号量：这是一种用于线程同步和互斥的机制，它维护一个计数器，表示可用资源的数量，线程通过等待（P 操作）和释放（V 操作）信号量来实现同步，适用于需要控制对共享资源的访问的场景；<br>（E）事件：线程需要等待某个事件（如 I&#x2F;O 操作完成）才能继续执行。</p>
+<p><span style="background-color:green;"><font color=white>（6）</font></span>线程间通信指的是在多线程编程中，不同线程之间如何交换信息或协调执行。常见的实现方式有：<br>（A）共享内存：多个线程可访问同一块内存，通过读写这块内存实现数据交换，如全局变量，但要注意同步问题；<br>（B）消息传递：线程之间通过发送和接收消息来进行通信，比如使用消息队列；<br>（C）条件变量‌：通过条件变量实现线程间的等待和唤醒，适用于线程需要等待某个条件成立才能继续执行的场景；<br>（D）信号量：这是一种用于线程同步和互斥的机制，它维护一个计数器（就是一个整数），表示可用资源的数量，线程通过等待（P 操作）和释放（V 操作）信号量来实现同步，适用于需要控制对共享资源的访问的场景；<br>（E）事件：线程需要等待某个事件（如 I&#x2F;O 操作完成）才能继续执行。</p>
 <p>在 Java 中的实现：<br>（A）volatile：保证共享变量的可见性和有序性（配合 synchronized 或 ReentrantLock 使用，保证原子性）；<br>（B）BlockingQueue：提供了线程安全的队列实现，可用于在生产者和消费者线程之间传递数据；<br>（C）wait 和 notify&#x2F;notifyAll：由 Object 类提供，用于线程间的等待和通知，必须与 synchronized 配合使用；<br>（D）Condition：提供了比 wait &#x2F; notify 更为灵活的通信机制，通常与 ReentrantLock 配合使用；<br>（E）Semaphore：在 java.util.concurrent 包中，通过 acquire 方法获取许可，通过 release 方法释放许可；<br>（F）CountDownLatch：允许一个或多个线程等待其他线程完成操作（老师必须要等到所有学生交完试卷才能走）；<br>（G）CyclicBarrier：允许一组线程互相等待，直到所有线程都到达某个屏障点（比如，多人游戏必须都要加载到 100% 才能开始）。</p>
 <p>并发编程的最佳实践：<br>（A）减少共享变量的使用：通过设计，将对共享变量的访问降到最低，尽量使用不可变对象和局部变量；<br>（B）使用线程安全的集合类：比如 ConcurrentHashMap、CopyOnWriteArrayList 等，这些类是线程安全的；<br>（C）选择合适的同步工具：比如 synchronized、ReentrantLock 或 java.util.concurrent 包中的工具类。<br>（D）确保所有线程都以相同的加锁顺序获取锁，避免死锁；<br>（E）使用线程池。</p>
 <p>synchronized 和 Lock 的区别：<br>（A）synchronized：是一个内置的关键字，可用于方法和代码块，不需要显式地获取和释放锁，当线程进入一个 synchronized 方法或代码块时，会自动获得锁，退出时自动释放锁，只支持抢占式的非公平锁，适用于简单的同步场景；<br>（B）Lock：是一个接口，常用的实现类有 ReentrantLock，需要显式地调用 lock() 方法获取锁，通常在 finally 块中调用 unlock() 方法确保锁的释放，还提供了 tryLock()、isLocked() 等方法实现更灵活的控制，支持公平锁和非公平锁，可在创建对象时指定，适用于复杂的同步场景。</p>
@@ -246,7 +248,7 @@
 <li><p><strong>Redis 的 SETNX</strong>（SET if Not eXists）：是 Redis 提供的原子性命令，用于在指定键（Key）不存在时设置，若键已存在，则不执行任何操作。当多个客户端并发调用时，它确保仅有一个客户端能成功设置键值，是分布式锁的基础，为避免死锁（如客户端崩溃未释放锁），需设置键的过期时间。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">基本用法</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 1：键不存在，设置成功</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 0：键已存在，未执行操作</span></span><br><span class="line">SETNX key value</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分布式锁用法：为保证原子性，NX（不存在才设置）和 PX（过期时间，单位：毫秒）必须同时设置</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 1：获取锁成功</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 0：锁已被其他客户端持有</span></span><br><span class="line">SET key value NX PX 30000</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong>Redisson 分布式锁</strong>：跟 SETNX 的作用类似，区别在于它通过 Lua 脚本确保加锁、解锁、重入等操作的原子性，在调用 lock() 方法时会默认启动看门狗机制延长锁过期时间，防止业务未执行完锁却超时释放。使用不当可能会引发的问题有：（a）<u>死锁</u>：比如看门狗无限续期或客户端发生故障，解决办法是设置一个合理的锁过期时间或在 finally 块中显式释放锁；（b）<u>误释放锁</u>：比如线程 A 释放了线程 B 的锁，解决办法是在获取锁时为其生成一个唯一标识作为锁的值，如 UUID，释放锁时先校验锁的值是否与自己保存的标识一致；（c）<u>数据不一致</u>：比如线程 A 更新缓存的逻辑未在锁过期时间之前完成，紧接着线程 B 获取到锁并对同一缓存进行更新，解决办法为使用可重入锁，获取锁时增加持有次数，释放锁时减少持有次数，只有当持有次数为 0 且持有者是当前线程时才真正释放锁。</p>
+<li><p><strong>Redisson 分布式锁</strong>：跟 SETNX 的作用类似，区别在于它通过 Lua 脚本确保加锁、解锁、重入等操作的原子性，在调用 lock() 方法时会默认启动看门狗机制延长锁过期时间，防止业务未执行完锁却超时释放。使用不当可能会引发的问题有：（a）<u>死锁</u>：比如看门狗无限续期或客户端发生故障，解决办法是设置一个合理的锁过期时间或在 finally 块中显式释放锁；（b）<u>误释放锁</u>：比如线程 A 释放了线程 B 的锁，解决办法是在获取锁时为其生成一个唯一标识作为锁的值，如 UUID，释放锁时先校验锁的值是否与自己保存的标识一致；（c）<u>数据不一致</u>：比如线程 A 更新缓存的逻辑未在锁过期时间之前完成，紧接着线程 B 获取到锁并对同一缓存进行更新，解决办法为使用可重入锁（在没抢到锁的情况下一直循环抢锁，被称为自旋锁，在递归函数中使用自旋锁可能引发死锁，比如递归方法在释放锁之前，所以为了解决这个问题而设计了可重入锁。成功获取到锁后记录锁的持有者，并用一个计数器记录获取的次数，在持有锁的情况下再次申请锁只是给计数器加 1，释放锁时把计数器减 1，只有当计数器为 0 且持有者是当前线程时才真正释放锁）。</p>
 </li>
 </ul>
 <p>（II）雪崩指的是<strong>缓存中大量数据同时失效</strong>，或 Redis 宕机，导致所有请求直接访问数据库，可能引发数据库崩溃。比如大促期间缓存集中过期，解决方法：<br>（A）<u>对缓存数据的过期时间添加随机值</u>，避免批量数据同时失效‌；<br>（B）<u>增加二级缓存</u>（如 Memcached），当 Redis 缓存失效时，可从二级缓存读取；<br>（C）<u>部署 Redis Cluster</u>，支持数据备份和故障转移，防止单点故障导致服务不可用‌；<br>（D）<u>对关键数据开启持久化功能</u>，配合 Hystrix 等<u>熔断</u>工具，在数据库压力过大时暂时拒绝部分请求‌。</p>

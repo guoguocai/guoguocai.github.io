@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/sigaction.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/AIO.png">
 <meta property="article:published_time" content="2024-12-10T09:30:39.000Z">
-<meta property="article:modified_time" content="2025-06-19T06:29:05.547Z">
+<meta property="article:modified_time" content="2025-06-21T14:28:48.294Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -179,7 +179,7 @@
 <img src="/images/2024-12-10/BIO.png" width="55%" />
 
 <p>这是最常用的 IO 模型，缺省情况下，所有文件操作都是阻塞的。</p>
-<h4 id="1-2-非阻塞-IO"><a href="#1-2-非阻塞-IO" class="headerlink" title="1.2 非阻塞 IO"></a>1.2 非阻塞 IO</h4><p>第一阶段不再阻塞，而是用<strong>轮询</strong>的方式检查数据是否准备好，第二阶段仍然阻塞。<br>调用 recvfrom 后，如果内核缓冲区中没有数据，那就直接返回一个错误，然后开始轮询，直到有数据到来（在负载均衡中，轮询的含义是将请求按顺序均匀分配给后端服务器；而在非阻塞 IO 中，轮询的含义是以固定频率主动查询状态）。</p>
+<h4 id="1-2-非阻塞-IO"><a href="#1-2-非阻塞-IO" class="headerlink" title="1.2 非阻塞 IO"></a>1.2 非阻塞 IO</h4><p>第一阶段不再阻塞，而是用<strong>轮询</strong>的方式检查数据是否准备好，第二阶段仍然阻塞。<br>调用 recvfrom 后，如果内核缓冲区中没有数据，那就直接返回一个错误，然后开始轮询，直到有数据到来（在负载均衡中，轮询的含义是将请求按顺序均匀分配给后端服务器；而在非阻塞 IO 中，轮询的含义是主动循环检查 I&#x2F;O 状态）。</p>
 <img src="/images/2024-12-10/round_robin.png" width="55%" />
 
 <h4 id="1-3-IO-复用"><a href="#1-3-IO-复用" class="headerlink" title="1.3 IO 复用"></a>1.3 IO 复用</h4><p>在调用 recvfrom 之前，用户进程把相应的一个或多个 socket fd 都阻塞在 <strong>select &#x2F; poll</strong> 系统调用上（即多个 IO 的阻塞复用了同一个 select 阻塞），select &#x2F; poll 再将这个 fd 集合传给内核，由内核帮我们遍历这些 fd 是否处于就绪状态，当发现有 fd 就绪时（有数据可读&#x2F;写），内核就给它做一个标记，然后返回就绪 fd 的数量给用户进程，用户进程通过遍历所有的 fd 找出有标记的 fd，再作相应处理即可。所以，如果用户进程调用了 recvfrom，则说明它的第一阶段其实已经完成，自然不算阻塞，但第二阶段仍然阻塞。</p>
@@ -205,8 +205,8 @@
 <p>包括创建一个 epoll 描述符、注册&#x2F;管理 fd 及其监听的事件、阻塞等待监听的事件发生、关闭 epoll 描述符等等。</p>
 </li>
 </ul>
-<p><strong>Java NIO</strong> 的核心类库多路复用器 Selector 就是基于 epoll 的技术实现。要说明的是，因为 Selector 一开始是基于 select &#x2F; poll 模型实现，后来才用 epoll 模型替换 select &#x2F; poll，算是一次性能优化，所以 Selector 仍然在用某种形式的轮询来检查通道事件，但这种轮询是高效的，因此，可以说 Selector 结合了轮询和事件驱动的特性。</p>
-<p>Selector 的工作方式是不断轮询注册在其上的 Channel，如果某个 Channel 上面发生读或者写事件，这个 Channel 就处于就绪状态，会被 Selector 轮询出来，然后通过 SelectionKey 就可以获取就绪 Channel 的集合，再进行后续的 IO 操作。一个 Selector 可以同时轮询多个 Channel，由于 JDK 使用 epoll 优化了传统的 select 实现，所以它并没有最大连接的限制，同时也不会导致性能线性下降，这意味着只需要一个线程负责 Selector 的轮询，就可接入成千上万的客户端。</p>
+<p><strong>Java NIO</strong> 的核心类库多路复用器 Selector 就是基于 epoll 的技术实现。要说明的是，在不同的操作系统下，Selector 的实现机制可能不同，比如在 Linux 中会优先使用 epoll 作为 Selector 的底层实现，但在 Windows 中仍然默认使用 select 模型，不过两者在应用层的接口一致，开发者在使用时是无感知的。</p>
+<p>Selector 的工作方式是通过调用 select() 方法阻塞当前线程，直到内核通知注册的 Channel 中有事件就绪，随后返回就绪事件的数量，通过 selectedKeys() 方法可以获取就绪 Channel 及具体事件类型的集合，就能进行相应的 IO 操作了。在 Linux 下，epoll 优化了传统的 select 实现，所以 Selector 并没有最大连接数的限制，性能也不会线性下降，这意味着只需一个线程负责 Selector，就可接入成千上万的客户端。</p>
 <h4 id="1-4-信号驱动-IO"><a href="#1-4-信号驱动-IO" class="headerlink" title="1.4 信号驱动 IO"></a>1.4 信号驱动 IO</h4><p>在调用 recvfrom 之前，用户进程通过调用 sigaction 先执行一个信号处理函数（此函数立即返回，用户进程可继续执行，是非阻塞的），当内核中数据准备就绪时，它就为用户进程生成一个信号，通过这个信号来回调通知用户进程可以调用 recvfrom 来读取数据了。此时对于 recvfrom 来说，它的第一阶段其实已经完成，自然不算阻塞，第二阶段仍然阻塞。</p>
 <img src="/images/2024-12-10/sigaction.png" width="55%" />
 
@@ -248,6 +248,12 @@
 <li>在执行异步操作的时候传入一个 java.nio.channels。</li>
 </ul>
 <p>CompletionHandler 接口的实现类作为操作完成的回调。在实际项目中，异步的网络套接字 Channel 是被动执行对象，它不需要像 NIO 编程那样创建一个独立的 IO 线程来处理读写操作，对于 AsynchronousServerSocketChannel 和 AsynchronousSocketChannel，它们都由 JDK 底层的线程池负责回调并驱动读写操作。</p>
+<p><strong>☆</strong> 方法的调用有三种方式：</p>
+<ul>
+<li>同步调用：最基本且最简单的方式，比如类 A 的方法 a() 直接调用类 B 的方法 b()，a() 要等到 b() 执行完毕后才继续往下走。这种调用方式适用于方法 b() 执行时间不长的情况，因为 b() 方法执行时间一长或者直接阻塞的话，a() 方法的余下代码就无法执行下去，会造成整个流程的阻塞。</li>
+<li>异步调用：类 A 的方法 a() 起一个新线程调用类 B 的方法 b()，方法 a() 继续往下执行，不用等待方法 b() 执行完成，这样无论方法 b() 执行多久，都不会阻塞方法 a() 的执行。如果 a() 需要 b() 的异步执行结果，则可以使用类似 Future + Callable 的组合对方法 b() 进行监听。</li>
+<li>回调：类 A 的方法 a() 调用了类 B 的方法 b()，方法 b() 执行完毕后主动调用类 A 的 callback() 方法，是一种双向的调用方式。回调函数（callback() 方法）是一个由调用方实现、供被调用方使用的特殊函数，它作为参数传递给被调用方，在特定事件、条件满足或异步操作完成后被被调用方调用。</li>
+</ul>
 <h4 id="2-4-三种-Java-IO-对比"><a href="#2-4-三种-Java-IO-对比" class="headerlink" title="2.4 三种 Java IO 对比"></a>2.4 三种 Java IO 对比</h4><p>Java BIO：一个线程处理一个客户端连接（1:1）<br>Java NIO：一个线程处理多个客户端连接（1:n）<br>Java AIO：被动回调，不需要启动额外的线程（0:n）</p>
 <h4 id="2-5-选择-Netty"><a href="#2-5-选择-Netty" class="headerlink" title="2.5 选择 Netty"></a>2.5 选择 Netty</h4><p>实际开发时，为什么不用 JDK NIO 的原生类库，而选择 Netty 框架？</p>
 <p>JDK NIO 有本身固有的复杂性和 Bug，开发出高质量的 NIO 程序并不是一件简单的事情。虽然用原生 JDK NIO 开发功能相对容易，但是其可靠性能力补足的工作量和难度都非常大，作为一个服务端，需要能够处理网络的闪断、客户端的重复接入、客户端的安全认证、消息的编解码、半包读写、失败缓存、网络拥塞、异常码流等情况，如果没有足够的编程经验积累，一个稳定的服务端往往需要一年甚至更长的时间。更为糟糕的是，一旦在生产环境发生问题，调试定位难度大，还可能带来巨大损失。</p>
