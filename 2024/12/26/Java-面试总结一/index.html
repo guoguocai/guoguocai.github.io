@@ -16,7 +16,7 @@
 <meta property="og:description" content="这些都是我在真实面试时被问到的问题，当时可能因为知识储备不足或其他原因，没能答上来。现在重新整理一下，希望能对以后的面试有所帮助。注意文中的前半部分都是问题，答案统一放在最后，这样方便先在脑海中思考一遍，快速过掉简单的问题，想不出来的再去看参考答案。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2024-12-26T03:03:24.000Z">
-<meta property="article:modified_time" content="2025-06-28T03:50:07.443Z">
+<meta property="article:modified_time" content="2025-06-29T03:07:18.290Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -224,7 +224,7 @@
 <li>@Bean 注解的方法‌返回需要注册的对象，Spring 调用该方法并将返回值注册为 Bean  其返回值会在容器刷新阶段被调用并实例化（方法逻辑执行一次）。@Bean 方法所在的类必须被 Spring 管理</li>
 <li>若 Bean 作用域为 @Scope(“prototype”) 或添加了 @Lazy 注解，实例化会延迟到首次使用时（如通过 @Autowired 注入或 getBean() 调用）  通过 @EnableAsync + @Async 可将特定方法设为异步初始化，但不改变整体启动时实例化的本质，绝大多数情况下‌，这些注解标记的类会在项目启动时实例化；仅在显式配置延迟策略时例外（如 prototype 或 @Lazy，它们会覆盖默认的启动时实例化行为）实例化后通过 @Autowired 或构造函数注入依赖</li>
 <li>@Component：‌类‌级别，由 Spring 扫描后自动创建，适用于自己编写的类，用于将类注册为 Bean</li>
-<li>@Bean：‌方法‌级别（建议与 @Configuration 配合使用），需开发者手动编写实例化逻辑后再返回，适用于第三方库的类（如 RestTemplate）当需要注册‌非自定义类‌或‌定制初始化逻辑‌时使用；调用配置类方法，返回实例对象 需自定义初始化逻辑‌的 Bean（如复杂参数构造） @Bean 注解的核心作用是‌将方法返回的对象实例注册到 IOC 容器中‌，而非直接注册类本身，成为可被注入的 Bean</li>
+<li>@Bean：‌方法‌级别（建议与 @Configuration 配合使用），需开发者手动编写实例化逻辑后再返回，适用于第三方库的类（如 RestTemplate），当需要注册‌非自定义类‌或‌自定义初始化逻辑‌的 Bean 时使用（如复杂参数构造）；调用配置类方法，返回实例对象 @Bean 注解的核心作用是‌将方法返回的对象实例注册到 IOC 容器中‌，而非直接注册类本身，成为可被注入的 Bean</li>
 </ul>
 <p>（完）</p>
 
@@ -460,7 +460,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -468,7 +468,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
