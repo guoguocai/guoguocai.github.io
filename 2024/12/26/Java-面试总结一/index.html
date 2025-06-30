@@ -16,7 +16,7 @@
 <meta property="og:description" content="这些都是我在真实面试时被问到的问题，当时可能因为知识储备不足或其他原因，没能答上来。现在重新整理一下，希望能对以后的面试有所帮助。注意文中的前半部分都是问题，答案统一放在最后，这样方便先在脑海中思考一遍，快速过掉简单的问题，想不出来的再去看参考答案。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2024-12-26T03:03:24.000Z">
-<meta property="article:modified_time" content="2025-06-29T03:07:18.290Z">
+<meta property="article:modified_time" content="2025-06-30T15:10:06.207Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -218,13 +218,13 @@
 <ul>
 <li>（I）应用从<u>标注 @SpringBootApplication 的主类的 main() 方法启动</u>，调用 SpringApplication.run()；<u>创建 SpringApplication 对象</u>：推断应用类型（Web&#x2F;Servlet&#x2F;普通），<u>初始化监听器</u> ApplicationListener，通过监听器可监听启动事件（如环境准备、上下文刷新），便于插入扩展逻辑。</li>
 <li>（II）<u>加载配置文件</u>（如 application.properties&#x2F;yml），构建 ConfigurableEnvironment 对象存储环境变量；<u>触发环境准备事件</u>（ApplicationEnvironmentPreparedEvent），通知监听器处理环境配置。</li>
-<li>（III）根据应用类型<u>创建应用上下文 ApplicationContext</u>，然后**<u>刷新上下文 refreshContext()</u>**：<br>（III.I）加载主类并<u>组件扫描</u>（通过 @ComponentScan 扫描指定包路径下的（默认主类所在包） @Controller、@Service、@Repository、@Configuration、@Component 等目标注解，识别并解析所有带这些目标注解的类，将它们注册到 BeanFactory，然后通过反射创建对象实例）；<br>（III.II）<u>加载</u> META-INF&#x2F;spring.factories 中的<u>自动配置类</u>（@EnableAutoConfiguration）；原理：通过 @Conditional 系列注解条件判断是否实例化，避免冗余配置；通过启动器（如 spring-boot-starter-web）自动引入 Tomcat 和 Spring MVC 组件；<br>（III.III）<u>启动内嵌 Web 服务器</u>（如 Tomcat），创建端口监听线程。</li>
+<li>（III）根据应用类型<u>创建应用上下文 ApplicationContext</u>，然后**<u>刷新上下文 refreshContext()</u>**：<br>（III.I）加载主类并<u>组件扫描</u>（通过 @ComponentScan 扫描指定包路径下的（默认主类所在包） @Controller、@Service、@Repository、@Configuration、@Component 等目标注解，识别并解析所有带这些目标注解的类，将它们注册到 BeanFactory，然后通过反射创建对象）；<br>（III.II）<u>加载</u> META-INF&#x2F;spring.factories 中的<u>自动配置类</u>（@EnableAutoConfiguration）；原理：通过 @Conditional 系列注解条件判断是否实例化，避免冗余配置；通过启动器（如 spring-boot-starter-web）自动引入 Tomcat 和 Spring MVC 组件；<br>（III.III）<u>启动内嵌 Web 服务器</u>（如 Tomcat），创建端口监听线程。</li>
 <li>（IV）执行所有 CommandLineRunner 和 ApplicationRunner 接口的实现类；触发启动完成事件（ApplicationReadyEvent），标志应用完全启动。</li>
 <li></li>
-<li>@Bean 注解的方法‌返回需要注册的对象，Spring 调用该方法并将返回值注册为 Bean  其返回值会在容器刷新阶段被调用并实例化（方法逻辑执行一次）。@Bean 方法所在的类必须被 Spring 管理</li>
+<li></li>
 <li>若 Bean 作用域为 @Scope(“prototype”) 或添加了 @Lazy 注解，实例化会延迟到首次使用时（如通过 @Autowired 注入或 getBean() 调用）  通过 @EnableAsync + @Async 可将特定方法设为异步初始化，但不改变整体启动时实例化的本质，绝大多数情况下‌，这些注解标记的类会在项目启动时实例化；仅在显式配置延迟策略时例外（如 prototype 或 @Lazy，它们会覆盖默认的启动时实例化行为）实例化后通过 @Autowired 或构造函数注入依赖</li>
 <li>@Component：‌类‌级别，由 Spring 扫描后自动创建，适用于自己编写的类，用于将类注册为 Bean</li>
-<li>@Bean：‌方法‌级别（建议与 @Configuration 配合使用），需开发者手动编写实例化逻辑后再返回，适用于第三方库的类（如 RestTemplate），当需要注册‌非自定义类‌或‌自定义初始化逻辑‌的 Bean 时使用（如复杂参数构造）；调用配置类方法，返回实例对象 @Bean 注解的核心作用是‌将方法返回的对象实例注册到 IOC 容器中‌，而非直接注册类本身，成为可被注入的 Bean</li>
+<li>@Bean：‌方法‌级别（建议与 @Configuration 配合使用），用于将方法返回的对象实例注册到 IOC 容器中‌，其返回值会在容器刷新阶段被调用并实例化（方法逻辑执行一次），需开发者手动编写实例化逻辑后再返回，适用于第三方库的类（如 RestTemplate），在需要注册‌非自定义类‌或‌自定义初始化逻辑‌的 Bean 时使用（如复杂参数构造）；而非直接注册类本身，成为可被注入的 Bean   @Bean 方法所在的类必须被 Spring 管理  Spring 调用该方法并将返回值注册为 Bean</li>
 </ul>
 <p>（完）</p>
 
@@ -480,11 +480,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
