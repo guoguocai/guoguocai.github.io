@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/combine_index.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-07-05T15:31:54.210Z">
+<meta property="article:modified_time" content="2025-07-06T14:41:41.610Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -241,7 +241,7 @@
 </li>
 </ul>
 <p><span style="background-color:green;"><font color=white>（9）</font></span>以下是一个基本的设计思路：<br>（A）消息头：<br>协议版本：标识通信双方所使用的协议版本；<br>消息类型：标识消息的类型，如请求、响应、心跳等；<br>消息长度：整个消息的长度，包括消息头和消息体；<br>校验和：防止消息被篡改或损坏‌，并非加密技术，一般是对整个消息进行一些算法处理后得到，比如 IP&#x2F;TCP&#x2F;UDP 生成校验和‌的规则为：基于反码求和，接收方用相同规则生成后与发送方提供的对比，若不一致，则消息可能已损坏；<br>时间戳：记录时间。<br>（B）消息体：<br>根据消息类型，消息体包含不同的字段，例如：<br>请求消息：设备 ID、请求的操作码、参数等；<br>响应消息：操作结果、状态码、数据等。<br>（C）消息尾（可选）：<br>包含一些额外信息，如签名。</p>
-<p><span style="background-color:green;"><font color=white>（10）</font></span>严格来说，只要协议、域名、端口中有任何一个不同，就被认为是跨域，这是浏览器主动实施的‌安全壁垒‌，而非技术缺陷。解决 CORS 问题（即跨源资源共享）通常涉及配置服务器以允许来自不同源的请求，以下是几种常见方法：<br>（A）通过 @Configuration 注解配置一个类，并让这个类实现 WebMvcConfigurer 接口，然后重写 addCorsMappings 方法，来全局设置 CORS 策略；<br>（B）创建一个 Servlet Filter 来处理 CORS，再将这个 Filter 配置到 web.xml 中；<br>（C）对于特定的控制器或方法，可以使用 @CrossOrigin 注解来设置 CORS 策略；<br>（D）通过 Nginx 等代理服务器配置。<br>注意，允许来自任意源的请求可能会带来安全风险，务必限制允许的源和方法。</p>
+<p><span style="background-color:green;"><font color=white>（10）</font></span>严格来说，只要协议、域名、端口中有任何一个不同，就被认为是跨域，这是浏览器主动实施的‌安全壁垒‌，而非技术缺陷。解决 CORS 问题（即跨源资源共享）通常涉及配置服务器以允许来自不同源的请求，以下是几种常见方法：<br>（A）通过 @Configuration 注解配置一个类，并让这个类实现 WebMvcConfigurer 接口，然后重写 addCorsMappings 方法，来全局设置 CORS 策略；<br>（B）@Bean 注解 CorsFilter；<br>（C）创建一个 Servlet Filter 来处理 CORS，再将这个 Filter 配置到 web.xml 中；<br>（D）对于特定的控制器或方法，可以使用 @CrossOrigin 注解来设置 CORS 策略；<br>（E）通过 Nginx 等代理服务器配置。<br>注意，允许来自任意源的请求可能会带来安全风险，务必限制允许的源和方法。</p>
 <p><span style="background-color:green;"><font color=white>（11）</font></span>RESTful 是目前最流行的 API 设计规范，包括：<br>（A）使用 HTTP 动词来表达操作‌，比如 GET、POST、PUT、DELETE 等；</p>
 <ul>
 <li>GET：侧重从服务器获取资源，请求参数放在 URL 后，用户可见，不安全，参数长度有限制，传输的数据量小；</li>
@@ -602,15 +602,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -622,11 +622,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
