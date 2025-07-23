@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2022-05-22/fanout.png">
 <meta property="og:image" content="http://yoursite.com/images/2022-05-22/fanoutResult.png">
 <meta property="article:published_time" content="2022-05-22T03:45:04.000Z">
-<meta property="article:modified_time" content="2025-06-06T04:55:01.098Z">
+<meta property="article:modified_time" content="2025-07-23T00:57:48.453Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -171,10 +171,10 @@
         <p>此篇文章内容较多，包括 RabbitMQ 相关的一些简单理论介绍，和消息生产者 Provider 推送实例，消息消费者 Consumer 实例，Direct、Topic、Fanout 的使用，消息回调、手动确认等。</p>
 <span id="more"></span>
 
-<p>关于 RabbitMQ 的安装，就不介绍了。在安装完 RabbitMQ 后，输入 <a target="_blank" rel="noopener" href="http://ip:15672/">http://ip:15672/</a> ，可以看到一个简单的后台管理界面。</p>
+<p>安装完 RabbitMQ 后，输入 <a target="_blank" rel="noopener" href="http://ip:15672/">http://ip:15672/</a> ，可以看到一个简单的后台管理界面。</p>
 <img src="/images/2022-05-22/RabbitMQ.png" width="45%" />
 
-<p>在这个界面里面我们可以做些什么？<br>可以手动创建虚拟 host，创建用户，分配权限，创建交换机，创建队列等等，还有查看队列消息，消费效率，推送效率等等。以上这些管理界面的操作在这篇暂时不做扩展描述，我想着重介绍后面实例里会使用到的。首先先介绍一个简单的一个消息从推送到接收的流程，提供一个简单的图：</p>
+<p>在这个界面里面我们可以做些什么？<br>可以手动创建虚拟 host、创建用户、分配权限、创建交换机、创建队列等等，还可查看队列消息、消费效率、推送效率等。以上这些管理界面的操作在此篇暂不扩展描述，先着重介绍后面实例里会使用到的，首先介绍一个消息从推送到接收的流程，提供一个简单的图：</p>
 <img src="/images/2022-05-22/MessageStream.png" width="45%" />
 
 <p>左边的黄色圈圈就是我们的消息推送服务，将消息推送到中间方框里面也就是 RabbitMQ 的服务器，然后经过服务器里面的交换机、队列等各种关系（后面会详细讲）将数据处理入列后，最终右边的蓝色圈圈消费者获取对应监听的消息。</p>
@@ -578,7 +578,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -586,7 +586,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -606,11 +606,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
+                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
               </li>
              
               <li class="article-tag-list-item">
