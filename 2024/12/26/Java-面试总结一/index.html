@@ -16,7 +16,7 @@
 <meta property="og:description" content="这些都是我在真实面试时被问到的问题，当时可能因为知识储备不足或其他原因，没能答上来。现在重新整理一下，希望能对以后的面试有所帮助。注意文中的前半部分都是问题，答案统一放在最后，这样方便先在脑海中思考一遍，快速过掉简单的问题，想不出来的再去看参考答案。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2024-12-26T03:03:24.000Z">
-<meta property="article:modified_time" content="2025-07-26T14:34:28.025Z">
+<meta property="article:modified_time" content="2025-07-27T10:36:57.182Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -218,7 +218,7 @@
 <ul>
 <li>（I）应用从<u>标注 @SpringBootApplication 的主类的 main() 方法启动</u>，调用 SpringApplication.run()；<u>创建 SpringApplication 对象</u>：推断应用类型（Web&#x2F;Servlet&#x2F;普通），<u>初始化监听器</u> ApplicationListener，通过监听器可监听启动事件（如环境准备、上下文刷新），便于插入扩展逻辑。</li>
 <li>（II）<u>加载配置文件</u>（如 application.properties&#x2F;yml），构建 ConfigurableEnvironment 对象存储环境变量；<u>触发环境准备事件</u>（ApplicationEnvironmentPreparedEvent），通知监听器处理环境配置。</li>
-<li>（III）根据应用类型<u>创建应用上下文 ApplicationContext</u>，然后**<u>刷新上下文 refreshContext()</u>*<em>：<br>（III.I）加载主类并<u>组件扫描</u>（通过 @ComponentScan 扫描指定包路径（默认主类所在包）下的 @Controller、@Service、@Repository、@Configuration、@Component 等目标注解，识别并解析所有带这些目标注解的类，将它们注册到容器，然后通过反射自动创建对象）；<br><strong>☆</strong> ApplicationContext 是 BeanFactory 的子接口‌，BeanFactory 是 Spring 容器最基础的接口，管理着 Bean 的生命周期（</em>实例化<em>、</em>依赖注入<em>、</em>初始化<em>（包括调用 init-method、检测是否实现 xxxAware 接口以注入相关的 xxxAware 实例、以及是否实现 BeanPostProcessor 接口以进行自定义的前置和后置处理）、</em>使用<em>、</em>销毁*），它采用延迟加载，即将实例化行为延迟到首次使用时（如调用 getBean() 方法或依赖注入时）；ApplicationContext 则在 BeanFactory 的基础上提供了更全面的企业级应用支持，比如支持国际化、支持发布&#x2F;监听事件等，它在容器启动时会实例化所有单例的 Bean（Bean 的默认作用域就是 singleton），此时若想延迟加载，可通过添加 @Lazy 注解或将作用域设置为 @Scope(“prototype”) 实现（scope&#x3D;”prototype” 使得每次调用 getBean() 时都会创建新实例，且不受 lazy-init&#x3D;”false” 的影响，这种特性能使 Bean 线程安全）；<br><strong>☆</strong> 注解 @Bean 常与 @Configuration 配合使用，作用在类的方法上，用于将方法返回的对象实例注册到 IOC 容器中‌，使其成为可被注入的 Bean，方法同样在刷新阶段被调用（只执行一次，方法中的实例化逻辑由开发者手动编写，适用于第三方库的类（如 RestTemplate）或需要自定义初始化逻辑的类（如复杂参数构造）），另外，通过 @EnableAsync + @Async 可将特定方法设置为异步执行；<br>（III.II）<u>加载</u> META-INF&#x2F;spring.factories 中定义的<u>自动配置类</u>（通过 @EnableAutoConfiguration）；通过 @Conditional 系列注解条件判断配置类是否有效或是否实例化，避免冗余配置；通过启动器（如 spring-boot-starter-web）自动引入 Tomcat 和 Spring MVC 组件；<br>（III.III）<u>启动内嵌 Web 服务器</u>（如 Tomcat），创建端口监听线程。</li>
+<li>（III）根据应用类型<u>创建应用上下文 ApplicationContext</u>，然后**<u>刷新上下文 refreshContext()</u>*<em>：<br>（III.I）加载主类并<u>组件扫描</u>（通过 @ComponentScan 扫描指定包路径（默认主类所在包）下的 @Controller、@Service、@Repository、@Configuration、@Component 等目标注解，识别并解析所有带这些目标注解的类，将它们注册到容器，然后通过反射自动创建对象）；<br><strong>☆</strong> ApplicationContext 是 BeanFactory 的子接口‌，BeanFactory 是 Spring 容器最基础的接口，管理着 Bean 的生命周期（</em>实例化<em>、</em>依赖注入<em>、</em>初始化<em>（包括调用 init-method、检测是否实现 xxxAware 接口以注入相关的 xxxAware 实例、以及是否实现 BeanPostProcessor 接口以进行自定义的前置和后置处理）、</em>使用<em>、</em>销毁*），它采用延迟加载，即将实例化行为延迟到首次使用时（如调用 getBean() 方法或依赖注入时）；ApplicationContext 则在 BeanFactory 的基础上提供了更全面的企业级应用支持，比如支持国际化、支持发布&#x2F;监听事件等，它在容器启动时会实例化所有单例的 Bean（Bean 的默认作用域就是 singleton），此时若想延迟加载，可通过添加 @Lazy 注解或将作用域设置为 @Scope(“prototype”) 实现（scope&#x3D;”prototype” 使得每次调用 getBean() 时都会创建新实例，且不受 lazy-init&#x3D;”false” 的影响，这种特性能使 Bean 线程安全，单例 Bean 只有在无可变状态时是线程安全的）；<br><strong>☆</strong> 注解 @Bean 常与 @Configuration 配合使用，作用在类的方法上，用于将方法返回的对象实例注册到 IOC 容器中‌，使其成为可被注入的 Bean，方法同样在刷新阶段被调用（只执行一次，方法中的实例化逻辑由开发者手动编写，适用于第三方库的类（如 RestTemplate）或需要自定义初始化逻辑的类（如复杂参数构造）），另外，通过 @EnableAsync + @Async 可将特定方法设置为异步执行；<br>（III.II）<u>加载</u> META-INF&#x2F;spring.factories 中定义的<u>自动配置类</u>（通过 @EnableAutoConfiguration）；通过 @Conditional 系列注解条件判断配置类是否有效或是否实例化，避免冗余配置；通过启动器（如 spring-boot-starter-web）自动引入 Tomcat 和 Spring MVC 组件；<br>（III.III）<u>启动内嵌 Web 服务器</u>（如 Tomcat），创建端口监听线程。</li>
 <li>（IV）执行所有 CommandLineRunner 和 ApplicationRunner 接口的实现类；触发启动完成事件（ApplicationReadyEvent），标志应用完全启动。</li>
 </ul>
 <p>（完）</p>
@@ -455,15 +455,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -475,11 +475,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
