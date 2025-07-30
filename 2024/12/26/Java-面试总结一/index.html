@@ -16,7 +16,7 @@
 <meta property="og:description" content="这些都是我在真实面试时被问到的问题，当时可能因为知识储备不足或其他原因，没能答上来。现在重新整理一下，希望能对以后的面试有所帮助。注意文中的前半部分都是问题，答案统一放在最后，这样方便先在脑海中思考一遍，快速过掉简单的问题，想不出来的再去看参考答案。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2024-12-26T03:03:24.000Z">
-<meta property="article:modified_time" content="2025-07-29T14:46:11.895Z">
+<meta property="article:modified_time" content="2025-07-30T13:53:15.684Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -222,7 +222,7 @@
 <li>ApplicationContext 是 BeanFactory 的子接口‌，BeanFactory 是 Spring 容器最基础的接口，管理着 Bean 的生命周期（<em>实例化</em>、<em>依赖注入</em>、<em>初始化</em>（包括调用 init-method、检测是否实现 xxxAware 接口以注入相关的 xxxAware 实例、以及是否实现 BeanPostProcessor 接口以进行自定义的前置和后置处理）、<em>使用</em>、<em>销毁</em>），它采用延迟加载，即将实例化行为延迟到首次使用时（如调用 getBean() 方法或依赖注入时）；ApplicationContext 则在 BeanFactory 的基础上提供了更全面的企业级应用支持，比如支持国际化、支持发布&#x2F;监听事件等，它会在容器启动时实例化所有单例的 Bean（Bean 的默认作用域就是 singleton），此时若想延迟加载，可通过添加 @Lazy 注解或将作用域设置为 prototype 实现（@Scope(“prototype”) 使得每次调用 getBean() 时都会创建新实例，且不受 lazy-init&#x3D;”false” 的影响，这种特性能使 Bean 线程安全，单例 Bean 只有在无可变状态时才是线程安全的）。</li>
 <li>注解 @Bean 常与 @Configuration 配合使用，作用在类的方法上，用于将方法返回的对象实例注册到 IOC 容器中‌，使其成为可被注入的 Bean，方法同样在刷新阶段被调用（只执行一次，方法中的实例化逻辑由开发者手动编写，适用于第三方库的类（如 RestTemplate）或需要自定义初始化逻辑的类（如复杂参数构造）），另外，通过 @EnableAsync + @Async 可将特定方法设置为异步执行。</li>
 </ul>
-<p>（III.II）<u>加载</u> META-INF&#x2F;spring.factories 文件中定义的<u>自动配置类</u>（通过 @EnableAutoConfiguration），并通过条件注解（如 @Conditional）筛选出有效或符合特定条件的配置类，避免加载无关或冲突的配置，随后将筛选后的配置类转化为 BeanDefinition 注册到容器并实例化，完成依赖注入‌；通过启动器（如 spring-boot-starter-web）自动引入 Tomcat 和 Spring MVC 组件；<br>（III.III）<u>启动内嵌 Web 服务器</u>（如 Tomcat），创建端口监听线程。</p>
+<p>（III.II）<u>加载</u> META-INF&#x2F;spring.factories 文件中预定义的<u>自动配置类</u>（通过 @EnableAutoConfiguration），通过条件注解（如 @Conditional）筛选出有效或符合特定条件的配置类，避免加载无关或冲突的配置，随后将筛选出的配置类转化为 BeanDefinition 注册到容器并实例化，完成依赖注入‌；通过启动器（如 spring-boot-starter-web）自动引入 Tomcat 和 Spring MVC 组件；<br>（III.III）<u>启动内嵌 Web 服务器</u>（如 Tomcat），创建端口监听线程。</p>
 <p>（IV）执行所有 CommandLineRunner 和 ApplicationRunner 接口的实现类；触发启动完成事件（ApplicationReadyEvent），标志应用完全启动。</p>
 <p>（完）</p>
 
@@ -458,11 +458,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
