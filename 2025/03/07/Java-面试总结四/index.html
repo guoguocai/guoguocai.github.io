@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2025-03-07/B_plus_tree.png">
 <meta property="og:image" content="http://yoursite.com/images/2025-03-07/B_plus_and_B.png">
 <meta property="article:published_time" content="2025-03-07T13:41:12.000Z">
-<meta property="article:modified_time" content="2025-06-03T04:50:10.202Z">
+<meta property="article:modified_time" content="2025-08-17T14:54:43.153Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -235,6 +235,7 @@
 
 <p>B+ 树能存储的数据量也很大，Page 是 InnoDB 磁盘管理的最小单位，俗称数据页，默认大小为 16KB，每个 Page 对应 B+ 树的一个节点，那么 3 层的 B+ 树就可以存储 2 千万条左右的行记录，相当于 20G 左右。</p>
 <p>B+ 树的自平衡通过节点的分裂和合并操作来维持，这里推荐一个<a target="_blank" rel="noopener" href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html">数据结构的演示网站</a>，在页面上找到 B+ 树后多操作几遍，理解会更加深刻。插入新数据时，通过逐层与非叶子节点的值作比较，找到待插入位置的叶子节点，然后自底向上插入，当节点变满时，进行分裂操作，删除数据时则可能又需要将节点合并。</p>
+<p>不推荐使用 UUID 作为表的主键，因为 UUID 是随机生成的字符串，而 B+ 树索引按顺序存储，随机插入会破坏索引的有序性，导致 B+ 树索引发生页分裂的概率增加，显著降低写入性能。另外 UUID 占用 36 字节，与自增 ID 相比需要更多的存储空间。</p>
 
       
 
@@ -472,11 +473,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
