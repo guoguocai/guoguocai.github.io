@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-07-05T08:23:49.462Z">
+<meta property="article:modified_time" content="2025-08-20T14:12:02.119Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -212,6 +212,7 @@
 </ul>
 <p>以 <strong>Netty</strong> 为例，它的调优技巧有：<br>（A）线程池：根据应用负载和硬件配置，设置合适的线程池大小，如核心线程数、最大线程数；BossGroup 通常设置为单线程，负责处理连接请求；WorkerGroup 负责处理 I&#x2F;O 操作，可以设置为 CPU 核心数 × 2；使用独立的线程池 EventExecutorGroup 异步执行耗时操作；<br>（B）内存：启用 Netty 的内存池功能，复用内存中的对象，减少内存分配和回收的开销；<br>（C）协议：根据应用场景选择合适的通信协议（如 UDP、WebSocket、TCP 等），对于 TCP 协议，将 TCP_NODELAY 设置为 true，降低延迟；并选择更加高效的序列化框架，比如用 Protobuf 替代 JSON；<br>（D）I&#x2F;O 模型：根据应用场景和操作系统选择合适的 I&#x2F;O 模型，比如在 Linux 系统上用 epoll 会更加高效；<br>（E）编解码器：选择合适的编解码器，比如使用 Netty 自带的工具处理粘包和拆包： LengthFieldBasedFrameDecoder（默认，基于消息头中的长度字段，灵活高效）、DelimiterBasedFrameDecoder（基于特定分隔符，兼容性强，适用于文本协议）；<br>（F）日志：调整日志级别来减少不必要的日志输出，提升性能；<br>（G）使用压缩：大数据量使用 Gzip 压缩，减少数据传输量，提高 I&#x2F;O 性能。</p>
 <p><span style="background-color:green;"><font color=white>（4）</font></span>线程池通过复用线程，避免频繁创建和销毁线程，减少系统资源的浪费。它的配置项及作用有：<br>（A）核心线程数：<u>始终保持存活的线程数量</u>，即使线程池处于空闲状态，核心线程也不会被回收；<br>（B）最大线程数：<u>允许创建的最大线程数量</u>，任务队列满了之后会创建新的非核心线程，直至达到该值；<br>（C）非核心线程存活时间：<u>非核心线程在空闲时能存活的最长时间</u>，超时后会被回收，与单位（unit）配合使用；<br>（D）任务队列：<u>当任务数量超出核心线程数时，选择合适的队列类型来存放待执行的任务</u>，比如有界队列（ArrayBlockingQueue）、无界队列（LinkedBlockingQueue）或同步队列（SynchronousQueue，是一个不存储任何元素的阻塞队列，更像一种信号机制，比如添加元素时，如果没有线程在等待从这个队列中移除元素，那么添加操作将会阻塞，直到有线程从队列中移除元素，反之亦然）；<br>（E）线程工厂：用于<u>自定义线程创建逻辑</u>，可以设置线程的名称、优先级、是否是守护线程‌等属性‌（守护线程在后台运行，通过调用 setDaemon(true) 设置，其作用是为其他线程提供服务，如垃圾回收、日志记录、监控等，当所有的非守护线程结束时，守护线程会自动结束）；<br>（F）拒绝策略：<u>当任务队列已满且线程池达到最大线程数时，选择合适的策略来处理新提交的任务</u>，比如抛出异常（AbortPolicy，默认策略）、直接丢弃任务（DiscardPolicy，静默丢弃，不抛异常）、由提交任务的线程处理任务（CallerRunsPolicy‌）或通过实现 RejectedExecutionHandler 接口来自定义策略。</p>
+<p>应当避免过度配置，线程数过多会导致频繁上下文切换，降低性能。对于 CPU 密集型任务而言（如计算、压缩、加密），任务主要消耗 CPU 资源，建议使用有界队列，它的核心线程数可设置为：<em>CPU 核心数 + 1</em>，加 1 是用于应对线程因短暂阻塞导致的 CPU 空闲，避免资源浪费。对于 IO 密集型任务而言（如网络请求、数据库查询），任务大部分时间都在等待 IO 操作，CPU 利用率低，增加最大线程数可让更多线程在 IO 等待期间处理其他事情，它的最大线程数可设置为：<em>CPU 核心数 × （1 + 线程等待时间 &#x2F; 线程计算时间）</em>，通常为 2N ~ 10N（N 为 CPU 核心数），任务执行时间和等待时间可通过 APM 工具统计（如 Micrometer）。</p>
 <p>创建线程池主要有两种方式：<strong>ThreadPoolExecutor 构造函数（推荐）</strong>和 Executors 工具类（快速但需谨慎使用）。优先使用 ThreadPoolExecutor 来自定义配置参数，以实现粒度更细的控制，用 Executors 工具类创建的线程池可能因默认参数导致资源耗尽（比如使用无界队列导致 OOM）。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ExecutorService</span> <span class="variable">executor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(</span><br><span class="line">    <span class="number">5</span>, <span class="comment">// 核心线程数</span></span><br><span class="line">    <span class="number">10</span>, <span class="comment">// 最大线程数</span></span><br><span class="line">    <span class="number">60L</span>, TimeUnit.SECONDS, <span class="comment">// 非核心线程存活时间</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">100</span>), <span class="comment">// 任务队列</span></span><br><span class="line">    Executors.defaultThreadFactory(), <span class="comment">// 线程工厂</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>.AbortPolicy() <span class="comment">// 拒绝策略</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
@@ -282,7 +283,7 @@
 <p>RPC 框架的目标就是将上面 Client stub 和 Server stub 要做的事情都封装起来，让用户感知不到它们的存在，使用时就像调用本地方法一样简单，无需关心网络通信的细节。RPC 主要用到的技术有动态代理、序列化、NIO 等，常见的 RPC 框架有 Dubbo、gRPC（基于 HTTP&#x2F;2 实现，支持多路复用；支持多种编程语言，通过 .proto 文件定义的接口可以自动生成代码；使用 ProtoBuf 进行序列化，相比与 HTTP 使用的 JSON 文本来说传输效率更高）等，支持 RPC 功能的框架有 WebService、Spring Cloud 等。</p>
 <p><span style="background-color:green;"><font color=white>（11）</font></span>缓存技术是提高系统性能和响应速度的关键组件，在高并发的场景下尤为重要。它的作用有：<br>（A）<u>减轻数据库压力</u>：通过缓存频繁访问的数据，减少查询数据库的次数，可避免数据库成为性能瓶颈；<br>（B）<u>提高数据读取速度</u>：缓存通常存储在内存中，而内存的访问速度远快于磁盘；<br>（C）<u>降低网络延迟</u>：对于需要从远程服务器获取的数据，缓存可以减少对远程服务器的请求次数。</p>
 <p>为什么需要缓存（Cache）？本质原因是速度的不匹配。缓存技术的核心原理是<strong>将频繁访问的数据存储在读写速度更快的存储介质中（如内存）</strong>，以减少 CPU 对慢速存储介质的访问次数（如磁盘或数据库），那么哪些数据会被频繁访问呢？基于<strong>数据的局部性原理</strong>，最近被访问过的数据很可能在不久的将来再次被访问，并且与它相邻的数据也很可能被访问，这个原理在计算机系统内部也有用到，即读取某块数据到内存的同时也一并读取与之相邻的数据，以减少磁盘 IO 次数。</p>
-<p>当用户请求数据时，系统会首先检查缓存中是否存在所需的数据，如果存在，则直接返回缓存中的数据，从而大大缩短数据访问时间，如果不存在，则查询并添加至缓存。常见的缓存类型有<u>本地缓存</u>（将数据缓存在进程内存中，如 Caffeine、Guava Cache‌、EHCache）、<u>分布式缓存</u>（Redis、Memcached）、<u>CDN 缓存</u>（内容分发网络，是一种通过‌分布式节点服务器‌将图片、视频、网页等内容缓存到全球多个地理位置，使用户能够从离自己最近的节点快速获取资源的技术）、<u>数据库缓存</u>（如 Buffer Pool，它将磁盘数据页缓存到内存）等。Spring Cache 是一个缓存抽象层，支持集成上面提到的多种缓存技术，通过注解统一管理（如 @Cacheable、@CachePut），通过 CacheManager 接口切换实现。</p>
+<p>当用户请求数据时，系统会首先检查缓存中是否存在所需的数据，如果存在，则直接返回缓存中的数据，从而大大缩短数据访问时间，如果不存在，则查询并添加至缓存。常见的缓存类型有<u>本地缓存</u>（将数据缓存在进程内存中，如 Caffeine、Guava Cache‌）、<u>分布式缓存</u>（Redis、Memcached）、<u>CDN 缓存</u>（内容分发网络，是一种通过‌分布式节点服务器‌将图片、视频、网页等内容缓存到全球多个地理位置，使用户能够从离自己最近的节点快速获取资源的技术）、<u>数据库缓存</u>（如 Buffer Pool，它将磁盘上的数据页和索引页缓存到内存中，数据修改时会更新缓存池中的页而成为脏页，通过后台线程异步刷盘‌解决）等。Spring Cache 是一个缓存抽象层，支持集成上面提到的多种缓存技术，通过注解统一管理（如 @Cacheable、@CachePut），通过 CacheManager 接口切换实现。</p>
 <p>缓存技术的缺点：<br>（A）额外的硬件支出：缓存需要额外的磁盘空间和内存空间来存储数据，增加了硬件成本；<br>（B）数据一致性问题：缓存与数据库之间可能存在数据不一致的问题，需要采取额外的措施来保证数据一致性；<br>（C）高并发缓存失效问题‌：在高并发场景下，缓存失效可能会导致数据库访问量瞬间增大，甚至导致数据库崩溃。</p>
 <p>缓存的数据一致性问题主要由以下原因引起：<br>（B1）‌数据更新与缓存同步不一致：更新数据源后，缓存中的数据未能及时更新，常见的缓存更新策略有：<br>Cache-Aside‌（<strong>首选</strong>）：应用层‌管理缓存读写（读：先查缓存，未命中查库并回填；写：直接写库，再删除缓存）；<br>Write-Through：写操作‌先更新缓存，由缓存层更新数据库‌，Guava Cache 的 CacheLoader.write 采用；<br>Read-Through：缓存层‌自动加载数据库数据，应用层仅与缓存交互，注解 @Cacheable 采用此策略；<br>Write-Back（慎用）：写操作‌仅更新缓存，由缓存层标记脏数据，再异步批量刷入数据库。<br>（B2）‌并发更新：多个并发的更新操作导致缓存中的数据更新顺序与数据源中的更新顺序不一致（使用分布式锁）。<br>（B3）缓存失效策略不当：缓存中的数据已过期，但由于没有有效的失效策略而仍然存在（设置合理的失效策略，常见的缓存失效策略有 LRU（最近最少使用）、LFU（最不经常使用）、‌FIFO（先进先出）、TTL（设置过期时间））。</p>
 <p><span style="background-color:green;"><font color=white>（12）</font></span>Spring Boot 集成并自动配置了 Spring MVC，因此与 Spring MVC 的过程类似：<br>（A）请求首先<u>到达 Servlet 容器</u>（如 Tomcat，已被内嵌在 Spring Boot 中，简化开发流程）；<br>（B）然后依次经过过滤器链（Filter Chain），每个过滤器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 chain.doFilter() 方法之前的代码</u>，如对请求进行认证、校验等）；<br>（C）<u>到达核心控制器 DispatcherServlet</u>，它负责分发请求，根据请求的 URL 和请求方式找到对应的控制器；<br>（D）依次经过拦截器链（Interceptor Chain），每个拦截器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 preHandle() 方法</u>中的代码，如对请求进行权限校验、参数绑定等，<u>但这步是可选的</u>，因为拦截器目前只在 Spring MVC 中有效）；<br>（E）<u>执行 Controller 中的具体方法</u>，并返回响应数据；<br>（F）响应数据逆向经过拦截器链，<u>执行 postHandle() 方法</u>中的代码，进行后置处理；<br>（G）响应到达 DispatcherServlet，由 DispatcherServlet 统一调度视图解析器并<u>渲染视图</u>（可选，因为响应可能是纯 JSON），若有异常抛出，也由 DispatcherServlet 调用异常处理器来<u>处理异常</u>（如全局异常处理）；<br>（H）响应数据逆向经过过滤器链，<u>执行 chain.doFilter() 方法之后的代码</u>，最终返回给客户端。</p>
@@ -326,14 +327,14 @@
 </ul>
 <p>（D）配置调优：</p>
 <ul>
-<li>增大 innodb_buffer_pool_size 缓存池，提升热数据访问速度‌；</li>
-<li>优化 max_connections 和连接池配置，避免资源争用‌；</li>
+<li>通过 innodb_buffer_pool_size 增大缓存池的大小，提升热点数据访问速度‌（默认大小为 128MB，这在生产环境中通常不足，可设置为系统可用物理内存的 50% ~ 60%）；</li>
+<li>通过 max_connections 优化连接池配置，避免资源争用‌；</li>
 <li>根据业务场景选择合适的事务隔离级别。</li>
 </ul>
 <p>（E）架构级优化：</p>
 <ul>
 <li><p>读写分离，建立集群，分担主库压力，由一个可读可写的 master 库（以写为主）和多个只读的 slave 库组成，slave 库通过复制 master 库的数据与其保持一致（比如请求 MySQL 的 binlog 日志文件和 position 之后的内容，以获取数据更新事件），如果 master 库挂掉了，还可以将 slave 库升级为新的 master 库继续工作，提高可用性；</p>
-<p>随之而来的问题是需要把代码中的读操作和写操作区分开，区分开了才知道 SQL 是要发给 master 库还是发给 slave 库，而且由于 slave 库有多个，还得决定到底发给哪个 slave 库。为了避免大量修改已有代码，新增一个中间层 MySQL Proxy（分层可以隔离变化），它位于应用程序代码和数据库集群之间，由它来处理这些麻烦事。</p>
+<p>随之而来的问题是需要把代码中的读操作和写操作区分开，区分开了才知道 SQL 是要发给 master 库还是发给 slave 库，而且由于 slave 库有多个，还得决定到底发给哪个 slave 库。为了避免大量修改已有代码，于是新增一个中间层 MySQL Proxy（分层可以隔离变化），它位于应用程序代码和数据库集群之间，由它来处理这些麻烦事。</p>
 </li>
 <li><p>分库分表，对超大数据表进行水平拆分（如按时间或 ID 范围分），分散单表压力‌。</p>
 </li>
@@ -578,7 +579,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -586,7 +587,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
