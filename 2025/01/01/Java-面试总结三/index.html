@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-08-20T14:12:02.119Z">
+<meta property="article:modified_time" content="2025-08-21T15:00:40.309Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -285,7 +285,7 @@
 <p>为什么需要缓存（Cache）？本质原因是速度的不匹配。缓存技术的核心原理是<strong>将频繁访问的数据存储在读写速度更快的存储介质中（如内存）</strong>，以减少 CPU 对慢速存储介质的访问次数（如磁盘或数据库），那么哪些数据会被频繁访问呢？基于<strong>数据的局部性原理</strong>，最近被访问过的数据很可能在不久的将来再次被访问，并且与它相邻的数据也很可能被访问，这个原理在计算机系统内部也有用到，即读取某块数据到内存的同时也一并读取与之相邻的数据，以减少磁盘 IO 次数。</p>
 <p>当用户请求数据时，系统会首先检查缓存中是否存在所需的数据，如果存在，则直接返回缓存中的数据，从而大大缩短数据访问时间，如果不存在，则查询并添加至缓存。常见的缓存类型有<u>本地缓存</u>（将数据缓存在进程内存中，如 Caffeine、Guava Cache‌）、<u>分布式缓存</u>（Redis、Memcached）、<u>CDN 缓存</u>（内容分发网络，是一种通过‌分布式节点服务器‌将图片、视频、网页等内容缓存到全球多个地理位置，使用户能够从离自己最近的节点快速获取资源的技术）、<u>数据库缓存</u>（如 Buffer Pool，它将磁盘上的数据页和索引页缓存到内存中，数据修改时会更新缓存池中的页而成为脏页，通过后台线程异步刷盘‌解决）等。Spring Cache 是一个缓存抽象层，支持集成上面提到的多种缓存技术，通过注解统一管理（如 @Cacheable、@CachePut），通过 CacheManager 接口切换实现。</p>
 <p>缓存技术的缺点：<br>（A）额外的硬件支出：缓存需要额外的磁盘空间和内存空间来存储数据，增加了硬件成本；<br>（B）数据一致性问题：缓存与数据库之间可能存在数据不一致的问题，需要采取额外的措施来保证数据一致性；<br>（C）高并发缓存失效问题‌：在高并发场景下，缓存失效可能会导致数据库访问量瞬间增大，甚至导致数据库崩溃。</p>
-<p>缓存的数据一致性问题主要由以下原因引起：<br>（B1）‌数据更新与缓存同步不一致：更新数据源后，缓存中的数据未能及时更新，常见的缓存更新策略有：<br>Cache-Aside‌（<strong>首选</strong>）：应用层‌管理缓存读写（读：先查缓存，未命中查库并回填；写：直接写库，再删除缓存）；<br>Write-Through：写操作‌先更新缓存，由缓存层更新数据库‌，Guava Cache 的 CacheLoader.write 采用；<br>Read-Through：缓存层‌自动加载数据库数据，应用层仅与缓存交互，注解 @Cacheable 采用此策略；<br>Write-Back（慎用）：写操作‌仅更新缓存，由缓存层标记脏数据，再异步批量刷入数据库。<br>（B2）‌并发更新：多个并发的更新操作导致缓存中的数据更新顺序与数据源中的更新顺序不一致（使用分布式锁）。<br>（B3）缓存失效策略不当：缓存中的数据已过期，但由于没有有效的失效策略而仍然存在（设置合理的失效策略，常见的缓存失效策略有 LRU（最近最少使用）、LFU（最不经常使用）、‌FIFO（先进先出）、TTL（设置过期时间））。</p>
+<p>缓存的数据一致性问题主要由以下原因引起：<br>（B1）‌数据更新与缓存同步不一致：更新数据源后，缓存中的数据未能及时更新，常见的缓存更新策略有：<br>Cache-Aside‌（<strong>首选</strong>）：应用层‌管理缓存读写（读：先查缓存，未命中查库并回填；写：直接写库，再删除缓存）；<br>Write-Through：写操作‌先更新缓存，由缓存层更新数据库‌，Guava Cache 的 CacheLoader.write 采用；<br>Read-Through：缓存层‌自动加载数据库数据，应用层仅与缓存交互，注解 @Cacheable 采用此策略；<br>Write-Back（慎用）：写操作‌仅更新缓存，由缓存层标记脏数据，再由后台线程异步批量刷入数据库。<br>（B2）‌并发更新：多个并发的更新操作导致缓存中的数据更新顺序与数据源中的更新顺序不一致（使用分布式锁）。<br>（B3）缓存失效策略不当：缓存中的数据已过期，但由于没有有效的失效策略而仍然存在（设置合理的失效策略，常见的缓存失效策略有 LRU（最近最少使用）、LFU（最不经常使用）、‌FIFO（先进先出）、TTL（设置过期时间））。</p>
 <p><span style="background-color:green;"><font color=white>（12）</font></span>Spring Boot 集成并自动配置了 Spring MVC，因此与 Spring MVC 的过程类似：<br>（A）请求首先<u>到达 Servlet 容器</u>（如 Tomcat，已被内嵌在 Spring Boot 中，简化开发流程）；<br>（B）然后依次经过过滤器链（Filter Chain），每个过滤器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 chain.doFilter() 方法之前的代码</u>，如对请求进行认证、校验等）；<br>（C）<u>到达核心控制器 DispatcherServlet</u>，它负责分发请求，根据请求的 URL 和请求方式找到对应的控制器；<br>（D）依次经过拦截器链（Interceptor Chain），每个拦截器可以对请求进行预处理操作，并决定是否将请求继续传递（即<u>执行 preHandle() 方法</u>中的代码，如对请求进行权限校验、参数绑定等，<u>但这步是可选的</u>，因为拦截器目前只在 Spring MVC 中有效）；<br>（E）<u>执行 Controller 中的具体方法</u>，并返回响应数据；<br>（F）响应数据逆向经过拦截器链，<u>执行 postHandle() 方法</u>中的代码，进行后置处理；<br>（G）响应到达 DispatcherServlet，由 DispatcherServlet 统一调度视图解析器并<u>渲染视图</u>（可选，因为响应可能是纯 JSON），若有异常抛出，也由 DispatcherServlet 调用异常处理器来<u>处理异常</u>（如全局异常处理）；<br>（H）响应数据逆向经过过滤器链，<u>执行 chain.doFilter() 方法之后的代码</u>，最终返回给客户端。</p>
 <img src="/images/2025-01-01/api_life.jpg" width="90%" />
 
@@ -579,15 +579,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -599,11 +599,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
