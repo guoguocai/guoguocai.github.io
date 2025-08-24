@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-08-23T11:21:53.630Z">
+<meta property="article:modified_time" content="2025-08-24T10:09:10.698Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -249,7 +249,13 @@
 <li><p><strong>Redis 的 SETNX</strong>（SET if Not eXists）：是 Redis 提供的原子性命令，用于在指定键（Key）不存在时设置，若键已存在，则不执行任何操作。当多个客户端并发调用时，它确保仅有一个客户端能成功设置键值，是分布式锁的基础，为避免死锁（如客户端崩溃未释放锁），需设置键的过期时间。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">基本用法</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 1：键不存在，设置成功</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 0：键已存在，未执行操作</span></span><br><span class="line">SETNX key value</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分布式锁用法：为保证原子性，NX（不存在才设置）和 PX（过期时间，单位：毫秒）必须同时设置</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 1：获取锁成功</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 0：锁已被其他客户端持有</span></span><br><span class="line">SET key value NX PX 30000</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong>Redisson 分布式锁</strong>：跟 SETNX 的作用类似，区别在于它通过 Lua 脚本确保加锁、解锁、重入等操作的原子性，在调用 lock() 方法时会默认启动看门狗机制延长锁过期时间，防止业务未执行完锁却超时释放。使用不当可能会引发的问题有：（a）<u>死锁</u>：比如看门狗无限续期或客户端发生故障，解决办法是设置一个合理的锁过期时间或在 finally 块中显式释放锁；（b）<u>误释放锁</u>：比如线程 A 释放了线程 B 的锁，解决办法是在获取锁时为其生成一个唯一标识作为锁的值，如 UUID，释放锁时先校验锁的值是否与自己保存的标识一致；（c）<u>数据不一致</u>：比如线程 A 更新缓存的逻辑未在锁过期时间之前完成，紧接着线程 B 获取到锁并对同一缓存进行更新，解决办法为使用可重入锁（在没抢到锁的情况下一直循环抢锁，被称为自旋锁，在递归函数中使用自旋锁可能引发死锁，比如递归方法在释放锁之前，所以为了解决这个问题而设计了可重入锁。成功获取到锁后记录锁的持有者，并用一个计数器记录获取的次数，在持有锁的情况下再次申请锁只是给计数器加 1，释放锁时把计数器减 1，只有当计数器为 0 且持有者是当前线程时才真正释放锁）。</p>
+<li><p><strong>Redisson 分布式锁</strong>：跟 SETNX 的作用类似，区别在于它通过 Lua 脚本确保加锁、解锁、重入等操作的原子性。分布式锁使用不当可能引发以下问题：</p>
+<p>（a）<u>锁提前释放</u>：比如业务执行时间超过锁过期时间，导致锁释放时业务还未执行完，此时其他线程可提前获取到锁，操作同一数据而引发数据不一致。解决方案为启用看门狗机制自动续期，即通过后台线程定时检查并延长锁的有效期：获取锁时（如调用 lock() 或 tryLock() 并传递 leaseTime &#x3D; -1），看门狗线程‌启动。线程默认每 10 秒检查一次锁是否仍被当前线程持有（异步定时任务基于 Netty 的 HashedWheelTimer 实现，判断锁的归属使用 HEXISTS 命令），若锁仍被持有，则重置锁过期时间为 30 秒，业务执行完成后释放锁，看门狗线程自动终止‌。</p>
+<p>注意，若显式指定了锁的超时时间（如 lock(10, TimeUnit.SECONDS)），则看门狗‌不会启动！因此，对执行时间不确定的任务（如 RPC 调用、批量处理），推荐用看门狗；对高频短时任务建议指定固定超时时间，避免续期开销。</p>
+<p>（b）<u>死锁</u>：如持有锁的线程崩溃或网络中断，导致锁无法释放。解决办法为设置一个合理的锁过期时间，并且添加守护线程监控业务线程，若锁超时未自己释放，则由守护线程强制中断业务并释放锁（在 finally 块中显式释放）。</p>
+<p>（c）<u>误释放锁</u>：比如线程 A 释放了线程 B 的锁（锁超时自动失效时线程 A 未感知，在线程 B 获取到锁后，线程 A 又手动释放），解决办法是在获取锁时为其生成一个唯一标识作为锁的值（如机器 IP + 进程 ID + 线程 ID + 随机数），释放锁时通过对比锁的值与线程自己保存的标识是否一致来验证锁的持有者。</p>
+<p>（d）<u>锁不可重入</u>：比如递归调用时，在同一线程内重复获取同一把锁导致自我阻塞（在没抢到锁的情况下一直循环抢锁，被称为自旋锁，在递归函数中使用自旋锁可能引发死锁，比如递归调用先于锁释放时）。解决办法为使用可重入锁 RLock 记录线程 ID 和重入次数（可重入锁：成功获取到锁后记录锁的持有者，并用一个计数器记录获取的次数，在持有锁的情况下再次申请锁只是给计数器加 1，释放锁时把计数器减 1，只有当计数器为 0 且持有者是当前线程时才真正释放锁）。</p>
+<p>（e）<u>锁竞争激烈性能下降</u>：高并发下大量线程循环抢锁，导致 CPU 飙升。解决方案为采用指数退避算法降低请求频率（请求重试时，通过‌指数级增长的等待时间‌来避免系统过载或冲突加剧），或者将抢锁请求路由到消息队列（如 Kafka），顺序消费。</p>
 </li>
 </ul>
 <p>（II）雪崩指的是<strong>缓存中大量数据同时失效</strong>，或 Redis 宕机，导致所有请求直接访问数据库，可能引发数据库崩溃。比如大促期间缓存集中过期，解决方法：<br>（A）<u>对缓存数据的过期时间添加随机值</u>，避免批量数据同时失效‌；<br>（B）<u>增加二级缓存</u>（如 Memcached），当 Redis 缓存失效时，可从二级缓存读取；<br>（C）<u>部署 Redis Cluster</u>，支持数据备份和故障转移，防止单点故障导致服务不可用‌；<br>（D）<u>对关键数据开启持久化功能</u>，配合 Hystrix 等<u>熔断</u>工具，在数据库压力过大时暂时拒绝部分请求‌。</p>
@@ -583,11 +589,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
