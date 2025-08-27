@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/combine_index.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-08-21T15:04:19.037Z">
+<meta property="article:modified_time" content="2025-08-27T09:51:07.808Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -283,7 +283,7 @@
 <li>幻读：<u>同一事务多次执行相同的范围查询时，因其他事务插入或删除了符合条件的数据，导致结果集行数不一致</u>。例如：事务 A 查询年龄 &gt; 30 的用户得到 3 条记录，事务 B 插入一条年龄为 35 的数据后，事务 A 再次查询得到 4 条记录。与不可重复读的理解类似，事务 A 内部的多次查询需要基于同一数据快照，否则就会出现问题（不可重复读是针对已存在的记录，幻读是针对新增的记录）：<br>（I）在财务计算事务中，若中途插入新数据导致统计结果变化，则可能导致后续扣款金额错误；<br>（II）在统计当前库存时，若其他事务新增库存记录未被感知，则会导致实际库存与统计结果不一致；<br>（III）在银行系统中，若在账户余额计算期间有新增交易未被纳入统计，则可能导致超额放贷或风险控制失效；<br>（IV）当执行 WHERE age &gt; 20 的条件更新时，若其他事务插入 age &#x3D; 25 的新记录，则已提交的更新将无法作用于新增的记录。</li>
 </ul>
 <p>为解决这些问题，数据库提供了几种隔离级别（由低到高，已解决的问题在更高的隔离级别中自然也被解决）：<br>（A）读未提交：允许读取其他事务未提交的数据，解决丢失更新；<br>（B）读已提交：只能读取其他事务已提交的数据，解决脏读，是 Oracle 的默认隔离级别；<br>（C）可重复读：同一事务重复读取同一记录结果一致，解决不可重复读，是 MySQL 的默认隔离级别；<br>（D）串行化：强制事务串行执行，解决幻读，但其性能开销很大，影响并发效率，因此实际用得较少。<br>为了兼顾数据一致性与并发性能，在可能出现不可重复读或幻读的场合，可由应用程序用乐观锁或悲观锁控制。</p>
-<p>Spring 的事务隔离级别直接沿用了数据库的四种隔离级别标准，对其进行了抽象封装，所以它的实际隔离行为仍然依赖于数据库的具体实现。Spring 只额外增加了一个默认级别，对应具体数据库的默认隔离级别。有了这个事务抽象层后，开发者通过注解 @Transactional(isolation &#x3D; Isolation.REPEATABLE_READ) 就能方便地配置和切换隔离级别，且无需关心数据库的具体实现差异。</p>
+<p>Spring 的事务隔离级别直接沿用了数据库的四种隔离级别标准，对其进行了抽象封装，所以它的实际隔离行为仍然依赖于数据库的具体实现。Spring 只额外增加了一个默认级别，对应具体数据库的默认隔离级别。有了 Spring 的事务抽象层后，开发者通过注解 @Transactional(isolation &#x3D; Isolation.REPEATABLE_READ) 就能方便地配置和切换隔离级别，且无需关心数据库的具体实现差异。</p>
 <p>数据库事务的 ACID 实现原理：</p>
 <ul>
 <li><p>原子性：通过 <strong>undo log（回滚日志）</strong>实现。在执行真正的操作之前，记录事务修改前的旧数据，若事务执行失败或显式调用 ROLLBACK，则可根据 undo log 逆向操作，将数据恢复到事务开始前的状态。包括遇到断电或系统崩溃的情况，也可在系统重启后读 undo log 恢复。</p>
@@ -296,6 +296,17 @@
 <li><p>一致性：由原子性、持久性、隔离性和数据库约束共同保障。</p>
 </li>
 </ul>
+<p>Spring 事务的本质是数据库对事务的支持，没有数据库的支持，Spring 是无法提供事务的。Spring 支持编程式事务和声明式事务两种方式，声明式事务建立在 AOP 之上，对业务代码无侵入，唯一不足的是最细粒度只能作用到方法级别，而编程式事务可以作用到代码块。Spring 事务的传播行为（当一个事务方法被另一个事务方法调用时，事务交互的规则）可通过 @Transactional(propagation &#x3D; Propagation.行为) 指定，共定义了七种行为（其核心在于控制事务方法是否共用同一个数据库连接，或者说共用同一事务，数据库连接和事务状态通过存放在 ThreadLocal 中实现跨方法调用的隐式传递，注意必须通过代理对象去调用，在类内部直接调用会导致传播行为失效）：</p>
+<ul>
+<li>REQUIRED（<strong>默认</strong>）：若当前存在事务，则加入该事务；若当前没有事务，则新建一个事务（适用于多数场景）。</li>
+<li>REQUIRES_NEW：总是新建一个事务，若当前存在事务，则挂起当前事务（适用于需独立提交或回滚的业务）。</li>
+<li>SUPPORTS：如果当前存在事务，则加入；否则以非事务方式执行（适用于查询，对事务无强制要求）。</li>
+<li>NOT_SUPPORTED：以非事务方式执行，如果当前存在事务，则挂起（用于不需要事务支持的操作）。</li>
+<li>MANDATORY：必须在已有事务中执行，否则抛出异常（确保方法被事务上下文调用）。</li>
+<li>NEVER：必须在非事务环境下执行，否则抛出异常（用于禁止事务的场景）。</li>
+<li>NESTED：若当前存在事务，则在嵌套事务内执行（可部分回滚）；否则新建事务（适用于需要保存点的业务）。</li>
+</ul>
+<p>Spring 事务的隔离级别直接沿用了数据库的四种隔离级别标准，对其进行了抽象封装，只额外增加了一个默认级别，对应的是具体数据库的默认隔离级别，所以它的实际隔离行为仍然依赖于数据库的具体实现。有了 Spring 的事务抽象层后，开发者通过注解 @Transactional(isolation &#x3D; Isolation.REPEATABLE_READ) 就能方便地配置和切换隔离级别，且无需关心数据库的具体实现差异。</p>
 <p>（13.2）对于分布式事务，则是需要协调多个独立的服务或组件之间的一致性操作，涉及多个分布式的数据库。例如，在电商系统中，用户下单的操作可能涉及库存服务、支付服务和订单服务，分布式事务要确保库存扣减、支付扣款和订单生成这三个操作要么全部成功，要么全部失败，以防止出现用户支付成功但库存未扣减或订单未生成的情况‌。分布式事务的 BASE 模型概括了三个核心思想：基本上可用（Basically Available，部分节点发生故障时核心功能仍然可用）、软状态（Soft State，允许存在暂时的不一致状态）和最终一致性（Eventually Consistent，数据最终会达到一致状态‌）‌‌。常见的分布式事务解决方案有：</p>
 <p>（I）保证强一致性（实时一致性）：</p>
 <p>（A）<strong>两阶段提交（2PC）</strong>：分为<u>准备阶段（Prepare）</u>和<u>提交阶段（Commit）</u>，通过协调者协调所有参与者（事务协调者简称 TC（Transaction Coordinator），负责维护全局事务状态，驱动分支事务提交或回滚）。准备阶段为协调者询问所有参与者是否准备好提交事务，然后参与者执行本地事务但不提交，向协调者报告；提交阶段为若所有参与者都反馈说准备好了，则协调者就通知所有参与者快速提交，否则通知回滚。2PC 没有统一的接口标准，后来在它的理论基础上制定了标准化的 XA 协议规范，明确定义了事务协调器为 TM（在某些框架中命名的是 TC），参与者为 RM（可以是数据库、消息队列等），RM 通过实现 XA 接口与 TM 通信，扩展了 2PC 的适用性。</p>
@@ -609,11 +620,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
