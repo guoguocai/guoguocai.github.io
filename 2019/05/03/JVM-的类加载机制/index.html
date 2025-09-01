@@ -16,7 +16,7 @@
 <meta property="og:description" content="最近在学习 Java 虚拟机底层的工作原理，找来了一些相关的书籍看，在阅读过程中看到一个例子，觉得很不错，在此记录一下，主要讲述虚拟机是如何执行 main 方法中的第一条指令的。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2019-05-03T06:28:33.000Z">
-<meta property="article:modified_time" content="2025-05-25T14:41:55.817Z">
+<meta property="article:modified_time" content="2025-08-31T11:34:14.168Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -174,11 +174,11 @@
 <p>当<strong>把新生成的 Lava 对象的引用压入栈中</strong>，main() 方法的第一条指令也完成了。接下来的指令<strong>通过这个引用调用 Java 代码</strong>（该代码把 speed 变量初始化为正确值 5）。另外一条指令将用这个引用调用 Lava 对象的 flow() 方法。</p>
 <p><br/>总结：</p>
 <p>通过上面的讲解，我们可以得出类加载器的基本工作顺序：</p>
-<p>1.<strong>加载（Loading）</strong>：JVM 通过全限定名查找到类，然后通过类加载器（ClassLoader）将类的 .class 文件加载到内存中，并将类的二进制数据转换为运行时数据结构。<br>2.<strong>连接（Linking）</strong>，包括三个阶段：<br><u>验证（Verification）</u>：确保加载的类的正确性，要符合 Java 语言规范；<br><u>准备（Preparation）</u>：为类的静态变量分配内存，并将其初始化为默认值；<br><u>解析（Resolution）</u>：将常量池中的符号引用转换为直接引用，例如将方法名转换为方法所在的内存地址。<br>3.<strong>初始化（Initialization）</strong>：执行各种初始化操作（比如把类的静态变量初始化为正确的值、执行类的静态代码块）。</p>
+<p>1.<strong>加载（Loading）</strong>：JVM 通过全限定名查找到类，然后通过类加载器（ClassLoader）将类的 .class 文件加载到内存中，并将类的二进制数据转换为运行时数据结构。<br>2.<strong>链接（Linking）</strong>，包括三个阶段：<br><u>验证（Verification）</u>：确保加载的类的正确性，要符合 Java 语言规范；<br><u>准备（Preparation）</u>：为类的静态变量分配内存，并将其初始化为默认值；<br><u>解析（Resolution）</u>：将常量池中的符号引用转换为直接引用，例如将方法名转换为方法所在的内存地址。<br>3.<strong>初始化（Initialization）</strong>：执行各种初始化操作（比如把类的静态变量初始化为正确的值、执行类的静态代码块）。</p>
 <p>到这里类加载的过程就结束了，初始化完成后，类的实例就可以被创建了，并且类的成员变量可以被访问和修改。类加载器是一个非常重要的组件，它确保了类的正确加载和初始化，JVM 提供了三种类加载器：<br>（A）启动类加载器（Bootstrap ClassLoader）‌：负责加载 Java 的核心类库（如 java.lang.* 等）；<br>（B）扩展类加载器（Extension ClassLoader）‌：负责加载扩展类库（如 lib&#x2F;ext 目录下的 jar 包）；<br>（C）应用程序类加载器（Application ClassLoader）‌：负责加载应用程序的类路径（classpath）上的类。<br>此外，开发者还可以自定义类加载器，以满足特定的需求（如从网络上加载类、加密类的字节码等）。</p>
 <p>Java 的类加载器默认采用‌<font color=blue>双亲委派</font>模型‌：当一个类加载器（如 Application ClassLoader）收到一个类的加载请求时，它首先将请求委托给它的父类加载器（如 Extension ClassLoader）去处理，如果父类加载器无法处理，才由自己处理。父类加载器收到加载请求后，同样也会先委托给它的父类加载器（如 Bootstrap ClassLoader）去完成，如果父类加载器能够找到并加载所需的类，那么它就直接返回这个类给子类加载器，子类加载器就不再需要自己去加载这个类了。并且，无论这个类是由哪个类加载器加载的，只要它被加载过，就会被缓存起来，当再次需要加载这个类时，类加载器会直接从缓存中获取，而不是重新加载。</p>
 <p>这种双亲委派的机制可以防止通过自定义类加载器来加载恶意的类，从而保护了 Java 应用程序的安全，同时也避免了类的重复加载‌。</p>
-<p>（完）</p>
+<p>（后记：Java 中的链接是运行时的动态链接，C 语言中也有链接，它是在编译之后的一个单独步骤，用于解决调用的目标函数不在本文件中的情况，也就是将一个符号（如 add 函数的名称）和这个符号的地址（如 add 函数的真正地址，那里有 add 函数的指令）绑定起来）</p>
 
       
 
@@ -399,11 +399,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
