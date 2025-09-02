@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>代码简洁之道 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这篇文章主要是记录日常开发中的一些代码片段，寻找是否有更简洁的写法，仅供参考。">
+  <meta name="description" content="架构师不是高高在上，脱离代码只说不做的人。架构师首先是一名优秀的程序员，要能够编写项目或产品中的核心功能，随时能够撸起袖子去解决项目中的问题。代码写得不漂亮怎么能拿得出手？怎么能够服人？所谓漂亮代码不仅仅要实现功能，更要清晰、易懂、优雅，没有 Bug 或者只有极少 Bug。 要用技术的影响力来领导人，而不是威权和职位。这是一个漫长的过程：你解决了一道技术难题，你提出的方案被证明可行……这样的事情会">
 <meta property="og:type" content="article">
 <meta property="og:title" content="代码简洁之道">
 <meta property="og:url" content="http://yoursite.com/2022/06/12/%E4%BB%A3%E7%A0%81%E7%AE%80%E6%B4%81%E4%B9%8B%E9%81%93/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:description" content="这篇文章主要是记录日常开发中的一些代码片段，寻找是否有更简洁的写法，仅供参考。">
+<meta property="og:description" content="架构师不是高高在上，脱离代码只说不做的人。架构师首先是一名优秀的程序员，要能够编写项目或产品中的核心功能，随时能够撸起袖子去解决项目中的问题。代码写得不漂亮怎么能拿得出手？怎么能够服人？所谓漂亮代码不仅仅要实现功能，更要清晰、易懂、优雅，没有 Bug 或者只有极少 Bug。 要用技术的影响力来领导人，而不是威权和职位。这是一个漫长的过程：你解决了一道技术难题，你提出的方案被证明可行……这样的事情会">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-06-12T02:16:39.000Z">
-<meta property="article:modified_time" content="2022-06-12T03:18:54.367Z">
+<meta property="article:modified_time" content="2025-09-02T03:54:35.246Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -153,7 +153,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这篇文章主要是记录日常开发中的一些代码片段，寻找是否有更简洁的写法，仅供参考。</p>
+        <p>架构师不是高高在上，脱离代码只说不做的人。架构师首先是一名优秀的程序员，要能够编写项目或产品中的核心功能，随时能够撸起袖子去解决项目中的问题。代码写得不漂亮怎么能拿得出手？怎么能够服人？所谓漂亮代码不仅仅要实现功能，更要清晰、易懂、优雅，没有 Bug 或者只有极少 Bug。</p>
+<p><strong>要用技术的影响力来领导人，而不是威权和职位。</strong>这是一个漫长的过程：你解决了一道技术难题，你提出的方案被证明可行……这样的事情会一点一滴地积累起你在别人心目中的形象，建立起你的个人品牌，技术人员服你了，你在团队里发出的声音才会被倾听、被尊重。</p>
+<p>这篇文章主要是记录日常开发中的一些代码片段，寻找是否有更简洁的写法，仅供参考。</p>
 <span id="more"></span>
 
 <h4 id="1-比较两个数的大小"><a href="#1-比较两个数的大小" class="headerlink" title="1 比较两个数的大小"></a><strong>1</strong> 比较两个数的大小</h4><p>场景举例：比较两款竞品的订单下单总数，得出较大的那个数。</p>
@@ -208,6 +210,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; originMap = getMapData();</span><br><span class="line">Map&lt;String, Object&gt; targetMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">targetMap.putAll(originMap);</span><br><span class="line"><span class="comment">// 新增元素</span></span><br><span class="line">targetMap.put(<span class="string">&quot;status&quot;</span>, <span class="string">&quot;1&quot;</span>);</span><br><span class="line">targetMap.put(<span class="string">&quot;deleted&quot;</span>, <span class="string">&quot;1&quot;</span>);</span><br></pre></td></tr></table></figure>
 
 <p>参考文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35387940/category_9985622.html?spm=1001.2014.3001.5482">头铁</a></p>
+<p>每个程序员都梦想从头写一个东西，不愿意读别人的代码，甚至同行相轻，瞧不起别人的代码。但实际情况是，自己重写一遍，不见得能比现在已经运行的代码好到哪里去，甚至更差。除非你了解了所有的细节，用大量的时间仔细规划、小心编程，但现实中哪有这么多时间啊？既然无法推倒重来，还不如承认现实，脚踏实地，从当下做起，慢慢地重构代码，让代码的质量朝着更好的方向发展。这就是所谓的革新，而不是革命吧！</p>
 
       
 
@@ -445,11 +448,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -461,11 +464,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
