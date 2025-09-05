@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-09-01T11:48:48.274Z">
+<meta property="article:modified_time" content="2025-09-03T12:47:48.415Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -343,6 +343,7 @@
 <ul>
 <li><p>读写分离，建立集群，分担主库压力，由一个可读可写的 master 库（以写为主）和多个只读的 slave 库组成，slave 库通过复制 master 库的数据与其保持一致（比如请求 MySQL 的 binlog 日志文件和 position 之后的内容，以获取数据更新事件），如果 master 库挂掉了，还可以将 slave 库升级为新的 master 库继续工作，提高可用性；</p>
 <p>随之而来的问题是需要把代码中的读操作和写操作区分开，区分开了才知道 SQL 是要发给 master 库还是发给 slave 库，而且由于 slave 库有多个，还得决定到底发给哪个 slave 库。为了避免大量修改已有代码，于是新增一个中间层 MySQL Proxy（分层可以隔离变化），它位于应用程序代码和数据库集群之间，由它来处理这些麻烦事。</p>
+<p>向 master 库写入数据后马上读，如何保证读到的数据是正确的？<br>（I）强制读主库：对于关键业务（如支付），可通过代码强制将读请求路由到主库，如 setMasterRouteOnly()。<br>（II）延迟读取：写入后，通过业务逻辑短暂延迟读取操作（如支付成功后跳转中间页），避免立即查询从库。<br>（III）缓存标记：写入后，在缓存中设置标记及其过期时间（预估主从同步延迟时间），读取时先检查标记，存在则读主库，否则读从库。<br>（IV）半同步复制：确保至少一个从库同步完成后再返回写入成功。<br>（V）全同步复制（MGR，MySQL Group Replication）：确保所有从库同步完成才返回成功，牺牲了写入性能。</p>
 </li>
 <li><p>分库分表，对超大数据表进行水平拆分（如按时间或 ID 范围分），分散单表压力‌。</p>
 </li>
@@ -587,11 +588,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -607,11 +608,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
+                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
