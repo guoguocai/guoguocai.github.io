@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/sigaction.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/AIO.png">
 <meta property="article:published_time" content="2024-12-10T09:30:39.000Z">
-<meta property="article:modified_time" content="2025-09-07T07:32:36.308Z">
+<meta property="article:modified_time" content="2025-09-08T12:48:32.514Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -257,7 +257,7 @@
 <h4 id="2-4-三种-Java-IO-对比"><a href="#2-4-三种-Java-IO-对比" class="headerlink" title="2.4 三种 Java IO 对比"></a>2.4 三种 Java IO 对比</h4><p>Java BIO：一个线程处理一个客户端连接（1:1）<br>Java NIO：一个线程处理多个客户端连接（1:n）<br>Java AIO：被动回调，不需要启动额外的线程（0:n）</p>
 <h4 id="2-5-选择-Netty"><a href="#2-5-选择-Netty" class="headerlink" title="2.5 选择 Netty"></a>2.5 选择 Netty</h4><p>实际开发时，为什么不用 JDK NIO 的原生类库，而选择 Netty 框架？</p>
 <p>JDK NIO 有本身固有的复杂性和 Bug，开发出高质量的 NIO 程序并不是一件简单的事情。虽然用原生 JDK NIO 开发功能相对容易，但是其可靠性能力补足的工作量和难度都非常大，作为一个服务端，需要能够处理网络的闪断、客户端的重复接入、客户端的安全认证、消息的编解码、半包读写、失败缓存、网络拥塞、异常码流等情况，如果没有足够的编程经验积累，一个稳定的服务端往往需要一年甚至更长的时间。更为糟糕的是，一旦在生产环境发生问题，调试定位难度大，还可能带来巨大损失。</p>
-<p>Netty 经历了大规模的商业应用考验，质量得到验证，成熟稳定。而且它的社区活跃，已成为最流行的 NIO 框架之一（什么是框架？框架就像一个模板，里面预置了一些公认的最佳实践，它无法独立运行，必须由开发人员按照它定义的规则，把项目相关代码填充到指定的地方，才是一个完整的应用程序。框架不得不学，但如果只会用框架，只会填充代码也是不行的）。Netty 的核心组件有：</p>
+<p>Netty 经历了大规模的商业应用考验，质量得到验证，成熟稳定。比如 Redis 的连接是基于 Netty 的 NIO 模型来管理，还有 Redisson 看门狗中的异步定时任务也是基于 Netty 的 HashedWheelTimer 实现。Netty 的社区活跃，已成为最流行的 NIO 框架之一（什么是框架？框架就像一个模板，里面预置了一些公认的最佳实践，它无法独立运行，必须由开发人员按照它定义的规则，把项目相关代码填充到指定的地方，才是一个完整的应用程序。框架不得不学，但如果只会用框架，只会填充代码也是不行的）。Netty 的核心组件有：</p>
 <ul>
 <li>网络通信层：</li>
 <li><strong>Bootstrap &#x2F; ServerBootstrap</strong>：负责客户端或服务端的启动引导，串联其他组件初始化流程；</li>
@@ -510,11 +510,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -546,11 +546,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+                <a href="javascript:void(0)" class="js-tag color2">Python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Python</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
             
             <div class="clearfix"></div>
