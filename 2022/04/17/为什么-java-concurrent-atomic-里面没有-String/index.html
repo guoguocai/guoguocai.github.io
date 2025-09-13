@@ -16,7 +16,7 @@
 <meta property="og:description" content="首先说结论，String 是线程安全的，不会造成多线程读写冲突问题。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-04-17T01:54:10.000Z">
-<meta property="article:modified_time" content="2025-09-12T15:00:41.639Z">
+<meta property="article:modified_time" content="2025-09-13T04:51:34.956Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -173,8 +173,8 @@
 <h3 id="2-不可变对象的优点"><a href="#2-不可变对象的优点" class="headerlink" title="2.不可变对象的优点"></a>2.不可变对象的优点</h3><h4 id="2-1-对并发友好"><a href="#2-1-对并发友好" class="headerlink" title="2.1 对并发友好"></a>2.1 对并发友好</h4><p>提到多线程并发，最让人苦恼的莫过于对共享资源的访问冲突，目前在大多数语言中，对多线程冲突问题常采用同步的方式解决，比如 Java 中的 synchronized 关键字和 Lock 对象等机制，但这个方式有个弊端：冲突能否被解决，取决于程序员对共享资源加锁和解锁的时机对不对。所以还有另一个方向，就是从多线程冲突的原因——共享资源上入手。</p>
 <p>假设程序中完全没有共享资源，那自然就不存在访问冲突了，Java 中的 ThreadLocal 机制就是利用了这一理念，<u>ThreadLocal 就是给每个线程分配一份数据副本，通过将数据存储到线程内的 ThreadLocalMap 来实现线程隔离，每个线程只能访问和修改自己的副本，从而避免多线程竞争</u>。ThreadLocalMap 是默认内置在每个 Java 线程（Thread 类）中的一个类似哈希表的键值对数组，初始值为 null，仅在首次调用 ThreadLocal.set() 或 ThreadLocal.get() 时才会被创建‌，避免不必要的内存占用‌。</p>
 <ul>
-<li>一个 ThreadLocal 实例只能存储一个值，当在一个线程内使用了一个或多个不同的 ThreadLocal 实例时，这些 ThreadLocal 实例的数据副本会被存储在同一个 ThreadLocalMap 中，因此存在哈希冲突的可能，通常用开放地址法（线性探测）解决。<br>键（Key）为 ThreadLocal 实例：弱引用（ThreadLocal 实例本身为强引用，但作为 Key 时会用弱引用封装）。<br>值（Value）为通过 set 方法存储的数据：强引用，<u>一定要记得调用 remove() 方法及时清理旧值（在 finally 块中），否则可能出现内存泄漏</u>；如果使用了线程池，还可能存在线程没销毁就被复用，导致旧数据被新任务误用的问题。</li>
-<li>Java 的四种引用类型（目的是‌提供更灵活的内存管理机制，在保证程序稳定的同时减少手动管理内存的负担）：<br>强引用（StrongReference）：永不自动回收，用 new 创建的对象默认都是强引用，需显式置为 null 才能解除。<br>软引用（SoftReference）：内存不足时（即将发生 OOM 前）才会被回收，常用于实现内存敏感型缓存。<br>弱引用（WeakReference）：发现后立即回收，常用于临时的对象映射关系，能防止因疏忽导致的内存泄漏。<br>虚引用（PhantomReference）：无法用 get() 获取对象实例，通过 ReferenceQueue 在对象被回收后触发清理动作。</li>
+<li>一个 ThreadLocal 实例只能存储一个值，当在一个线程内使用了一个或多个不同的 ThreadLocal 实例时，这些 ThreadLocal 实例的数据副本会被存储在同一个 ThreadLocalMap 中，因此存在哈希冲突的可能，通常用开放地址法（线性探测）解决。<br>键（Key）为 <u>ThreadLocal 实例</u>：弱引用（ThreadLocal 实例本身为强引用，但作为 Key 时会用弱引用包装）。<br>值（Value）为<u>通过 set 方法存储的数据</u>：强引用，<u>一定要记得调用 remove() 方法及时清理旧值（在 finally 块中），否则可能出现内存泄漏</u>；如果使用了线程池，还可能存在线程没销毁就被复用，导致旧数据被新任务误用的问题。</li>
+<li>Java 的四种引用类型（目的是‌提供更灵活的内存管理机制，在保证程序稳定的同时减少手动管理内存的负担）：<br>强引用（StrongReference）：永不自动回收，用 new 创建的对象默认都是强引用，需显式置为 null 才能解除。<br>软引用（SoftReference）：内存不足时（即将发生 OOM 前）才会被回收，常用于实现内存敏感型缓存。<br>弱引用（WeakReference）：发现后立即回收，常用于临时的对象映射关系，防止因疏忽导致的内存泄漏。<br>虚引用（PhantomReference）：无法用 get() 获取对象实例，通过 ReferenceQueue 在对象被回收后触发清理动作。</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadLocalDemo</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建 ThreadLocal（通常声明为 static，此处设置初始值的操作是可选的）</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ThreadLocal&lt;String&gt; userContext = ThreadLocal.withInitial(() -&gt; <span class="string">&quot;default&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 线程 1 和线程 2 操作的是 userContext 的独立副本，互不影响</span></span><br><span class="line">        <span class="comment">// 线程 1</span></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            <span class="comment">// 设置当前线程的数据</span></span><br><span class="line">            userContext.set(<span class="string">&quot;User1&quot;</span>);</span><br><span class="line">            <span class="comment">// 获取当前线程的数据，若未设置，默认返回 null，此处输出 User1</span></span><br><span class="line">            System.out.println(userContext.get()); </span><br><span class="line">            <span class="comment">// 清理当前线程的数据（防止内存泄漏）</span></span><br><span class="line">            userContext.remove();</span><br><span class="line">        &#125;).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程 2</span></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">            userContext.set(<span class="string">&quot;User2&quot;</span>);</span><br><span class="line">            System.out.println(userContext.get()); <span class="comment">// 输出 User2</span></span><br><span class="line">            userContext.remove();</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 需要存储多个值时，有两种解决方案：</span></span><br><span class="line">    <span class="comment">// 1.创建多个 ThreadLocal 实例，每个实例存储不同的值</span></span><br><span class="line">    <span class="comment">// ThreadLocal&lt;String&gt; tl1 = new ThreadLocal&lt;&gt;();</span></span><br><span class="line">    <span class="comment">// ThreadLocal&lt;Integer&gt; tl2 = new ThreadLocal&lt;&gt;();</span></span><br><span class="line">    <span class="comment">// tl1.set(&quot;Name&quot;);</span></span><br><span class="line">    <span class="comment">// tl2.set(100);</span></span><br><span class="line">    <span class="comment">// 这里如果 tl1 和 tl2 在同一线程，就有可能发生哈希冲突</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 2.使用 Map 或自定义对象封装，再存入单个 ThreadLocal</span></span><br><span class="line">    <span class="comment">// ThreadLocal&lt;Map&lt;String, Object&gt;&gt; tl = new ThreadLocal&lt;&gt;();</span></span><br><span class="line">    <span class="comment">// Map&lt;String, Object&gt; data = new HashMap&lt;&gt;();</span></span><br><span class="line">    <span class="comment">// data.put(&quot;user&quot;, &quot;Alice&quot;);</span></span><br><span class="line">    <span class="comment">// data.put(&quot;count&quot;, 10);</span></span><br><span class="line">    <span class="comment">// tl.set(data);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -417,15 +417,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -437,19 +437,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
               </li>
              
               <li class="article-tag-list-item">

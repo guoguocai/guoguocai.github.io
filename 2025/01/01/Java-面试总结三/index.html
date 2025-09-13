@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-09-12T13:10:05.317Z">
+<meta property="article:modified_time" content="2025-09-13T04:46:50.505Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -242,7 +242,7 @@
 <p><span style="background-color:green;"><font color=white>（6）</font></span>线程间通信指的是在多线程编程中，不同线程之间如何交换信息或协调执行。常见的实现方式有：<br>（A）共享内存：多个线程可访问同一块内存，通过读写这块内存实现数据交换，如全局变量，但要注意同步问题；<br>（B）消息传递：线程之间通过发送和接收消息来进行通信，比如使用消息队列；<br>（C）条件变量‌：通过条件变量实现线程间的等待和唤醒，适用于线程需要等待某个条件成立才能继续执行的场景；<br>（D）信号量：这是一种用于线程同步和互斥的机制，它维护一个计数器（就是一个整数），表示可用资源的数量，线程通过等待（P 操作）和释放（V 操作）信号量来实现同步，用于控制同时访问共享资源的线程数量；<br>（E）事件：线程需要等待某个事件（如 I&#x2F;O 操作完成）才能继续执行。</p>
 <p>在 Java 中的实现：<br>（A）volatile：保证共享变量的可见性和有序性（配合 synchronized 或 ReentrantLock 使用，保证原子性）；<br>（B）BlockingQueue：提供了线程安全的队列实现，可用于在生产者和消费者线程之间传递数据；<br>（C）wait 和 notify&#x2F;notifyAll：由 Object 类提供，用于线程间的等待和通知，必须与 synchronized 配合使用；<br>（D）Condition：提供了比 wait &#x2F; notify 更为灵活的通信机制，通常与 ReentrantLock 配合使用；<br>（E）Semaphore：在 java.util.concurrent 包中，通过 acquire 方法获取许可，通过 release 方法释放许可；<br>（F）CountDownLatch：允许一个或多个线程等待其他线程完成操作（老师必须要等到所有学生交完试卷才能走）；<br>（G）CyclicBarrier：允许一组线程互相等待，直到所有线程都到达某个屏障点（比如，多人游戏必须都要加载到 100% 才能开始）。</p>
 <p>其中 ReentrantLock、Semaphore、CountDownLatch、CyclicBarrier、另外还有 FutureTask 等都是基于 AQS 实现的，AQS（AbstractQueuedSynchronizer，抽象队列同步器）是 JUC 的基石，它的核心原理包括：<br>（A）通过一个 <strong>volatile int state</strong> 变量表示资源占用状态，并提供了 getState()、setState()、compareAndSetState() 等操作方法。它的具体语义由子类定义，比如在 ReentrantLock 中表示锁的重入次数，在 Semaphore 中表示剩余许可证数量，在 CountDownLatch 中表示未完成的计数等。<br>（B）通过一个 <strong>FIFO 的双向链表</strong>（CLH 队列的变体，原本是单向链表）存放等待获取资源的线程，队列中的每个节点是一个 Node 对象，包含节点状态、前驱和后继节点指针、关联的线程引用等。线程在占用资源成功时继续执行，失败时则被封装为 Node 放入队列尾部，并在适当时机唤醒（类似银行业务办理窗口都满了，后面来的只能去等候区排队等着叫号）。<br>AQS 是一个抽象类，采用了模板方法模式，将具体的资源获取 &#x2F; 释放逻辑留给子类实现，主要的模板方法有 tryAcquire &#x2F; tryRelease（独占模式）和 tryAcquireShared &#x2F; tryReleaseShared（共享模式）。独占模式和共享模式是 AQS 的两种工作流程，独占模式每次仅允许单个线程获取资源（如 ReentrantLock），共享模式则允许多个线程同时获取资源（如 Semaphore）。</p>
-<p>并发编程的最佳实践：<br>（A）减少共享变量的使用：通过设计，将对共享变量的访问降到最低，尽量使用不可变对象和局部变量；<br>（B）使用线程安全的集合类：比如 ConcurrentHashMap、CopyOnWriteArrayList 等，这些类是线程安全的；<br>（C）选择合适的同步工具：比如 synchronized、ReentrantLock 或 java.util.concurrent 包中的工具类；<br>（D）确保所有线程都以相同的加锁顺序获取锁，避免死锁；<br>（E）使用线程池。</p>
+<p>并发编程的最佳实践：<br>（A）减少共享变量的使用：通过设计降低对共享变量的访问，尽量用不可变对象、局部变量或 ThreadLocal 代替；<br>（B）使用线程安全的集合类：比如 ConcurrentHashMap、CopyOnWriteArrayList 等，这些类是线程安全的；<br>（C）选择合适的同步工具：比如 synchronized、ReentrantLock 或 java.util.concurrent 包中的工具类；<br>（D）确保所有线程都以相同的加锁顺序获取锁，避免死锁；<br>（E）使用线程池。</p>
 <p>synchronized 和 Lock 的区别：<br>（A）synchronized：是一个内置的关键字，可用于方法和代码块，不需要显式地获取和释放锁，当线程进入一个 synchronized 方法或代码块时，会自动获得锁，退出时自动释放锁，只支持抢占式的非公平锁，适用于简单的同步场景；<br>（B）Lock：是一个接口，常用的实现类有 ReentrantLock，需要显式地调用 lock() 方法获取锁，通常在 finally 块中调用 unlock() 方法确保锁的释放，还提供了 tryLock()、isLocked() 等方法实现更灵活的控制，支持公平锁和非公平锁，可在创建对象时指定，适用于复杂的同步场景。</p>
 <p><span style="background-color:green;"><font color=white>（7）</font></span>超时处理的优化策略如下：<br>（A）提高任务执行效率：通过优化算法、减少不必要的 I&#x2F;O 操作等方式，缩短执行时间；<br>（B）合理分配资源：确保系统有足够的资源来处理任务（如内存、网络带宽等）；<br>（C）使用缓存：对于频繁访问但不经常变化的数据，可使用缓存来减少时间；<br>（D）异步处理：使用异步编程来处理任务（如 CompletableFuture），减少等待时间；<br>（E）使用更高效的超时检测机制：比如使用 ScheduledThreadPoolExecutor 定期检查状态，取代阻塞式的 get；<br>（F）快速失败：如果可以检测到任务不可能在超时时间内完成，就尽快取消任务并释放资源；<br>（G）友好的错误提示：发生超时时，向用户显示清晰的错误提示和可能的解决方案；<br>（H）重试机制‌：提供重试按钮或自动重试功能，让用户可以方便地重新尝试操作；<br>（I）进度条或加载指示器：在操作进行时显示进度条或加载指示器，让用户知道并非无响应。</p>
 <p><span style="background-color:green;"><font color=white>（8）</font></span>适合存储的数据类型包括：<br>（A）<strong>String</strong>：适合存储任何形式的字符串（如 JSON），存软件版本号、接口执行结果、用户语种（SET &#x2F; GET）；<br>（B）<strong>Hash</strong>：适合存储具有多个属性的对象信息，比如数据字典、用户信息、商品信息（HSET &#x2F; HGETALL）；<br>（C）<strong>List</strong>：适合存储需要有一定顺序的数据集合，比如任务列表、操作日志、消息通知（LPUSH &#x2F; RPOP）；<br>（D）<strong>Set</strong>：适合存储无序不重复的数据集合，如在线用户、标签、类别、抽奖参与人员（SADD &#x2F; SMEMBERS）；<br>（E）<strong>SortedSet</strong>：适合存储有序不重复的数据集合，根据赋予的分数排列顺序，比如排行榜、时间线（ZADD &#x2F; ZRANGE，OTA 时，用收到终端心跳时的当前时间作为分数，每收到一次心跳就更新分数，这样就能根据分数删除心跳超时的终端 ID，以此获取当前在线的终端列表）。</p>
@@ -591,15 +591,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -611,19 +611,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">一个人的电影史</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+                <a href="javascript:void(0)" class="js-tag color4">Git</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
               </li>
              
               <li class="article-tag-list-item">
