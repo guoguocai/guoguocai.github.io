@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-09-16T14:54:21.790Z">
+<meta property="article:modified_time" content="2025-09-17T15:29:41.470Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -311,8 +311,8 @@
 <li>（IV）执行：调用数据库引擎接口，按执行计划执行，数据库引擎通过索引结构定位到目标位置：<br>读操作（FROM-&gt;WHERE-&gt;GROUP BY-&gt;SELECT-&gt;ORDER BY‌）：缓存池中有则直接返回，否则从磁盘加载；<br>写操作（UPDATE&#x2F;INSERT&#x2F;DELETE）：写 undo log（INSERT 不用写 undo log）、更新缓存池、写 redo log。</li>
 <li>（V）读操作组装结果集返回给客户端；写操作提交事务。</li>
 </ul>
-<p>优化措施如下：<br>（A）定位问题：<br>（a）启用慢查询日志：通过设置阈值来记录执行时间过长的 SQL，以快速定位高频慢查询语句‌。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- MySQL示例</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> slow_query_log <span class="operator">=</span> <span class="string">&#x27;ON&#x27;</span>;</span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> long_query_time <span class="operator">=</span> <span class="number">1</span>; <span class="comment">-- 记录超过1秒的查询</span></span><br></pre></td></tr></table></figure>
+<p>优化措施如下：<br>（A）定位问题：<br>（a）启用慢查询日志：通过设置阈值来快速定位执行时间过长的 SQL，然后可使用 mysqldumpslow 命令进行分析。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- MySQL示例</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> slow_query_log <span class="operator">=</span> <span class="string">&#x27;ON&#x27;</span>; <span class="comment">-- 临时开启，重启后失效，永久配置需在 my.cnf 中添加</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> long_query_time <span class="operator">=</span> <span class="number">1</span>; <span class="comment">-- 记录超过1秒的查询</span></span><br></pre></td></tr></table></figure>
 
 <p>（b）使用 EXPLAIN 关键字分析 SQL 语句的执行计划，确保使用到了索引，重点关注：（在工作中，各个公司的数据库版本可能大不相同，会存在一些奇怪的问题，所以强烈建议通过 EXPLAIN 查看一下主要 SQL 的执行计划）</p>
 <ul>
@@ -341,11 +341,12 @@
 </ul>
 <p>（D）配置调优：</p>
 <ul>
-<li>通过 innodb_buffer_pool_size 增大缓存池的大小，提升热点数据访问速度‌（默认大小为 128MB，这在生产环境中通常不足，可设置为系统可用物理内存的 40% ~ 50%）；</li>
+<li>通过 innodb_buffer_pool_size 增大缓存池的大小，提升热点数据访问速度‌（默认大小为 128MB，这在生产环境中通常不足，可设置为系统可用物理内存的 40% ~ 50%），通过 SET GLOBAL 修改参数后需验证效果；</li>
+<li>通过 innodb_buffer_pool_instances 将缓存池划分为多个实例（建议为 CPU 核心数的 1-2 倍），减少锁竞争；</li>
 <li>通过 max_connections 优化连接池配置，避免资源争用‌；</li>
 <li>根据业务场景选择合适的事务隔离级别。</li>
 </ul>
-<p>（E）架构级优化：</p>
+<p>（E）若单机性能已达瓶颈，可考虑进行架构级优化：</p>
 <ul>
 <li><p>读写分离，建立集群，分担主库压力，由一个可读可写的 master 库（以写为主）和多个只读的 slave 库组成，slave 库通过复制 master 库的数据与其保持一致（比如请求 MySQL 的 binlog 日志文件和 position 之后的内容，以获取数据更新事件），如果 master 库挂掉了，还可以将 slave 库升级为新的 master 库继续工作，提高可用性；</p>
 <p>随之而来的问题是需要把代码中的读操作和写操作区分开，区分开了才知道 SQL 是要发给 master 库还是发给 slave 库，而且由于 slave 库有多个，还得决定到底发给哪个 slave 库。为了避免大量修改已有代码，于是新增一个中间层 MySQL Proxy（分层可以隔离变化），它位于应用程序代码和数据库集群之间，由它来处理这些麻烦事。</p>
@@ -357,7 +358,7 @@
 <p>（F）工具辅助：</p>
 <ul>
 <li>使用压测工具 sysbench 模拟高并发场景，验证优化效果；</li>
-<li>集成 Prometheus + Grafana 监控慢查询、锁等待等关键指标‌。</li>
+<li>集成 Prometheus + Grafana 监控 QPS、TPS、慢查询、锁等待等关键指标‌。</li>
 </ul>
 <p><span style="background-color:green;"><font color=white>（14）</font></span>防止被提前读取的方案有：<br>（A）目标文件上传完成后（服务端是不知道何时传完的），再上传一个跟它文件名相同，但后缀不同的临时文件，通过这个临时文件来判断目标文件的上传情况。比如要上传的目标文件是 users.xlsx，上传完成后另外再上传一个文件 users.tmp，这样一来，服务端如果想要读文件 users.xlsx，就要先判断文件 users.tmp 是否存在，若存在，则说明文件 users.xlsx 已经上传完成，可以放心去读了。<br>（B）改目标文件名：比如要上传的目标文件是 data.txt，那么在文件上传完成前，我们可以用脚本将文件名改为类似 data.txt.uploading 这样的格式，等文件上传完成后，再将其改回原来的 data.txt 即可，外部程序仅监控正式文件 data.txt，避免读取未完成文件‌。<br>（C）将上传中的文件存放在临时目录（如 &#x2F;temp），并设置严格的访问权限（如仅上传进程可读写），待文件上传完成后，再将其移动至正式存储目录‌，确保服务端的文件仅在完整上传后才可见‌。</p>
 <p>进一步了解下客户端与服务端通信时，防止消息被中途抓包的方法：<br>（A）强制使用 HTTPS（内部使用了数字签名和数字证书）加密传输数据，防止明文被拦截；并对敏感数据（如账号、交易信息）使用 AES、RSA 等算法进行二次加密，这样即使 HTTPS 被破解也仍然无法解密业务数据；<br>（B）在使用 HTTPS 的基础上，再对数据加一层数字签名和数字证书机制，对身份进行二次验证；<br>（C）自定义私有的二进制协议并增加校验位，替代 JSON &#x2F; XML 等明文协议；<br>（D）将数据包拆分并乱序传输，接收端按预设规则重组，降低抓包工具解析成功率‌；<br>（E）关键算法（如 AES 密钥派生）通过 JNI 调用 C++ 实现，增加逆向分析难度；<br>（F）通过自动化工具模拟抓包攻击，检测协议漏洞并及时修复，必要时更新加密算法和证书‌。</p>
@@ -598,11 +599,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
