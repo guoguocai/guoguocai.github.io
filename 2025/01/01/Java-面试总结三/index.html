@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-09-23T12:59:37.784Z">
+<meta property="article:modified_time" content="2025-09-24T15:44:50.013Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -223,7 +223,7 @@
 <li>单线程池（newSingleThreadExecutor）：仅一个线程，任务队列无界，适用需顺序执行任务的场景。</li>
 <li>定时任务线程池‌（newScheduledThreadPool）：支持执行定时或周期性任务（如心跳检测、周期性数据同步）。</li>
 </ul>
-<p><span style="background-color:green;"><font color=white>（5）</font></span>方案如下：<br>（A）使用外部存储（如 Redis）集中存储 Session 数据，所有服务器统一对外部存储读取或写入；<br>（B）使用文件来存储 Session 数据，不同服务器之间通过共享这些文件来操作 Session 数据；<br>（C）搭建一个 Session 服务器专门管理 Session 数据，其他服务器统一访问这个 Session 服务器。</p>
+<p><span style="background-color:green;"><font color=white>（5）</font></span>方案如下：<br>（A）使用外部存储（如 Redis）集中存储 Session 数据，所有服务器统一对外部存储读取或写入；<br>（B）使用文件来存储 Session 数据，不同服务器之间通过共享这些文件来操作 Session 数据；<br>（C）搭建一个 Session 服务器专门管理 Session，其他服务器统一访问 Session 服务器。</p>
 <p>Session 是一种在服务器端用于跟踪用户会话信息的机制，它的出现主要是为了解决 HTTP 协议无状态的问题，以及为用户提供更好的服务体验。无状态即每个请求都是独立的，服务器不会记住与客户端之前的交互信息，但在实际应用中，用户有时会希望一些状态信息在多个请求之间保持一段时间，如登录状态、购物车内容等。它的用途常有：<br>（A）用户认证‌：通过 Session 可以判断用户是否已经登录，并获取用户的身份信息；<br>（B）状态保持‌：可用于在多个页面请求之间保持用户的状态信息，如购物车内容、表单填写进度等；<br>（C）个性化服务‌：根据 Session 中的用户信息，服务器可以提供个性化服务，如内容推荐、偏好设置等。</p>
 <p>在 Java 开发中，Session、Cookie 和 Token 都是用于管理用户会话和身份验证的重要机制，以下是三者的区别：</p>
 <ul>
@@ -595,7 +595,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -603,7 +603,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
