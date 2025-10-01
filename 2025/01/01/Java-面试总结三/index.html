@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-09-25T14:09:07.960Z">
+<meta property="article:modified_time" content="2025-10-01T11:55:13.427Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -167,7 +167,7 @@
 <p>（5）请给出 3 种多服务器共享 Session 的方案。</p>
 <p>（6）简述线程间如何通信？</p>
 <p>（7）如何优化超时处理机制？</p>
-<p>（8）Redis 适合存储哪些类型的数据？如何处理击穿、雪崩和穿透？</p>
+<p>（8）Redis 适合存储哪些类型的数据？支持事务吗？如何处理击穿、雪崩和穿透？</p>
 <p>（9）简述对 Linux 的熟悉程度。</p>
 <p>（10）如何实现一个 RPC 框架？</p>
 <p>（11）缓存有哪些作用？它的原理是什么？</p>
@@ -246,6 +246,13 @@
 <p>synchronized 和 Lock 的区别：<br>（A）synchronized：是一个内置的关键字，可用于方法和代码块，不需要显式地获取和释放锁，当线程进入一个 synchronized 方法或代码块时，会自动获得锁，退出时自动释放锁，只支持抢占式的非公平锁，适用于简单的同步场景；<br>（B）Lock：是一个接口，常用的实现类有 ReentrantLock，需要显式地调用 lock() 方法获取锁，通常在 finally 块中调用 unlock() 方法确保锁的释放，还提供了 tryLock()、isLocked() 等方法实现更灵活的控制，支持公平锁和非公平锁，可在创建对象时指定，适用于复杂的同步场景。</p>
 <p><span style="background-color:green;"><font color=white>（7）</font></span>超时处理的优化策略如下：<br>（A）提高任务执行效率：通过优化算法、减少不必要的 I&#x2F;O 操作等方式，缩短执行时间；<br>（B）合理分配资源：确保系统有足够的资源来处理任务（如内存、网络带宽等）；<br>（C）使用缓存：对于频繁访问但不经常变化的数据，可使用缓存来减少时间；<br>（D）异步处理：使用异步编程来处理任务（如 CompletableFuture），减少等待时间；<br>（E）使用更高效的超时检测机制：比如使用 ScheduledThreadPoolExecutor 定期检查状态，取代阻塞式的 get；<br>（F）快速失败：如果可以检测到任务不可能在超时时间内完成，就尽快取消任务并释放资源；<br>（G）友好的错误提示：发生超时时，向用户显示清晰的错误提示和可能的解决方案；<br>（H）重试机制‌：提供重试按钮或自动重试功能，让用户可以方便地重新尝试操作；<br>（I）进度条或加载指示器：在操作进行时显示进度条或加载指示器，让用户知道并非无响应。</p>
 <p><span style="background-color:green;"><font color=white>（8）</font></span>适合存储的数据类型包括：<br>（A）<strong>String</strong>：适合存储任何形式的字符串（如 JSON），存软件版本号、接口执行结果、用户语种（SET &#x2F; GET）；<br>（B）<strong>Hash</strong>：适合存储具有多个属性的对象信息，比如数据字典、用户信息、商品信息（HSET &#x2F; HGETALL）；<br>（C）<strong>List</strong>：适合存储需要有一定顺序的数据集合，比如任务列表、操作日志、消息通知（LPUSH &#x2F; RPOP）；<br>（D）<strong>Set</strong>：适合存储无序不重复的数据集合，如在线用户、标签、类别、抽奖参与人员（SADD &#x2F; SMEMBERS）；<br>（E）<strong>SortedSet</strong>：适合存储有序不重复的数据集合，根据赋予的分数排列顺序，比如排行榜、时间线（ZADD &#x2F; ZRANGE，OTA 时，用收到终端心跳时的当前时间作为分数，每收到一次心跳就更新分数，这样就能根据分数删除心跳超时的终端 ID，以此获取当前在线的终端列表）。</p>
+<p>Redis 事务与传统的数据库事务不同，它是一种将多个命令打包执行的机制，通过命令 MULTI、EXEC、DISCARD、WATCH 实现。Redis 事务最大的区别在于，若某条命令执行失败，后续命令仍会继续执行，且不会自动回滚已成功执行的命令‌，设计上认为运行时的错误需业务层处理。</p>
+<ul>
+<li>MULTI：开启事务，后续命令进入队列而非立即执行（语法正确的命令被缓存，语法错误会导致事务终止）。</li>
+<li>EXEC：串行执行队列中的所有命令，按顺序返回结果。</li>
+<li>DISCARD：放弃事务并清空队列。</li>
+<li>WATCH（乐观锁）：在 MULTI 命令执行之前，可以用 WATCH 指定待监控的 Keys，然后在执行 EXEC 之前，如果被监控的 Keys 发生了修改，则 EXEC 将放弃执行该事务队列中的所有命令。因为 Redis 事务无隔离级别概念，在执行期间其他客户端可修改被操作键值，因此 WATCH 乐观锁十分重要，可通过它监控账户余额，确保并发安全。</li>
+</ul>
 <p>（I）击穿指的是<strong>缓存中某个热点数据突然失效</strong>（因过期或被淘汰），导致大量请求直接访问数据库，造成数据库压力骤增‌。比如秒杀商品、热点新闻的缓存突然失效，解决方法：<br>（A）<u>使用一个互斥锁</u>（比如 Redis 的 SETNX 或 Redisson 分布式锁），保证失效时仅允许一个线程访问数据库并重建缓存，其他线程等待锁释放后读取新缓存；<br>（B）<u>不设置 key 的过期时间，在 value 中存一个逻辑过期时间</u>，当后台任务发现数据过期时，再异步更新缓存。</p>
 <ul>
 <li><p><strong>Redis 的 SETNX</strong>（SET if Not eXists）：是 Redis 提供的原子性命令，用于在指定键（Key）不存在时设置，若键已存在，则不执行任何操作。当多个客户端并发调用时，它确保仅有一个客户端能成功设置，是分布式锁的基础，为避免死锁（如客户端崩溃未释放锁），需设置键的过期时间。</p>
@@ -595,7 +602,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -603,7 +610,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -623,11 +630,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
+                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
+                <a href="javascript:void(0)" class="js-tag color5">电脑问题</a>
               </li>
              
               <li class="article-tag-list-item">
