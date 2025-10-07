@@ -16,7 +16,7 @@
 <meta property="og:description" content="记录一些命令的使用场景。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-06-01T14:27:42.000Z">
-<meta property="article:modified_time" content="2025-06-01T15:08:48.925Z">
+<meta property="article:modified_time" content="2025-10-07T13:56:36.283Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="CommandLine">
 <meta name="twitter:card" content="summary">
@@ -182,7 +182,21 @@
 <p>完成后可推送到远程仓库。  </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin 开发分支对应的远程分支</span><br></pre></td></tr></table></figure>
 
-<h3 id="场景-2"><a href="#场景-2" class="headerlink" title="场景 2"></a>场景 2</h3>
+<h3 id="场景-2"><a href="#场景-2" class="headerlink" title="场景 2"></a>场景 2</h3><p>更新代码时报如下错误：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">remote: Support <span class="keyword">for</span> password authentication was removed on August 13, 2021. Please use a personal access token instead.</span><br></pre></td></tr></table></figure>
+
+<p>说明 GitHub 不再支持用密码的方式验证，而是需要创建个人访问令牌。解决办法：</p>
+<p><strong>1、生成令牌</strong></p>
+<p>登录 GitHub 后点击 Settings &#x3D;&gt; 点击左侧的 Developer settings &#x3D;&gt; 点击 Personal access tokens &#x3D;&gt; 点击 Generate new token &#x3D;&gt; 设置 token 信息（过期时间根据实际情况选择，Scopes 选项全部勾上，自己用不想那么多） &#x3D;&gt; 点击 Generate token 生成令牌，一定要记得复制，再进来就看不到了。</p>
+<p><strong>2、应用令牌</strong></p>
+<p>修改当前项目的远程仓库地址：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote set-url origin https://&lt;YOUR_TOKEN&gt;@github.com/&lt;USERNAME&gt;/&lt;REPO_NAME&gt;.git</span><br></pre></td></tr></table></figure>
+
+<p>然后重新执行命令，世界又恢复原样了。</p>
+<p>对于全新版本，克隆的时候也在前面加个令牌就好了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://&lt;YOUR_TOKEN&gt;@github.com/&lt;USERNAME&gt;/&lt;REPO_NAME&gt;.git</span><br></pre></td></tr></table></figure>
+
+
       
 
       
@@ -406,15 +420,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
