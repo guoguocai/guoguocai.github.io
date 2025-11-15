@@ -16,7 +16,7 @@
 <meta property="og:description" content="对技术的好奇心&#x2F;兴趣是一切的基础。没有好奇心，就不愿意追本溯源，追求技术的本质；没有好奇心，就难以静下心来，耐得住寂寞，更难以跨过这个行业所带来的种种挑战；没有好奇心，就不愿意学习新技术，如果没有对技术的敏感度和前瞻性，一直抱着一套技术架构不变，估计很快就会被淘汰。 这些都是我在真实面试时被问到的问题，当时可能因为知识储备不足或其他原因，没能答上来。现在重新整理一下，希望能对以后的面试有">
 <meta property="og:locale">
 <meta property="article:published_time" content="2024-12-26T03:03:24.000Z">
-<meta property="article:modified_time" content="2025-11-13T15:33:03.480Z">
+<meta property="article:modified_time" content="2025-11-15T07:17:32.914Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -239,14 +239,18 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CustomEvent</span> <span class="keyword">extends</span> <span class="title class_">ApplicationEvent</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">CustomEvent</span><span class="params">(Object source, String message)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(source);</span><br><span class="line">        <span class="built_in">this</span>.message = message;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Getter...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <p>（II）<u>加载配置文件</u>（如 application.properties&#x2F;yml），构建 ConfigurableEnvironment 对象存储环境变量；<u>触发环境准备事件</u>（ApplicationEnvironmentPreparedEvent），通知监听器处理环境配置。</p>
-<p>（III）根据应用类型<u>创建应用上下文 ApplicationContext</u>，然后**<u>刷新上下文 refreshContext()</u>**：<br>（III.I）加载主类并<u>组件扫描</u>（通过 @ComponentScan 扫描指定包路径（默认主类所在包）下的 @Controller、@Service、@Repository、@Configuration、@Component 等目标注解，识别并解析所有带这些目标注解的类，将它们注册到容器，然后通过反射自动创建对象（Spring Boot 3.x 版本会在编译期通过 AOT（Ahead-of-Time）预分析 Bean 定义，生成机器码以减少运行时反射开销））；</p>
+<p>（III）根据应用类型<u>创建应用上下文 ApplicationContext</u>，然后**<u>刷新上下文 refreshContext()</u>**：<br>（III.I）加载主类并<u>组件扫描</u>（通过 @ComponentScan 扫描指定包路径（默认主类所在包）下的 @Controller、@Service、@Repository、@Configuration、@Component 等目标注解，识别并解析所有带这些目标注解的类，将它们转为 BeanDefinition 注册到容器，然后通过反射自动创建对象（Spring Boot 3.x 版本会在编译期通过 AOT（Ahead-of-Time）预分析 Bean 定义，生成机器码以减少运行时反射开销））；</p>
 <ul>
 <li>ApplicationContext 是 BeanFactory 的子接口‌，BeanFactory 是 Spring 容器最基础的接口，管理着 Bean 的生命周期（<em>实例化</em>、<em>依赖注入</em>、<em>初始化</em>（包括检测是否实现 xxxAware 接口以注入相关的 xxxAware 实例、是否实现 BeanPostProcessor 接口以进行自定义的前置和后置处理、以及调用 init-method）、<em>使用</em>、<em>销毁</em>），它采用延迟加载，即将实例化行为延迟到首次使用时（如调用 getBean() 方法或依赖注入时）；ApplicationContext 则在 BeanFactory 的基础上提供了更全面的企业级应用支持，比如支持国际化、支持发布&#x2F;监听事件等，它会在容器启动时实例化所有单例的 Bean（Bean 的默认作用域就是 singleton），此时若想延迟加载，可通过添加 @Lazy 注解或将作用域设置为 prototype 实现（@Scope(“prototype”) 使得每次调用 getBean() 时都会创建新实例，且不受 lazy-init&#x3D;”false” 的影响，这种特性能使 Bean 线程安全，单例 Bean 只有在无可变状态时才是线程安全的）。</li>
 <li>注解 @Bean 常与 @Configuration 配合使用，作用在类的方法上，用于将方法返回的对象实例注册到 IOC 容器中‌，使其成为可被注入的 Bean，方法同样在刷新阶段被调用（只执行一次，方法中的实例化逻辑由开发者手动编写，适用于第三方库的类（如 RestTemplate）或需要自定义初始化逻辑的类（如复杂参数构造）），另外，通过 @EnableAsync + @Async 可将特定方法设置为异步执行。</li>
 </ul>
-<p>（III.II）<u>自动装配</u> META-INF&#x2F;spring&#x2F;org.springframework.boot.autoconfigure.AutoConfiguration.imports 文件中<u>预定义的配置类</u>（通过 @EnableAutoConfiguration，路径和文件名是 Spring Boot 3.x 版本的最新规范），通过条件系列注解（如 @Conditional）筛选出有效或符合特定条件的配置类，避免加载无关或冲突的配置，随后将筛选出的配置类转为 BeanDefinition 注册到容器并实例化，完成依赖注入‌（启动器就是用这种方式加载，并且此时会通过 spring-boot-starter-web 自动引入 Tomcat 和 Spring MVC 组件）；</p>
+<p>（III.II）<u>自动装配</u> src&#x2F;main&#x2F;resources&#x2F;META-INF&#x2F;spring&#x2F;org.springframework.boot.autoconfigure.AutoConfiguration.imports 文件中<u>预定义的配置类</u>（@EnableAutoConfiguration，采用 SPI 动态发现和加载组件的思想，路径和文件名是 Spring Boot 3.x 版本的最新规范），结合条件系列注解（如 @Conditional）筛选出有效或符合特定条件的配置类，避免加载无关或冲突的配置，随后将筛选出的配置类同样注册到容器并实例化，完成依赖注入‌（starter 就是用这种方式加载，并且此时会通过 spring-boot-starter-web 自动引入 Tomcat 和 Spring MVC 组件）；</p>
 <ul>
-<li>如何自定义一个启动器（starter）？<br>① 创建 Maven 项目结构，需要包含依赖 spring-boot-starter 和 spring-boot-autoconfigure，自定义项目的命名规范为：{组织标识}-spring-boot-starter-{功能描述（可选）}，比如 mybatis-spring-boot-starter 或 acme-spring-boot-starter-caching，非官方组件‌禁止使用 spring-boot-starter- 作为前缀。<br>② 实现具体业务逻辑，使用 @Configuration 配置类，使用 @Conditional、@ConditionalOnClass 等条件注解控制 Bean 的创建，使用 @ConfigurationProperties 绑定外部配置。<br>③ 在 META-INF&#x2F;spring&#x2F;org.springframework.boot.autoconfigure.AutoConfiguration.imports 文件中注册配置类。</li>
+<li><p>如何自定义一个启动器（starter）？<br>① 创建 Maven 项目结构，需要包含依赖 spring-boot-starter 和 spring-boot-autoconfigure，自定义项目的命名规范为：{组织标识}-spring-boot-starter-{功能描述（可选）}，比如 mybatis-spring-boot-starter 或 acme-spring-boot-starter-caching，非官方组件‌禁止使用 spring-boot-starter- 作为前缀。<br>② 实现具体业务逻辑，使用 @Configuration 配置类，使用 @Conditional、@ConditionalOnClass 等条件注解控制 Bean 的创建，使用 @ConfigurationProperties 绑定外部配置。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ConditionalOnClass(name = &quot;org.eclipse.paho.client.mqttv3.MqttClient&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MqttConfiguration</span> &#123;</span><br><span class="line">    <span class="comment">// 配置类内容</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>③ 在 src&#x2F;main&#x2F;resources&#x2F;META-INF&#x2F;spring&#x2F;org.springframework.boot.autoconfigure.AutoConfiguration.imports 文件中以全限定类名的形式声明需要自动装配的配置类，如 「com.guoguocai.core.config.MqttConfiguration」（在多模块项目中，当父模块启动时，会自动扫描所有依赖的子模块 jar 包中的该文件，并加载其中声明的配置类，实现跨模块的配置共享）。</p>
+</li>
 </ul>
 <p>（III.III）<u>启动内嵌 Web 服务器</u>（如 Tomcat），创建端口监听线程。</p>
 <p>（IV）执行所有 CommandLineRunner 和 ApplicationRunner 接口的实现类；触发启动完成事件（ApplicationReadyEvent），标志应用完全启动。</p>
@@ -484,15 +488,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -508,11 +512,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Computer</a>
+                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
+                <a href="javascript:void(0)" class="js-tag color4">Computer</a>
               </li>
              
               <li class="article-tag-list-item">
