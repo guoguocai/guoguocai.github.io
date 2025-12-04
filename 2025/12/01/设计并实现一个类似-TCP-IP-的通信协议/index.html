@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>设计并实现一个类似 TCP/IP 的通信协议 | GUOGUOCAI&#39;S BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="以下是一个基本的设计思路：">
+  <meta name="description" content="先介绍一下网络通信的过程：通过 HTTP 发出请求，HTTP 的报文被打包在 TCP 的报文段中，然后又被放到 IP 层的数据报中，最后形成链路层的帧，通过网卡发出去。这个过程就是比 OSI 七层模型更符合实际情况的 TCP&#x2F;IP 五层模型：应用层 &lt;- 传输层 &lt;- 网络层 &lt;- 链路层 &lt;- 物理层。分层的好处是能够隔离变化，在接口不变的情况下，某一层的变化只">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计并实现一个类似 TCP&#x2F;IP 的通信协议">
 <meta property="og:url" content="http://yoursite.com/2025/12/01/%E8%AE%BE%E8%AE%A1%E5%B9%B6%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%B1%BB%E4%BC%BC-TCP-IP-%E7%9A%84%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/index.html">
 <meta property="og:site_name" content="GUOGUOCAI&#39;S BLOG">
-<meta property="og:description" content="以下是一个基本的设计思路：">
+<meta property="og:description" content="先介绍一下网络通信的过程：通过 HTTP 发出请求，HTTP 的报文被打包在 TCP 的报文段中，然后又被放到 IP 层的数据报中，最后形成链路层的帧，通过网卡发出去。这个过程就是比 OSI 七层模型更符合实际情况的 TCP&#x2F;IP 五层模型：应用层 &lt;- 传输层 &lt;- 网络层 &lt;- 链路层 &lt;- 物理层。分层的好处是能够隔离变化，在接口不变的情况下，某一层的变化只">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-12-01T13:50:49.000Z">
-<meta property="article:modified_time" content="2025-12-02T15:17:55.786Z">
+<meta property="article:modified_time" content="2025-12-04T15:29:53.931Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -153,9 +153,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>以下是一个基本的设计思路：</p>
+        <p>先介绍一下网络通信的过程：通过 <u>HTTP 发出请求</u>，HTTP 的报文被打包在 <u>TCP 的报文段</u>中，然后又被放到 <u>IP 层的数据报</u>中，最后形成<u>链路层的帧</u>，通过<u>网卡</u>发出去。这个过程就是比 OSI 七层模型更符合实际情况的 TCP&#x2F;IP 五层模型：<strong>应用层 &lt;- 传输层 &lt;- 网络层 &lt;- 链路层 &lt;- 物理层</strong>。分层的好处是能够隔离变化，在接口不变的情况下，某一层的变化只局限于本层次内。</p>
 <span id="more"></span>
 
+<p>以下是一个基本的设计思路：</p>
 <p>（A）消息头：<br>协议版本：标识通信双方所使用的协议版本；<br>消息类型：标识消息的类型，如请求、响应、心跳等；<br>消息长度：整个消息的长度，包括消息头和消息体；<br>校验和：防止消息被篡改或损坏‌，并非加密技术，一般是对整个消息进行一些算法处理后得到，比如 IP&#x2F;TCP&#x2F;UDP 生成校验和‌的规则为：基于反码求和，接收方用相同规则生成后与发送方提供的对比，若不一致，则消息可能已损坏；<br>时间戳：记录时间。</p>
 <p>（B）消息体：<br>根据消息类型，消息体包含不同的字段，例如：<br>请求消息：设备 ID、请求的操作码、参数等；<br>响应消息：操作结果、状态码、数据等。</p>
 <p>（C）消息尾（可选）：<br>包含一些额外信息，如签名。</p>

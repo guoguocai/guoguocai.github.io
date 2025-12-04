@@ -150,7 +150,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>以下是一个基本的设计思路：</p>
+        <p>先介绍一下网络通信的过程：通过 <u>HTTP 发出请求</u>，HTTP 的报文被打包在 <u>TCP 的报文段</u>中，然后又被放到 <u>IP 层的数据报</u>中，最后形成<u>链路层的帧</u>，通过<u>网卡</u>发出去。这个过程就是比 OSI 七层模型更符合实际情况的 TCP&#x2F;IP 五层模型：<strong>应用层 &lt;- 传输层 &lt;- 网络层 &lt;- 链路层 &lt;- 物理层</strong>。分层的好处是能够隔离变化，在接口不变的情况下，某一层的变化只局限于本层次内。</p>
         
           <a class="article-more-a" href="/2025/12/01/%E8%AE%BE%E8%AE%A1%E5%B9%B6%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%B1%BB%E4%BC%BC-TCP-IP-%E7%9A%84%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/#more">more >></a>
         
