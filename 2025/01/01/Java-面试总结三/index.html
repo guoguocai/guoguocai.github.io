@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2025-12-18T15:43:41.760Z">
+<meta property="article:modified_time" content="2025-12-19T14:56:38.948Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -160,22 +160,24 @@
 <p>老规矩，先思考，后看解答。</p>
 <span id="more"></span>
 
-<h3 id="问答题"><a href="#问答题" class="headerlink" title="问答题"></a>问答题</h3><p><a href="#10">（1）</a>详细描述用户在浏览器输入 <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 到用户看见网页，中间的技术处理细节。</p>
-<p><a href="#20">（2）</a>在一台 1 核 1G 的服务器中运行 Java 程序，可以使用哪些 JVM 参数调优，为什么？</p>
-<p><a href="#30">（3）</a>NIO 解决了什么问题？什么原理？并简述一个包含 NIO 技术的通信框架的调优技巧。</p>
-<p><a href="#40">（4）</a>线程池的配置项有哪些？各有什么作用？</p>
-<p><a href="#50">（5）</a>请给出 3 种多服务器共享 Session 的方案。</p>
-<p><a href="#60">（6）</a>简述线程间如何通信？</p>
-<p><a href="#70">（7）</a>如何优化超时处理机制？</p>
-<p><a href="#80">（8）</a>Redis 适合存储哪些类型的数据？支持事务吗？如何处理击穿、雪崩和穿透？</p>
-<p><a href="#90">（9）</a>简述对 Linux 的熟悉程度。</p>
-<p><a href="#100">（10）</a>如何实现一个 RPC 框架？</p>
-<p><a href="#110">（11）</a>缓存有哪些作用？它的原理是什么？</p>
-<p><a href="#120">（12）</a>从请求一个 Spring Boot 的 API 接口到收到响应，中间经历了哪些过程？</p>
-<p><a href="#130">（13）</a>SQL 语句执行很慢，如何处理？</p>
-<p><a href="#140">（14）</a>文件上传需要时间，如何防止文件在上传还未完成时被提前读取？</p>
-<h3 id="参考答案"><a href="#参考答案" class="headerlink" title="参考答案"></a>参考答案</h3><p><span id="10" style="background-color:green;"><font color=white>（1）</font></span>技术处理细节如下：<br>（A）浏览器处理输入：自动在网址上添加默认的协议和端口号‌，并在本地查找是否有这个网址的缓存版本；<br>（B）DNS 解析：查询域名对应的 IP 地址，依次在本地 Host 文件、本地域名服务器、根域名服务器中查找；<br>（C）建立连接：通过 TCP 三次握手与服务器建立连接；<br>（D）发送 HTTP 请求：若使用 HTTPS 协议，还会进行 TLS 握手，建立加密信道‌，然后设置请求头发出请求；<br>（E）服务器处理请求：根据请求解析出受访的主机、应用、资源，封装并返回 HTTP 响应报文；<br>（F）浏览器解析响应和渲染页面：如果响应头中的 Content-Type 是 text&#x2F;html，则进行 HTML 解析，否则做其他处理‌；在渲染页面时，如果遇到外部资源链接（如图片、JS 文件等），则会进一步请求这些资源（在 HTTP&#x2F;2 中，服务端可主动推送 CSS&#x2F;JS 等关联资源）。</p>
-<p><span id="20" style="background-color:green;"><font color=white>（2）</font></span>可使用以下 JVM 参数进行调优：<br>（A）‌堆内存设置：</p>
+<h3 id="问答题"><a href="#问答题" class="headerlink" title="问答题"></a>问答题</h3><p><a href="#question10">（1）</a>详细描述用户在浏览器输入 <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 到用户看见网页，中间的技术处理细节。</p>
+<p><a href="#question20">（2）</a>在一台 1 核 1G 的服务器中运行 Java 程序，可以使用哪些 JVM 参数调优，为什么？</p>
+<p><a href="#question30">（3）</a>NIO 解决了什么问题？什么原理？并简述一个包含 NIO 技术的通信框架的调优技巧。</p>
+<p><a href="#question40">（4）</a>线程池的配置项有哪些？各有什么作用？</p>
+<p><a href="#question50">（5）</a>请给出 3 种多服务器共享 Session 的方案。</p>
+<p><a href="#question60">（6）</a>简述线程间如何通信？</p>
+<p><a href="#question70">（7）</a>如何优化超时处理机制？</p>
+<p><a href="#question80">（8）</a>Redis 适合存储哪些类型的数据？支持事务吗？如何处理击穿、雪崩和穿透？</p>
+<p><a href="#question90">（9）</a>简述对 Linux 的熟悉程度。</p>
+<p><a href="#question100">（10）</a>如何实现一个 RPC 框架？</p>
+<p><a href="#question110">（11）</a>缓存有哪些作用？它的原理是什么？</p>
+<p><a href="#question120">（12）</a>从请求一个 Spring Boot 的 API 接口到收到响应，中间经历了哪些过程？</p>
+<p><a href="#question130">（13）</a>SQL 语句执行很慢，如何处理？</p>
+<p><a href="#question140">（14）</a>文件上传需要时间，如何防止文件在上传还未完成时被提前读取？</p>
+<h3 id="参考答案"><a href="#参考答案" class="headerlink" title="参考答案"></a>参考答案</h3><p><span id="question10"></span></p>
+<p><span style="background-color:green;"><font color=white>（1）</font></span>技术处理细节如下：<br>（A）浏览器处理输入：自动在网址上添加默认的协议和端口号‌，并在本地查找是否有这个网址的缓存版本；<br>（B）DNS 解析：查询域名对应的 IP 地址，依次在本地 Host 文件、本地域名服务器、根域名服务器中查找；<br>（C）建立连接：通过 TCP 三次握手与服务器建立连接；<br>（D）发送 HTTP 请求：若使用 HTTPS 协议，还会进行 TLS 握手，建立加密信道‌，然后设置请求头发出请求；<br>（E）服务器处理请求：根据请求解析出受访的主机、应用、资源，封装并返回 HTTP 响应报文；<br>（F）浏览器解析响应和渲染页面：如果响应头中的 Content-Type 是 text&#x2F;html，则进行 HTML 解析，否则做其他处理‌；在渲染页面时，如果遇到外部资源链接（如图片、JS 文件等），则会进一步请求这些资源（在 HTTP&#x2F;2 中，服务端可主动推送 CSS&#x2F;JS 等关联资源）。</p>
+<p><span id="question20"></span></p>
+<p><span style="background-color:green;"><font color=white>（2）</font></span>可使用以下 JVM 参数进行调优：<br>（A）‌堆内存设置：</p>
 <ul>
 <li><strong>-Xms</strong>：设置初始堆空间。默认为物理内存的 1&#x2F;64，由于服务器内存只有 1G，建议设置为较小值，建议将初始堆空间（-Xms）和最大堆空间（-Xmx）设置为相同的值，以避免堆内存的动态扩展和收缩带来的性能开销。</li>
 <li><strong>-Xmx</strong>：设置最大堆空间。默认为物理内存的 1&#x2F;4，同样考虑到内存受限和性能开销，应设置一个合适的值，且最好与 -Xms 设置的值相同，如 -Xmx256m 或 -Xmx512m，留出一定空间供操作系统和其他程序使用‌，确保服务器的稳定。</li>
@@ -195,7 +197,8 @@
 <li><strong>-XX:+PrintGCDateStamps</strong>：在 GC 日志中添加时间戳。可以更准确地分析 GC 事件的时间分布。</li>
 <li><strong>-Xloggc:</strong>：将 GC 日志输出到指定文件。便于收集和分析 GC 数据，如 -Xloggc:log&#x2F;gc.log。</li>
 </ul>
-<p><span id="30" style="background-color:green;"><font color=white>（3）</font></span>NIO 主要解决了在高并发、高性能需求下，使用传统阻塞 I&#x2F;O 模型所带来的资源消耗大、效率低下等问题。传统的阻塞 I&#x2F;O 一个线程管理一个 Socket，而 NIO 只用一个或少数几个线程就能管理多个网络连接，特别适用于需要同时处理大量并发连接或大量数据传输的场景，比如网络服务器、文件传输系统等。它的<strong>原理是基于事件驱动的 I&#x2F;O 模型，使用多路复用器（Selector）和事件通知机制来实现非阻塞 I&#x2F;O 操作</strong>。核心概念包括：</p>
+<p><span id="question30"></span></p>
+<p><span style="background-color:green;"><font color=white>（3）</font></span>NIO 主要解决了在高并发、高性能需求下，使用传统阻塞 I&#x2F;O 模型所带来的资源消耗大、效率低下等问题。传统的阻塞 I&#x2F;O 一个线程管理一个 Socket，而 NIO 只用一个或少数几个线程就能管理多个网络连接，特别适用于需要同时处理大量并发连接或大量数据传输的场景，比如网络服务器、文件传输系统等。它的<strong>原理是基于事件驱动的 I&#x2F;O 模型，使用多路复用器（Selector）和事件通知机制来实现非阻塞 I&#x2F;O 操作</strong>。核心概念包括：</p>
 <ul>
 <li>Selector：多路复用器，可以注册多个 Channel，并监听这些通道上的特定事件，比如读取数据、写入数据等；</li>
 <li>Channel：通道，数据传输的载体，比如文件通道、网络连接通道等，它是双向的，既可以读取也可以写入；</li>
@@ -212,7 +215,8 @@
 <li>所有事情做完后释放资源，关闭通道和多路复用器。</li>
 </ul>
 <p>以 <strong>Netty</strong> 为例，它的调优技巧有：<br>（A）线程池：根据应用负载和硬件配置，设置合适的线程池大小，如核心线程数、最大线程数；BossGroup 通常设置为单线程，负责处理连接请求；WorkerGroup 负责处理 I&#x2F;O 操作，可以设置为 CPU 核心数 × 2；使用独立的线程池 EventExecutorGroup 异步执行耗时操作；<br>（B）内存：启用 Netty 的内存池功能，复用内存中的对象，减少内存分配和回收的开销；<br>（C）协议：根据应用场景选择合适的通信协议（如 UDP、WebSocket、TCP 等），对于 TCP 协议，将 TCP_NODELAY 设置为 true，降低延迟；并选择更加高效的序列化框架，比如用 Protobuf 替代 JSON；<br>（D）I&#x2F;O 模型：根据应用场景和操作系统选择合适的 I&#x2F;O 模型，比如在 Linux 系统上用 epoll 会更加高效；<br>（E）编解码器：选择合适的编解码器，比如使用 Netty 自带的工具处理粘包和拆包： LengthFieldBasedFrameDecoder（默认，基于消息头中的长度字段，灵活高效）、DelimiterBasedFrameDecoder（基于特定分隔符，兼容性强，适用于文本协议）；<br>（F）日志：调整日志级别来减少不必要的日志输出，提升性能；<br>（G）使用压缩：大数据量使用 Gzip 压缩，减少数据传输量，提高 I&#x2F;O 性能。</p>
-<p><span id="40" style="background-color:green;"><font color=white>（4）</font></span>线程池通过复用线程，避免频繁创建和销毁线程，减少系统资源的浪费。它的配置项及作用有：<br>（A）核心线程数：<u>始终保持存活的线程数量</u>，即使线程池处于空闲状态，核心线程也不会被回收；<br>（B）最大线程数：<u>允许创建的最大线程数量</u>，任务队列满了之后会创建新的非核心线程，直至达到该值；<br>（C）非核心线程存活时间：<u>非核心线程在空闲时能存活的最长时间</u>，超时后会被回收，与单位（unit）配合使用；<br>（D）任务队列：<u>当任务数量超出核心线程数时，选择合适的队列类型来存放待执行的任务</u>，比如有界队列（ArrayBlockingQueue）、无界队列（LinkedBlockingQueue）或同步队列（SynchronousQueue，是一个不存储任何元素的阻塞队列，更像一种信号机制，比如添加元素时，如果没有线程在等待从这个队列中移除元素，那么添加操作将会阻塞，直到有线程从队列中移除元素，反之亦然）；<br>（E）线程工厂：用于<u>自定义线程创建逻辑</u>，可以设置线程的名称、优先级、是否是守护线程‌等属性‌（守护线程在后台运行，通过调用 setDaemon(true) 设置，其作用是为其他线程提供服务，如垃圾回收、日志记录、监控等，当所有的非守护线程结束时，守护线程会自动结束）；<br>（F）拒绝策略：<u>当任务队列已满且线程池达到最大线程数时，选择合适的策略来处理新提交的任务</u>，比如抛出异常（AbortPolicy，默认策略）、直接丢弃任务（DiscardPolicy，静默丢弃，不抛异常）、由提交任务的线程处理任务（CallerRunsPolicy‌）或通过实现 RejectedExecutionHandler 接口来自定义策略。</p>
+<p><span id="question40"></span></p>
+<p><span style="background-color:green;"><font color=white>（4）</font></span>线程池通过复用线程，避免频繁创建和销毁线程，减少系统资源的浪费。它的配置项及作用有：<br>（A）核心线程数：<u>始终保持存活的线程数量</u>，即使线程池处于空闲状态，核心线程也不会被回收；<br>（B）最大线程数：<u>允许创建的最大线程数量</u>，任务队列满了之后会创建新的非核心线程，直至达到该值；<br>（C）非核心线程存活时间：<u>非核心线程在空闲时能存活的最长时间</u>，超时后会被回收，与单位（unit）配合使用；<br>（D）任务队列：<u>当任务数量超出核心线程数时，选择合适的队列类型来存放待执行的任务</u>，比如有界队列（ArrayBlockingQueue）、无界队列（LinkedBlockingQueue）或同步队列（SynchronousQueue，是一个不存储任何元素的阻塞队列，更像一种信号机制，比如添加元素时，如果没有线程在等待从这个队列中移除元素，那么添加操作将会阻塞，直到有线程从队列中移除元素，反之亦然）；<br>（E）线程工厂：用于<u>自定义线程创建逻辑</u>，可以设置线程的名称、优先级、是否是守护线程‌等属性‌（守护线程在后台运行，通过调用 setDaemon(true) 设置，其作用是为其他线程提供服务，如垃圾回收、日志记录、监控等，当所有的非守护线程结束时，守护线程会自动结束）；<br>（F）拒绝策略：<u>当任务队列已满且线程池达到最大线程数时，选择合适的策略来处理新提交的任务</u>，比如抛出异常（AbortPolicy，默认策略）、直接丢弃任务（DiscardPolicy，静默丢弃，不抛异常）、由提交任务的线程处理任务（CallerRunsPolicy‌）或通过实现 RejectedExecutionHandler 接口来自定义策略。</p>
 <p>应当避免过度配置，线程数过多会导致频繁上下文切换，降低性能。对于 CPU 密集型任务而言（如计算、压缩、加密），任务主要消耗 CPU 资源，建议使用有界队列，它的<em>核心线程数</em>可设置为：<em>CPU 核心数 + 1</em>，加 1 是用于应对线程因短暂阻塞导致的 CPU 空闲，避免资源浪费。对于 IO 密集型任务而言（如网络请求、数据库查询），任务大部分时间都在等待 IO 操作，CPU 利用率低，增加最大线程数可让更多线程在 IO 等待期间处理其他事情，它的<em>最大线程数</em>可设置为：<em>CPU 核心数 × （1 + 线程等待时间 &#x2F; 线程计算时间）</em>，通常为 2N ~ 10N（N 为 CPU 核心数），任务执行时间和等待时间可通过 APM 工具统计（如 Micrometer）。最大线程数包含核心线程数。</p>
 <p>创建线程池主要有两种方式：<strong>ThreadPoolExecutor 构造函数（推荐）</strong>和 Executors 工具类（快速但需谨慎使用）。优先使用 ThreadPoolExecutor 来自定义配置参数，以实现粒度更细的控制，用 Executors 工具类创建的线程池可能因默认参数导致资源耗尽（比如使用无界队列导致 OOM）。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ExecutorService</span> <span class="variable">executor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(</span><br><span class="line">    <span class="number">5</span>, <span class="comment">// 核心线程数</span></span><br><span class="line">    <span class="number">16</span>, <span class="comment">// 最大线程数</span></span><br><span class="line">    <span class="number">60L</span>, TimeUnit.SECONDS, <span class="comment">// 非核心线程存活时间</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">100</span>), <span class="comment">// 任务队列</span></span><br><span class="line">    Executors.defaultThreadFactory(), <span class="comment">// 线程工厂</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>.AbortPolicy() <span class="comment">// 拒绝策略</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
@@ -223,7 +227,8 @@
 <li>单线程池（newSingleThreadExecutor）：仅一个线程，任务队列无界，适用需顺序执行任务的场景。</li>
 <li>定时任务线程池‌（newScheduledThreadPool）：支持执行定时或周期性任务（如心跳检测、周期性数据同步）。</li>
 </ul>
-<p><span id="50" style="background-color:green;"><font color=white>（5）</font></span>方案如下：<br>（A）使用外部存储（如 Redis）集中存储 Session 数据，所有服务器统一对外部存储读取或写入；<br>（B）使用文件来存储 Session 数据，不同服务器之间通过共享这些文件来操作 Session 数据；<br>（C）搭建一个 Session 服务器专门管理 Session，其他服务器统一访问 Session 服务器。</p>
+<p><span id="question50"></span></p>
+<p><span style="background-color:green;"><font color=white>（5）</font></span>方案如下：<br>（A）使用外部存储（如 Redis）集中存储 Session 数据，所有服务器统一对外部存储读取或写入；<br>（B）使用文件来存储 Session 数据，不同服务器之间通过共享这些文件来操作 Session 数据；<br>（C）搭建一个 Session 服务器专门管理 Session，其他服务器统一访问 Session 服务器。</p>
 <p>Session 是一种在服务器端用于跟踪用户会话信息的机制，它的出现主要是为了解决 HTTP 协议无状态的问题，以及为用户提供更好的服务体验。无状态即每个请求都是独立的，服务器不会记住与客户端之前的交互信息，但在实际应用中，用户有时会希望一些状态信息在多个请求之间保持一段时间，如登录状态、购物车内容等。它的用途常有：<br>（A）用户认证‌：通过 Session 可以判断用户是否已经登录，并获取用户的身份信息；<br>（B）状态保持‌：可用于在多个页面请求之间保持用户的状态信息，如购物车内容、表单填写进度等；<br>（C）个性化服务‌：根据 Session 中的用户信息，服务器可以提供个性化服务，如内容推荐、偏好设置等。</p>
 <p>在 Java 开发中，Session、Cookie 和 Token 都是用于管理用户会话和身份验证的重要机制，以下是三者的区别：</p>
 <ul>
@@ -239,13 +244,16 @@
 <li><p><strong>授权码</strong>：为了读取必要数据，很多第三方应用支持用其他平台的账号登录，比如用 QQ、微信的账号登，此时为保障原始密码安全，在使用这些第三方应用时不会直接输账号密码，而是<u>重定向到目标平台的官方认证中心</u>去登录和授权，成功后<u>返回一个授权码</u>给第三方（在前端&#x2F;浏览器得到，由于授权码会跟第三方自己在官方认证中心注册的 app_id、app_secret 关联，所以泄露也没事），第三方再<u>用这个授权码去申请 token</u>（在后端调用接口得到，防止泄漏），有了 token 后每次请求都带上，就能正常访问了。</p>
 </li>
 </ul>
-<p><span id="60" style="background-color:green;"><font color=white>（6）</font></span>线程间通信指的是在多线程编程中，不同线程之间如何交换信息或协调执行。常见的实现方式有：<br>（A）共享内存：多个线程可访问同一块内存，通过读写这块内存实现数据交换，如全局变量，但要注意同步问题；<br>（B）消息传递：线程之间通过发送和接收消息来进行通信，比如使用消息队列；<br>（C）条件变量‌：通过条件变量实现线程间的等待和唤醒，适用于线程需要等待某个条件成立才能继续执行的场景；<br>（D）信号量：这是一种用于线程同步和互斥的机制，它维护一个计数器（就是一个整数），表示可用资源的数量，线程通过等待（P 操作）和释放（V 操作）信号量来实现同步，用于控制同时访问共享资源的线程数量；<br>（E）事件：线程需要等待某个事件（如 I&#x2F;O 操作完成）才能继续执行。</p>
+<p><span id="question60"></span></p>
+<p><span style="background-color:green;"><font color=white>（6）</font></span>线程间通信指的是在多线程编程中，不同线程之间如何交换信息或协调执行。常见的实现方式有：<br>（A）共享内存：多个线程可访问同一块内存，通过读写这块内存实现数据交换，如全局变量，但要注意同步问题；<br>（B）消息传递：线程之间通过发送和接收消息来进行通信，比如使用消息队列；<br>（C）条件变量‌：通过条件变量实现线程间的等待和唤醒，适用于线程需要等待某个条件成立才能继续执行的场景；<br>（D）信号量：这是一种用于线程同步和互斥的机制，它维护一个计数器（就是一个整数），表示可用资源的数量，线程通过等待（P 操作）和释放（V 操作）信号量来实现同步，用于控制同时访问共享资源的线程数量；<br>（E）事件：线程需要等待某个事件（如 I&#x2F;O 操作完成）才能继续执行。</p>
 <p>在 Java 中的实现：<br>（A）volatile：保证共享变量的可见性和有序性（配合 synchronized 或 ReentrantLock 使用，保证原子性）；<br>（B）BlockingQueue：提供了线程安全的队列实现，可用于在生产者和消费者线程之间传递数据；<br>（C）wait 和 notify&#x2F;notifyAll：由 Object 类提供，用于线程间的等待和通知，必须与 synchronized 配合使用；<br>（D）Condition：提供了比 wait &#x2F; notify 更为灵活的通信机制，通常与 ReentrantLock 配合使用；<br>（E）Semaphore：在 java.util.concurrent 包中，通过 acquire 方法获取许可，通过 release 方法释放许可；<br>（F）CountDownLatch：允许一个或多个线程等待其他线程完成操作（老师必须要等到所有学生交完试卷才能走）；<br>（G）CyclicBarrier：允许一组线程互相等待，直到所有线程都到达某个屏障点（比如，多人游戏必须都要加载到 100% 才能开始）。</p>
 <p>其中 ReentrantLock、Semaphore、CountDownLatch、CyclicBarrier、另外还有 FutureTask 等都是基于 AQS 实现的，AQS（AbstractQueuedSynchronizer，抽象队列同步器）是 JUC 的基石，它的核心原理包括：<br>（A）通过一个 <strong>volatile int state</strong> 变量表示资源占用状态，并提供了 getState()、setState()、compareAndSetState() 等操作方法。它的具体语义由子类定义，比如在 ReentrantLock 中表示锁的重入次数，在 Semaphore 中表示剩余许可证数量，在 CountDownLatch 中表示未完成的计数等。<br>（B）通过一个 <strong>FIFO 的双向链表</strong>（CLH 队列的变体，原本是单向链表）存放等待获取资源的线程，队列中的每个节点是一个 Node 对象，包含节点状态、前驱和后继节点指针、关联的线程引用等。线程在占用资源成功时继续执行，失败时则被封装为 Node 放入队列尾部，并在适当时机唤醒（类似银行业务办理窗口都满了，后面来的只能去等候区排队等着叫号）。<br>AQS 是一个抽象类，采用了模板方法模式，将具体的资源获取 &#x2F; 释放逻辑留给子类实现，主要的模板方法有 tryAcquire &#x2F; tryRelease（独占模式）和 tryAcquireShared &#x2F; tryReleaseShared（共享模式）。独占模式和共享模式是 AQS 的两种工作流程，独占模式每次仅允许单个线程获取资源（如 ReentrantLock），共享模式则允许多个线程同时获取资源（如 Semaphore）。</p>
 <p>并发编程的最佳实践：<br>（A）减少共享变量的使用：通过设计降低对共享变量的访问，尽量用不可变对象、局部变量或 ThreadLocal 代替；<br>（B）使用线程安全的集合类：比如 ConcurrentHashMap、CopyOnWriteArrayList 等，这些类是线程安全的；<br>（C）选择合适的同步工具：比如 synchronized、ReentrantLock 或 java.util.concurrent 包中的工具类；<br>（D）确保所有线程都以相同的加锁顺序获取锁，避免死锁；<br>（E）使用线程池。</p>
 <p>synchronized 和 Lock 的区别：<br>（A）synchronized：是一个内置的关键字，可用于方法和代码块，不需要显式地获取和释放锁，当线程进入一个 synchronized 方法或代码块时，会自动获得锁，退出时自动释放锁，只支持抢占式的非公平锁，适用于简单的同步场景。<br>（B）Lock：是一个接口，常用的实现类有 ReentrantLock，需要显式地调用 lock() 方法获取锁，通常在 finally 块中调用 unlock() 方法确保锁的释放，还提供了 tryLock()、isLocked() 等方法实现更灵活的控制，支持公平锁和非公平锁，可在创建对象时指定，适用于复杂的同步场景。</p>
-<p><span id="70" style="background-color:green;"><font color=white>（7）</font></span>超时处理的优化策略如下：<br>（A）提高任务执行效率：通过优化算法、减少不必要的 I&#x2F;O 操作等方式，缩短执行时间；<br>（B）合理分配资源：确保系统有足够的资源来处理任务（如内存、网络带宽等）；<br>（C）使用缓存：对于频繁访问但不经常变化的数据，可使用缓存来减少时间；<br>（D）异步处理：使用异步编程来处理任务（如 CompletableFuture），减少等待时间；<br>（E）使用更高效的超时检测机制：如使用 ScheduledThreadPoolExecutor 定期检查状态，取代阻塞式的 get；<br>（F）快速失败：如果可以检测到任务不可能在超时时间内完成，就尽快取消任务并释放资源；<br>（G）友好的错误提示：发生超时时，向用户显示清晰的错误提示和可能的解决方案；<br>（H）重试机制‌：提供重试按钮或自动重试功能，让用户可以方便地重新尝试操作；<br>（I）进度条或加载指示器：在操作进行时显示进度条或加载指示器，让用户知道并非无响应。</p>
-<p><span id="80" style="background-color:green;"><font color=white>（8）</font></span>适合存储的数据类型包括：<br>（A）<strong>String</strong>：适合存储任何形式的字符串（如 JSON），存软件版本号、接口执行结果、用户语种（SET &#x2F; GET）；<br>（B）<strong>Hash</strong>：适合存储具有多个属性的对象信息，比如数据字典、用户信息、商品信息（HSET &#x2F; HGETALL）；<br>（C）<strong>List</strong>：适合存储需要有一定顺序的数据集合，比如任务列表、操作日志、消息通知（LPUSH &#x2F; RPOP）；<br>（D）<strong>Set</strong>：适合存储无序不重复的数据集合，如在线用户、标签、类别、抽奖参与人员（SADD &#x2F; SMEMBERS）；<br>（E）<strong>SortedSet</strong>：适合存储有序不重复的数据集合，根据赋予的分数排列顺序，比如排行榜、时间线（ZADD &#x2F; ZRANGE，OTA 时，用收到终端心跳时的当前时间作为分数，每收到一次心跳就更新分数，这样就能根据分数删除心跳超时的终端 ID，以此获取当前在线的终端列表）。</p>
+<p><span id="question70"></span></p>
+<p><span style="background-color:green;"><font color=white>（7）</font></span>超时处理的优化策略如下：<br>（A）提高任务执行效率：通过优化算法、减少不必要的 I&#x2F;O 操作等方式，缩短执行时间；<br>（B）合理分配资源：确保系统有足够的资源来处理任务（如内存、网络带宽等）；<br>（C）使用缓存：对于频繁访问但不经常变化的数据，可使用缓存来减少时间；<br>（D）异步处理：使用异步编程来处理任务（如 CompletableFuture），减少等待时间；<br>（E）使用更高效的超时检测机制：如使用 ScheduledThreadPoolExecutor 定期检查状态，取代阻塞式的 get；<br>（F）快速失败：如果可以检测到任务不可能在超时时间内完成，就尽快取消任务并释放资源；<br>（G）友好的错误提示：发生超时时，向用户显示清晰的错误提示和可能的解决方案；<br>（H）重试机制‌：提供重试按钮或自动重试功能，让用户可以方便地重新尝试操作；<br>（I）进度条或加载指示器：在操作进行时显示进度条或加载指示器，让用户知道并非无响应。</p>
+<p><span id="question80"></span></p>
+<p><span style="background-color:green;"><font color=white>（8）</font></span>适合存储的数据类型包括：<br>（A）<strong>String</strong>：适合存储任何形式的字符串（如 JSON），存软件版本号、接口执行结果、用户语种（SET &#x2F; GET）；<br>（B）<strong>Hash</strong>：适合存储具有多个属性的对象信息，比如数据字典、用户信息、商品信息（HSET &#x2F; HGETALL）；<br>（C）<strong>List</strong>：适合存储需要有一定顺序的数据集合，比如任务列表、操作日志、消息通知（LPUSH &#x2F; RPOP）；<br>（D）<strong>Set</strong>：适合存储无序不重复的数据集合，如在线用户、标签、类别、抽奖参与人员（SADD &#x2F; SMEMBERS）；<br>（E）<strong>SortedSet</strong>：适合存储有序不重复的数据集合，根据赋予的分数排列顺序，比如排行榜、时间线（ZADD &#x2F; ZRANGE，OTA 时，用收到终端心跳时的当前时间作为分数，每收到一次心跳就更新分数，这样就能根据分数删除心跳超时的终端 ID，以此获取当前在线的终端列表）。</p>
 <p>Redis 事务与传统的数据库事务不同，它是一种将多个命令打包执行的机制，通过命令 MULTI、EXEC、DISCARD、WATCH 实现。Redis 事务最大的区别在于，若某条命令执行失败，后续命令仍会继续执行，且不会自动回滚已成功执行的命令‌，设计上认为运行时的错误需业务层处理。</p>
 <ul>
 <li>MULTI：开启事务，后续命令进入队列而非立即执行（语法正确的命令被缓存，语法错误会导致事务终止）。</li>
@@ -286,10 +294,12 @@
 <ul>
 <li><strong>布隆过滤器</strong>：是一个由二进制位组成的固定长度数组（初始值全为 0‌，数组大小取决于创建时指定的两个参数：预期插入的元素数量（如 100 万）和误判率（如 0.03 &#x2F; 3%）），<u>它能快速判断一个元素是否「一定不存在」或「可能存在」于集合中</u>，其优势在于空间效率高、查询速度快，但存在误判，且不支持删除操作。其原理为：先预加载所有的合法元素，将每个元素输入到多个独立的哈希函数中，然后将多个哈希值对应的位数组位置设置为 1（例如：元素 a 经过 3 个哈希函数映射到位置 2、5、10，则这三个位置置为 1），查询时，对于待查元素进行相同处理，然后检查位数组中的对应位置是否全为 1，若存在 0，则代表元素一定不在集合中，若全为 1，则代表元素可能存在（可能因哈希冲突误判），误判率与‌位数组长度、哈希函数数量、已插入元素数量‌相关，可通过增大位数组长度、调整哈希函数数量来优化。布隆过滤器是以空间换时间，建议选择可扩展的布隆过滤器应对数据动态增长‌，并定期重建过滤器，避免误判率随时间累积升高‌。</li>
 </ul>
-<p><span id="90" style="background-color:green;"><font color=white>（9）</font></span>可从以下几个方面进行说明：<br>（A）掌握 Linux 的基本命令，比如 mkdir、pwd、chmod、cp、mv、history、crontab、vi 编辑器的使用等等；<br>（B）能熟练使用 Linux 的系统管理命令，比如 useradd、passwd、ps、top、kill、systemctl、df、apt、yum 等；<br>（C）能熟练使用 Linux 的命令行工具，比如 tar、ping、ifconfig、netstat、grep、awk 等等；<br>（D）能编写 Shell 脚本实现自动化任务，常用语法包括：使用 #!&#x2F;bin&#x2F;bash 指定脚本解释器，使用 $ 符号引用变量值，使用 -eq、-lt、-gt 来比较数字大小，使用 echo 来输出字符串或覆盖文件内容等等；<br>（E）了解 Linux 的内存管理，它是 Linux 内核的一个关键部分，负责内存的分配与回收，使用了虚拟内存技术。</p>
+<p><span id="question90"></span></p>
+<p><span style="background-color:green;"><font color=white>（9）</font></span>可从以下几个方面进行说明：<br>（A）掌握 Linux 的基本命令，比如 mkdir、pwd、chmod、cp、mv、history、crontab、vi 编辑器的使用等等；<br>（B）能熟练使用 Linux 的系统管理命令，比如 useradd、passwd、ps、top、kill、systemctl、df、apt、yum 等；<br>（C）能熟练使用 Linux 的命令行工具，比如 tar、ping、ifconfig、netstat、grep、awk 等等；<br>（D）能编写 Shell 脚本实现自动化任务，常用语法包括：使用 #!&#x2F;bin&#x2F;bash 指定脚本解释器，使用 $ 符号引用变量值，使用 -eq、-lt、-gt 来比较数字大小，使用 echo 来输出字符串或覆盖文件内容等等；<br>（E）了解 Linux 的内存管理，它是 Linux 内核的一个关键部分，负责内存的分配与回收，使用了虚拟内存技术。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ip -br a | grep eth0 | awk &#x27;&#123;print $2&#125;&#x27;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ip -br a：简洁显示所有网络接口状态</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">grep eth0：过滤出 eth0 行</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span>：提取第二列</span></span><br><span class="line"></span><br><span class="line">-rw-r--r-- 1 user group 2048 Jan 1 10:00 filename.txt</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">文件类型|所有者权限|所属组权限|其他用户权限 硬链接计数 所有者 所属组 文件大小 最后修改时间 文件/目录名</span></span><br></pre></td></tr></table></figure>
 
-<p><span id="100" style="background-color:green;"><font color=white>（10）</font></span>RPC（Remote Procedure Call，远程过程调用）是一种用于实现分布式系统中不同节点间通信的技术。实现一个 RPC 框架通常包括以下步骤：<br>（A）<u>设计‌协议</u>：约定好服务端与客户端双方代理的消息格式，包括网络传输协议、序列化协议和消息编码协议；<br>（B）<u>实现‌服务端代理</u>：接收和处理客户端代理的请求，调用对应的本地方法，将结果返回给客户端代理；<br>（C）<u>实现‌客户端代理</u>：发起调用，发送请求给远程服务器，然后接收并处理服务端代理返回的结果；<br>（D）<u>服务注册与发现</u>：将服务提供者的地址和端口等信息注册到注册中心，消费者通过注册中心发现服务；<br>（E）<u>负载均衡与容错机制</u>：实现负载均衡策略来分摊请求，增加容错机制保证调用的稳定性。</p>
+<p><span id="question100"></span></p>
+<p><span style="background-color:green;"><font color=white>（10）</font></span>RPC（Remote Procedure Call，远程过程调用）是一种用于实现分布式系统中不同节点间通信的技术。实现一个 RPC 框架通常包括以下步骤：<br>（A）<u>设计‌协议</u>：约定好服务端与客户端双方代理的消息格式，包括网络传输协议、序列化协议和消息编码协议；<br>（B）<u>实现‌服务端代理</u>：接收和处理客户端代理的请求，调用对应的本地方法，将结果返回给客户端代理；<br>（C）<u>实现‌客户端代理</u>：发起调用，发送请求给远程服务器，然后接收并处理服务端代理返回的结果；<br>（D）<u>服务注册与发现</u>：将服务提供者的地址和端口等信息注册到注册中心，消费者通过注册中心发现服务；<br>（E）<u>负载均衡与容错机制</u>：实现负载均衡策略来分摊请求，增加容错机制保证调用的稳定性。</p>
 <p>一次完整的 RPC 调用流程如下：</p>
 <ul>
 <li>服务消费者（Client）以本地调用方式调用服务；</li>
@@ -302,15 +312,18 @@
 <p>HTTP&#x2F;2 基于 TCP，可靠但有延迟（当前主流），TCP 数据传输的可靠性主要由以下机制保证：<br>（I）<u>序列号与确认机制（Seq&#x2F;Ack）</u>：每个发送的数据包携带唯一序列号，标识数据字节流的‌起始位置，接收方正确接收后回复 ACK &#x3D; 下一个期望的序列号，并按序列号对数据进行重组和去重（例如发送方发送 Seq &#x3D; 100，数据长度 100 字节，则下一个包 Seq &#x3D; 200，接收方回复 ACK &#x3D; 200）；如果发送方超时未收到 ACK 则重发。<br>（II）<u>超时重传（RTO）</u>：通常根据 RTT 动态调整超时时间；若发送方连续收到 3 个重复 ACK‌，则立即重发。<br>（III）<u>滑动窗口（Flow Control）</u>：接收方通过 Window Size 字段告知发送方‌剩余缓冲区大小‌（如 Win &#x3D; 5000 表示最多接收 5000 字节），发送方限制数据量不超过 min（接收窗口，拥塞窗口），避免接收方缓冲区溢出，这样既可以解决因接收方处理能力不足‌导致的丢包，还可以实现流量控制。<br>（IV）<u>拥塞控制（Congestion Control）</u>：初始拥塞窗口 cwnd &#x3D; 1 MSS，每收到一个 ACK 则 cwnd 翻倍（慢启动，cwnd 决定一次能发送多少数据，MSS 为最大报文段长度，典型值如 1460 字节）；当 cwnd 超过阈值 ssthresh 时，每一 RTT 时间 cwnd + 1‌（线性增长）；丢包时 ssthresh &#x3D; cwnd&#x2F;2，然后将 cwnd 重置为 1（或新值），重新慢启动。用这种方式动态适应网络带宽，避免‌网络拥塞‌引发大规模丢包。<br>（V）<u>校验和（Checksum）</u>：发送方计算数据包的校验和写入 Header，接收方重新计算，若不匹配，则丢弃该包。<br>（VI）<u>连接管理</u>：三次握手是为了确保双方‌收发能力正常（① 客户端 -&gt; SYN(Seq&#x3D;x) -&gt; 服务端、② 服务端 -&gt; SYN(Seq&#x3D;y)+ACK(Ack&#x3D;x+1) -&gt; 客户端、③ 客户端 -&gt; ACK(Ack&#x3D;y+1) -&gt; 服务端）；四次挥手是为了确保双方数据收发完全结束，无残留数据且安全释放双工通道（① Client -&gt; FIN(Seq&#x3D;x) -&gt; Server（收到 FIN 须立即响应，但 Server 可能仍有数据要发送）、② Server -&gt; ACK(Ack&#x3D;x+1) -&gt; Client、Server 发送完剩余数据后才能发送自己的 FIN……、③ Server -&gt; FIN(Seq&#x3D;y) -&gt; Client、④ Client -&gt; ACK(Ack&#x3D;y+1) -&gt; Server）。</p>
 <p>HTTP&#x2F;3 基于 UDP，延迟低但需额外依赖 QUIC 协议保证可靠性（还在逐步普及），另外它还结合 QUIC 和 TLS 1.3 减少握手次数（0-RTT 或 1-RTT，RTT（Round-Trip Time）指数据从客户端发送到服务器并返回响应所需的时间，首次建立连接或密钥未缓存时 1 次往返，密钥缓存后 0 次往返）。</p>
 <p>实时聊天软件底层使用 UDP，但消息很少丢失，也是因为它在应用层设计可靠性机制‌弥补了 UDP 的不足：<br>（I）UDP 不可靠、会丢包，那就模仿 TCP 的 ACK 确认和超时重传自定义一套重传机制；<br>（II）UDP 会乱序，那就让每条消息携带一个递增的序号，接收方按序号重组消息；<br>（III）在弱网络环境下，丢包率逐渐增长，那就采用指数退避自动降低发送频率，或使用 FEC 冗余‌传输（发送原始数据时携带冗余纠错码，丢失部分可通过算法还原），必要时甚至可直接切换为 TCP 传输，待网络恢复后再还原为 UDP。</p>
-<p><span id="110" style="background-color:green;"><font color=white>（11）</font></span>缓存技术是提高系统性能和响应速度的关键组件，在高并发的场景下尤为重要。它的作用有：<br>（A）<u>减轻数据库压力</u>：通过缓存频繁访问的数据，减少查询数据库的次数，可避免数据库成为性能瓶颈；<br>（B）<u>提高数据读取速度</u>：缓存通常存储在内存中，而内存的访问速度远快于磁盘；<br>（C）<u>降低网络延迟</u>：对于需要从远程服务器获取的数据，缓存可以减少对远程服务器的请求次数。</p>
+<p><span id="question110"></span></p>
+<p><span style="background-color:green;"><font color=white>（11）</font></span>缓存技术是提高系统性能和响应速度的关键组件，在高并发的场景下尤为重要。它的作用有：<br>（A）<u>减轻数据库压力</u>：通过缓存频繁访问的数据，减少查询数据库的次数，可避免数据库成为性能瓶颈；<br>（B）<u>提高数据读取速度</u>：缓存通常存储在内存中，而内存的访问速度远快于磁盘；<br>（C）<u>降低网络延迟</u>：对于需要从远程服务器获取的数据，缓存可以减少对远程服务器的请求次数。</p>
 <p>为什么需要缓存（Cache）？加快访问速度，本质原因是速度的不匹配。CPU 的运行速度比内存快百倍，比硬盘快百万倍，缓存技术的核心原理是<strong>将频繁访问的数据存储在读写速度更快的存储介质中（如内存）</strong>，以减少 CPU 对慢速存储介质的访问次数（如磁盘或数据库），那么哪些数据会被频繁访问呢？基于<strong>局部性原理</strong>，最近被访问过的指令或数据很可能在不久之后再次被访问，并且与它相邻的数据也很可能被访问，这个原理用处很大，比如操作系统会把经常需要用到的数据从硬盘取到内存中，CPU 会把经常用到的数据从内存取到寄存器中，有时也会一并读取与之相邻的数据。</p>
 <p>当用户请求数据时，系统会首先检查缓存中是否存在所需的数据，如果存在，则直接返回缓存中的数据，从而大大缩短数据访问时间，如果不存在，则查询并添加至缓存。常见的缓存类型有：<br>（I）<u>本地缓存</u>：将数据缓存在进程内存中，如 Caffeine、Guava Cache‌。<br>（II）<u>分布式缓存</u>：Redis、Memcached。<br>（III）<u>CDN 缓存</u>：内容分发网络，是一种通过‌分布式节点服务器‌将图片、视频、网页等内容缓存到全球多个地理位置，使用户能够从离自己最近的节点快速获取资源的技术。<br>（IV）<u>数据库缓存</u>：如 Buffer Pool，它将磁盘上的数据页和索引页缓存到内存中，数据修改时会先更新缓存池中的页而成为脏页，通过后台线程异步刷盘‌解决。在数据库之上的持久层框架也会有缓存，比如 Mybatis 提供了一级缓存和二级缓存机制，一级缓存默认开启且无法关闭，作用域为 SqlSession 级别，即在同一个数据库会话内有效，不同 SqlSession 的缓存相互隔离，它随 SqlSession 的创建而创建，在 SqlSession 关闭或执行 INSERT&#x2F;UPDATE&#x2F;DELETE 操作时失效；二级缓存的作用域为 Mapper &#x2F; namespace 级别，是跨 SqlSession 共享的，需通过 &lt;cache&#x2F;&gt; 标签或注解手动开启，执行同 namespace 下的 INSERT&#x2F;UPDATE&#x2F;DELETE 操作时缓存失效。<br>Spring Cache 是一个缓存抽象层，支持集成上面提到的多种缓存技术，通过注解统一管理（如 @Cacheable、@CachePut），通过 CacheManager 接口切换具体实现。</p>
 <p>缓存技术的缺点：<br>（A）额外的硬件支出：缓存需要额外的磁盘空间和内存空间来存储数据，增加了硬件成本；<br>（B）数据一致性问题：缓存与数据库之间可能存在数据不一致的问题，需要采取额外的措施来保证数据一致性；<br>（C）高并发缓存失效问题‌：在高并发场景下，缓存失效可能会导致数据库访问量瞬间增大，甚至导致数据库崩溃。</p>
 <p>缓存的数据一致性问题主要由以下原因引起：<br>（B1）‌数据更新与缓存同步不一致：更新数据源后，缓存中的数据未能及时更新，常见的缓存更新策略有：<br>Cache-Aside‌（<strong>首选</strong>）：应用层‌管理缓存读写（读：先查缓存，未命中则查库并回填；写：直接写库，再删缓存）；<br>Write-Through：写操作‌先更新缓存，由缓存层更新数据库‌，Guava Cache 的 CacheLoader.write 采用；<br>Read-Through：缓存层‌自动加载数据库数据，应用层仅与缓存交互，注解 @Cacheable 采用此策略；<br>Write-Back &#x2F; Write-Behind（慎用）：写操作‌仅更新缓存，由缓存层标记脏数据，再由后台线程异步批量刷入数据库。<br>延迟双删：更新前先删缓存，避免旧数据被读，完成数据写入后，等待短暂时间后（如 500ms）再次删除缓存。<br>（B2）‌并发更新：多个并发的更新操作导致缓存中的数据更新顺序与数据源中的更新顺序不一致（使用分布式锁）。<br>（B3）缓存失效策略不当：缓存中的数据已过期，但由于没有有效的失效策略而仍然存在（设置合理的失效策略，常见的缓存失效策略有 LRU（最近最少使用）、LFU（最不经常使用）、‌FIFO（先进先出）、TTL（设置过期时间））。</p>
-<p><span id="120" style="background-color:green;"><font color=white>（12）</font></span>Spring Boot 集成并自动配置了 Spring MVC，因此与 Spring MVC 的过程类似：<br>（A）请求首先<u>到达 Servlet 容器</u>（如 Tomcat，已被内嵌在 Spring Boot 中，简化开发流程）；<br>（B）然后依次经过过滤器链（Filter Chain），每个过滤器可以对请求进行预处理，并决定是否将请求继续传递（即<u>执行 chain.doFilter() 方法之前的代码</u>，如对请求进行认证、校验等）；<br>（C）<u>到达核心控制器 DispatcherServlet</u>，它负责分发请求，根据请求的 URL 和请求方式找到对应的控制器；<br>（D）依次经过拦截器链（Interceptor Chain），每个拦截器可以对请求进行预处理，并决定是否将请求继续传递（即<u>执行 preHandle() 方法</u>中的代码，如对请求进行权限校验、参数绑定等，<u>但这步是可选的</u>，因为拦截器目前只在 Spring MVC 中有效）；<br>（E）<u>执行 Controller 中的具体方法</u>，并返回响应数据；<br>（F）响应数据逆向经过拦截器链，<u>执行 postHandle() 方法</u>中的代码，进行后置处理；<br>（G）响应到达 DispatcherServlet，由 DispatcherServlet 统一调度视图解析器并<u>渲染视图</u>（可选，因为响应可能是纯 JSON），若有异常抛出，也由 DispatcherServlet 调用异常处理器来<u>处理异常</u>（如全局异常处理）；<br>（H）响应数据逆向经过过滤器链，<u>执行 chain.doFilter() 方法之后的代码</u>，最终返回给客户端。</p>
+<p><span id="question120"></span></p>
+<p><span style="background-color:green;"><font color=white>（12）</font></span>Spring Boot 集成并自动配置了 Spring MVC，因此与 Spring MVC 的过程类似：<br>（A）请求首先<u>到达 Servlet 容器</u>（如 Tomcat，已被内嵌在 Spring Boot 中，简化开发流程）；<br>（B）然后依次经过过滤器链（Filter Chain），每个过滤器可以对请求进行预处理，并决定是否将请求继续传递（即<u>执行 chain.doFilter() 方法之前的代码</u>，如对请求进行认证、校验等）；<br>（C）<u>到达核心控制器 DispatcherServlet</u>，它负责分发请求，根据请求的 URL 和请求方式找到对应的控制器；<br>（D）依次经过拦截器链（Interceptor Chain），每个拦截器可以对请求进行预处理，并决定是否将请求继续传递（即<u>执行 preHandle() 方法</u>中的代码，如对请求进行权限校验、参数绑定等，<u>但这步是可选的</u>，因为拦截器目前只在 Spring MVC 中有效）；<br>（E）<u>执行 Controller 中的具体方法</u>，并返回响应数据；<br>（F）响应数据逆向经过拦截器链，<u>执行 postHandle() 方法</u>中的代码，进行后置处理；<br>（G）响应到达 DispatcherServlet，由 DispatcherServlet 统一调度视图解析器并<u>渲染视图</u>（可选，因为响应可能是纯 JSON），若有异常抛出，也由 DispatcherServlet 调用异常处理器来<u>处理异常</u>（如全局异常处理）；<br>（H）响应数据逆向经过过滤器链，<u>执行 chain.doFilter() 方法之后的代码</u>，最终返回给客户端。</p>
 <img src="/images/2025-01-01/api_life.jpg" width="90%" />
 
-<p><span id="130" style="background-color:green;"><font color=white>（13）</font></span>先回顾一下 SQL 语句的执行过程：</p>
+<p><span id="question130"></span></p>
+<p><span style="background-color:green;"><font color=white>（13）</font></span>先回顾一下 SQL 语句的执行过程：</p>
 <ul>
 <li>（I）连接：客户端认证并建立连接。</li>
 <li>（II）解析：对 SQL 进行：<br>词法分析：识别 SQL 关键字、表名、列名等；<br>语法分析：验证 SQL 结构是否符合规范；<br>语义分析：验证表&#x2F;列是否存在、检查用户是否有访问权限等。</li>
@@ -367,7 +380,8 @@
 <li>使用压测工具 sysbench 模拟高并发场景，验证优化效果；</li>
 <li>集成 Prometheus + Grafana 监控 QPS、TPS、慢查询、锁等待等关键指标‌。</li>
 </ul>
-<p><span id="140" style="background-color:green;"><font color=white>（14）</font></span>防止被提前读取的方案有：<br>（A）目标文件上传完成后（服务端是不知道何时传完的），再上传一个跟它文件名相同，但后缀不同的临时文件，通过这个临时文件来判断目标文件的上传情况。比如要上传的目标文件是 users.xlsx，上传完成后另外再上传一个文件 users.tmp，这样一来，服务端如果想要读文件 users.xlsx，就要先判断文件 users.tmp 是否存在，若存在，则说明文件 users.xlsx 已经上传完成，可以放心去读了。<br>（B）改目标文件名：比如要上传的目标文件是 data.txt，那么在文件上传完成前，我们可以用脚本将文件名改为类似 data.txt.uploading 这样的格式，等文件上传完成后，再将其改回原来的 data.txt 即可，外部程序仅监控正式文件 data.txt，避免读取未完成文件‌。<br>（C）将上传中的文件存放在临时目录（如 &#x2F;temp），并设置严格的访问权限（如仅上传进程可读写），待文件上传完成后，再将其移动至正式存储目录‌，确保服务端的文件仅在完整上传后才可见‌。</p>
+<p><span id="question140"></span></p>
+<p><span style="background-color:green;"><font color=white>（14）</font></span>防止被提前读取的方案有：<br>（A）目标文件上传完成后（服务端是不知道何时传完的），再上传一个跟它文件名相同，但后缀不同的临时文件，通过这个临时文件来判断目标文件的上传情况。比如要上传的目标文件是 users.xlsx，上传完成后另外再上传一个文件 users.tmp，这样一来，服务端如果想要读文件 users.xlsx，就要先判断文件 users.tmp 是否存在，若存在，则说明文件 users.xlsx 已经上传完成，可以放心去读了。<br>（B）改目标文件名：比如要上传的目标文件是 data.txt，那么在文件上传完成前，我们可以用脚本将文件名改为类似 data.txt.uploading 这样的格式，等文件上传完成后，再将其改回原来的 data.txt 即可，外部程序仅监控正式文件 data.txt，避免读取未完成文件‌。<br>（C）将上传中的文件存放在临时目录（如 &#x2F;temp），并设置严格的访问权限（如仅上传进程可读写），待文件上传完成后，再将其移动至正式存储目录‌，确保服务端的文件仅在完整上传后才可见‌。</p>
 <p>进一步了解下客户端与服务端通信时，防止消息被中途抓包的方法：<br>（A）强制使用 HTTPS（内部使用了数字签名和数字证书）加密传输数据，防止明文被拦截；并对敏感数据（如账号、交易信息）使用 AES、RSA 等算法进行二次加密，这样即使 HTTPS 被破解也仍然无法解密业务数据；<br>（B）在使用 HTTPS 的基础上，再对数据加一层数字签名和数字证书机制，对身份进行二次验证；<br>（C）自定义私有的二进制协议并增加校验位，替代 JSON &#x2F; XML 等明文协议；<br>（D）将数据包拆分并乱序传输，接收端按预设规则重组，降低抓包工具解析成功率‌；<br>（E）关键算法（如 AES 密钥派生）通过 JNI 调用 C++ 实现，增加逆向分析难度；<br>（F）通过自动化工具模拟抓包攻击，检测协议漏洞并及时修复，必要时更新加密算法和证书‌。</p>
 
       
@@ -606,11 +620,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -626,11 +640,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Computer</a>
+                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
+                <a href="javascript:void(0)" class="js-tag color4">Computer</a>
               </li>
              
               <li class="article-tag-list-item">
