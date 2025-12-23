@@ -16,7 +16,7 @@
 <meta property="og:description" content="位运算符可以直接对二进制位进行操作，比使用乘除法的效率更高‌，Java 中常用的移位运算符包括 &lt;&lt;、&gt;&gt;、&gt;&gt;&gt;。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-03-03T09:20:44.000Z">
-<meta property="article:modified_time" content="2025-12-22T16:49:07.795Z">
+<meta property="article:modified_time" content="2025-12-23T15:31:52.620Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -172,19 +172,20 @@
 <p>正数：result &#x3D; 20 &gt;&gt;&gt; 2<br>结果与 result &#x3D; 20 &gt;&gt; 2 相同。</p>
 <p>负数：result &#x3D; -20 &gt;&gt;&gt; 2<br>-20 的二进制原码：10000000 00000000 00000000 00010100<br>-20 的二进制反码：11111111 11111111 11111111 11101011<br>-20 的二进制补码：11111111 11111111 11111111 11101100<br>无符号右移两位后：00111111 11111111 11111111 11111011<br>结果：result &#x3D; 1073741819</p>
 <h3 id="4-拓展"><a href="#4-拓展" class="headerlink" title="4 拓展"></a>4 拓展</h3><p>&lt;&lt;&#x3D;、&gt;&gt;&#x3D;、&amp;&#x3D;、^&#x3D;、|&#x3D;、~ 分别表示什么意思？<br>这些操作符分别是左移后赋值、右移后赋值、按位与后赋值、按位异或后赋值（对应位上的值相同时，结果为 0，不同时为 1）、按位或后赋值，跟 +&#x3D; 还有 -&#x3D; 的意思差不多，只不过这些都是要转换成二进制后再计算，最后一个运算符代表取反。</p>
-<h4 id="4-1-取反"><a href="#4-1-取反" class="headerlink" title="4.1 取反"></a>4.1 取反</h4><p>注意<strong>取反运算符是对所有的位进行取反操作，包括符号位。</strong>这与负数的反码不同，<strong>负数的反码是符号位保持不变，其余位取反。</strong></p>
-<p>举例：<br>正数：result &#x3D; ~15<br>15 的二进制补码：0000 1111<br>取反后的补码为：1111 0000<br>反码为：1110 1111<br>原码为：1001 0000<br>结果：result &#x3D; -16</p>
+<h4 id="4-1-取反"><a href="#4-1-取反" class="headerlink" title="4.1 取反"></a>4.1 取反</h4><p>注意<strong>取反运算符是对所有的位进行取反操作，包括符号位。</strong>这与负数的反码不同，<strong>负数的反码是符号位保持不变，其余位取反。</strong>举例：</p>
+<p>正数：result &#x3D; ~15<br>15 的二进制补码：0000 1111<br>取反后的补码为：1111 0000<br>反码为：1110 1111<br>原码为：1001 0000<br>结果：result &#x3D; -16</p>
 <h4 id="4-2-按位与"><a href="#4-2-按位与" class="headerlink" title="4.2 按位与"></a>4.2 按位与</h4><p>以下面这段代码为例进行说明（可先尝试理解）：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 验证前导码（0xDEADBEEF）</span></span><br><span class="line"><span class="type">int</span> <span class="variable">preamble</span> <span class="operator">=</span> (bytes[<span class="number">0</span>] &amp; <span class="number">0xFF</span>) | </span><br><span class="line">        ((bytes[<span class="number">1</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">8</span>) | </span><br><span class="line">        ((bytes[<span class="number">2</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">16</span>) | </span><br><span class="line">        ((bytes[<span class="number">3</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">24</span>);</span><br></pre></td></tr></table></figure>
 
-<p>这段代码的意思是：通过位运算将前 4 个字节的数据合并为一个 32 位整数。</p>
-<p><strong>bytes[0] &amp; 0xFF：将第一个字节的符号位清零，并保留低 8 位。</strong>原因：Java 中的 Byte 类型是 8 位有符号整数（-128 &#x3D;&gt; 127），0xFF 的二进制表示为 1111 1111，但它在 Java 中会被视为一个 32 位的整数（int），值为 255。当单字节与 0xFF 进行按位与运算时，单字节也会被提升为 32 位的整数（int），在提升过程中，单字节的符号位会被复制到高位。比如 bytes[0] 为 1000 0001 时：</p>
+<p>这段代码的意思是：通过位运算将前 4 个字节的数据合并为一个 32 位的整数。</p>
+<p><strong>bytes[0] &amp; 0xFF：将第一个字节的符号位清零，并保留低 8 位。</strong>原因：Java 中的 Byte 类型是 8 位有符号整数（-128 ~ 127），0xFF 的二进制表示为 1111 1111，但它在 Java 中会被视为一个 32 位的整数（int），值为 255。当单字节与 0xFF 进行按位与运算时，单字节也会被提升为 32 位的整数（int），在提升过程中，单字节的符号位会被复制到高位。比如 bytes[0] 为 1000 0001 时：</p>
 <p>bytes[0]（提升后）：11111111 11111111 11111111 10000001<br>0xFF（32 位）：00000000 00000000 00000000 11111111<br>按位与结果：00000000 00000000 00000000 10000001</p>
-<p>也就是将单字节转换成了无符号整数（0 &#x3D;&gt; 255），避免了负数问题。这里还有一点需要重申，<u>有符号整数在内存中始终以补码形式存储，但仅在算术运算中才涉及补码的转换。</u>位运算直接比较二进制位，不涉及数值计算，也不涉及数值的语义（符号、大小、进位），因此不涉及补码的转换，上文中的 1000 0001 可以理解为就是补码形式。</p>
+<p>也就是将单字节转换成了 8 位的无符号整数（0 ~ 255），避免负数问题。这里有一点需要重申，<u>有符号整数在内存中始终以补码形式存储，但仅在算术运算中才涉及补码的转换（加、减、乘、除、取模、自增、自减）。</u>位运算直接比较二进制位，不涉及数值计算，也不涉及数值的语义（符号、大小、进位），因此不涉及补码的转换，上文中的 1000 0001 可以理解为就是补码形式。</p>
 <p><strong>bytes[0] &amp; 0xF0（高 4 位保留）</strong>：提取字节的高 4 位（前 4 个二进制位），清零低 4 位。<br><strong>bytes[0] &amp; 0x0F（低 4 位保留）</strong>：提取字节的低 4 位（后 4 个二进制位），清零高 4 位。</p>
-<p>跟 0xF0 &#x2F; 0x0F 按位与不能将有符号整数转换为无符号整数，因为它们在 Java 中不会被视为 32 位的整数（int），而是会被视为一个字节（byte）。比如：</p>
+<p>跟 0xF0 &#x2F; 0x0F 按位与不能将有符号整数转换为无符号整数，因为它们在 Java 中不会被视为 32 位的整数（int），而是会被视为一个字节（byte）。举例：</p>
 <p>bytes[0]：1101 0110<br>0xF0：1111 0000<br>按位与结果：1101 0000</p>
 <p>bytes[0]：1101 0110<br>0x0F：0000 1111<br>按位与结果：0000 0110</p>
+<p>这些掩码操作在嵌入式系统、网络协议、数据压缩和图像处理中尤为常见。</p>
 
       
 
@@ -418,15 +419,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -442,11 +443,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Computer</a>
+                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">BlockChain</a>
+                <a href="javascript:void(0)" class="js-tag color4">Computer</a>
               </li>
              
               <li class="article-tag-list-item">
