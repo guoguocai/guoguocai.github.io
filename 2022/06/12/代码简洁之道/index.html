@@ -16,7 +16,7 @@
 <meta property="og:description" content="架构师不是高高在上，脱离代码只说不做的人。架构师首先是一名优秀的程序员，要能够编写项目或产品中的核心功能，随时能够撸起袖子去解决项目中的问题。代码写得不漂亮怎么能拿得出手？怎么能够服人？所谓漂亮代码不仅仅要实现功能，更要清晰、易懂、优雅，没有 Bug 或者只有极少 Bug。 要用技术的影响力来领导人，而不是威权和职位。这是一个漫长的过程：你解决了一道技术难题，你提出的方案被证明可行……这样的事情会">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-06-12T02:16:39.000Z">
-<meta property="article:modified_time" content="2025-12-26T15:19:18.304Z">
+<meta property="article:modified_time" content="2025-12-29T14:25:57.008Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -215,21 +215,21 @@
 <p>然后在 Controller 中使用注解 @Valid 触发对象属性的约束验证：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/send&quot;)</span></span><br><span class="line"><span class="meta">@Operation(summary = &quot;测试发送&quot;, description = &quot;测试发送&quot;)</span></span><br><span class="line"><span class="keyword">public</span> R <span class="title function_">send</span><span class="params">(<span class="meta">@Valid</span> <span class="meta">@RequestBody</span> FileDTO fileDto)</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> fileService.send(fileDto);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="10-用嵌套的-Map-实现聚合"><a href="#10-用嵌套的-Map-实现聚合" class="headerlink" title="10 用嵌套的 Map 实现聚合"></a>10 用嵌套的 Map 实现聚合</h4><p>传统写法（手动检查外层键是否存在，若不存在则创建并插入新值）：</p>
+<h4 id="10-用嵌套的-Map-实现聚合"><a href="#10-用嵌套的-Map-实现聚合" class="headerlink" title="10 用嵌套的 Map 实现聚合"></a>10 用嵌套的 Map 实现聚合</h4><p>传统写法（手动检查外层键是否存在，若不存在则插入，并创建新的内层 Map）：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Map&lt;String, Object&gt;&gt; nestedMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加数据：外层 Key=&quot;user&quot;，内层 Key=&quot;profile&quot;</span></span><br><span class="line"><span class="keyword">if</span> (!nestedMap.containsKey(<span class="string">&quot;user&quot;</span>)) &#123;</span><br><span class="line">    nestedMap.put(<span class="string">&quot;user&quot;</span>, <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;());</span><br><span class="line">&#125;</span><br><span class="line">nestedMap.get(<span class="string">&quot;user&quot;</span>).put(<span class="string">&quot;profile&quot;</span>, <span class="keyword">new</span> <span class="title class_">Object</span>());</span><br></pre></td></tr></table></figure>
 
 <p>缺点：</p>
 <ul>
 <li>每次操作都需要重复检查外层键是否存在。</li>
-<li>步骤多，不是原子操作，可能导致线程安全问题。</li>
+<li>步骤多，不是原子操作，线程不安全。</li>
 </ul>
 <p>简洁写法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Map&lt;String, Object&gt;&gt; nestedMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">nestedMap.computeIfAbsent(<span class="string">&quot;user&quot;</span>, k -&gt; <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;())</span><br><span class="line">        .put(<span class="string">&quot;profile&quot;</span>, <span class="keyword">new</span> <span class="title class_">Object</span>()); <span class="comment">// 此处的 put 是对内层 Map 进行操作</span></span><br></pre></td></tr></table></figure>
 
 <p>优点：</p>
 <ul>
-<li>自动处理外层键不存在的情况，不存在则调用 function 生成一个新的内层 Map，存在则返回现有的内存 Map。</li>
-<li>computeIfAbsent 是原子操作，避免线程安全问题。</li>
+<li>自动处理外层键不存在的情况，不存在则调用 function 生成一个新的内层 Map，存在则返回现有的内层 Map。</li>
+<li>computeIfAbsent 是原子操作，线程安全。</li>
 </ul>
 <p>后记：</p>
 <p>每个程序员都梦想从头写一个东西，不愿意读别人的代码，甚至同行相轻，瞧不起别人的代码。但实际情况是，自己重写一遍，不见得能比现在已经运行的代码好到哪里去，甚至更差。除非你了解了所有的细节，用大量的时间仔细规划、小心编程，但现实中哪有这么多时间啊？既然无法推倒重来，还不如承认现实，脚踏实地，从当下做起，慢慢地重构代码，让代码的质量朝着更好的方向发展。这就是所谓的革新，而不是革命吧！</p>
@@ -470,11 +470,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
