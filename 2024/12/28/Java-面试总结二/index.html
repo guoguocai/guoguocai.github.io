@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/combine_index.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-28/route.png">
 <meta property="article:published_time" content="2024-12-28T02:49:30.000Z">
-<meta property="article:modified_time" content="2025-12-19T14:58:52.178Z">
+<meta property="article:modified_time" content="2025-12-29T14:55:21.078Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -163,19 +163,19 @@
 <p>不能安于现状太久，要安排时间让自己升升级，这样机会来了才能把握住，或者即使没把握住，能有面试的机会也是不错的。同样地，先在脑子里思考一下问题，答不上的再去看后面的解答。</p>
 <span id="more"></span>
 
-<h3 id="问答题"><a href="#问答题" class="headerlink" title="问答题"></a>问答题</h3><p><a href="#question10">（1）</a>HashMap 是线程不安全的，那么两个不同的线程设置同一个 key 时会有冲突吗？</p>
-<p><a href="#question20">（2）</a>HashMap 是怎么扩容的？扩容后原数据是怎么转移的？</p>
-<p><a href="#question30">（3）</a>泛型是怎么实现的？</p>
-<p><a href="#question40">（4）</a>介绍一下 Java 的内存模型。</p>
-<p><a href="#question50">（5）</a>反射在虚拟机中是怎么实现的？</p>
-<p><a href="#question60">（6）</a>虚拟内存有什么好处？是怎么实现的？</p>
-<p><a href="#question70">（7）</a>介绍一下 select 和 epoll 的工作机制。</p>
-<p><a href="#question80">（8）</a>Mysql 用的什么数据库引擎？聚集索引和非聚集索引的区别是什么？</p>
-<p><a href="#question90">（9）</a>解决跨域有哪些方法？</p>
-<p><a href="#question100">（10）</a>RESTful API 的设计规范有哪些？</p>
-<p><a href="#question110">（11）</a>幂等性是什么？如何保证幂等性？</p>
-<p><a href="#question120">（12）</a>事务有哪些特性？数据库事务的隔离级别，原理是什么？分布式事务的解决方案，原理是什么？</p>
-<h3 id="编程题"><a href="#编程题" class="headerlink" title="编程题"></a>编程题</h3><p><a href="#question130">（13）</a>3 * 7 的表格，从左上走到右下，每次只能往右或者往下走一格，有几种不同的走法？写程序实现，要求最终能对任意大小的表格进行统计。</p>
+<h3 id="问答题"><a href="#问答题" class="headerlink" title="问答题"></a>问答题</h3><p><a href="#question10" target="_self">（1）</a>HashMap 是线程不安全的，那么两个不同的线程设置同一个 key 时会有冲突吗？</p>
+<p><a href="#question20" target="_self">（2）</a>HashMap 是怎么扩容的？扩容后原数据是怎么转移的？</p>
+<p><a href="#question30" target="_self">（3）</a>泛型是怎么实现的？</p>
+<p><a href="#question40" target="_self">（4）</a>介绍一下 Java 的内存模型。</p>
+<p><a href="#question50" target="_self">（5）</a>反射在虚拟机中是怎么实现的？</p>
+<p><a href="#question60" target="_self">（6）</a>虚拟内存有什么好处？是怎么实现的？</p>
+<p><a href="#question70" target="_self">（7）</a>介绍一下 select 和 epoll 的工作机制。</p>
+<p><a href="#question80" target="_self">（8）</a>Mysql 用的什么数据库引擎？聚集索引和非聚集索引的区别是什么？</p>
+<p><a href="#question90" target="_self">（9）</a>解决跨域有哪些方法？</p>
+<p><a href="#question100" target="_self">（10）</a>RESTful API 的设计规范有哪些？</p>
+<p><a href="#question110" target="_self">（11）</a>幂等性是什么？如何保证幂等性？</p>
+<p><a href="#question120" target="_self">（12）</a>事务有哪些特性？数据库事务的隔离级别，原理是什么？分布式事务的解决方案，原理是什么？</p>
+<h3 id="编程题"><a href="#编程题" class="headerlink" title="编程题"></a>编程题</h3><p><a href="#question130" target="_self">（13）</a>3 * 7 的表格，从左上走到右下，每次只能往右或者往下走一格，有几种不同的走法？写程序实现，要求最终能对任意大小的表格进行统计。</p>
 <h3 id="参考答案"><a href="#参考答案" class="headerlink" title="参考答案"></a>参考答案</h3><p><span id="question10"></span></p>
 <p><span style="background-color:green;"><font color=white>（1）</font></span><strong>会有冲突的风险</strong>。因为 HashMap 的 put() 方法是非原子性的操作，它涉及多个步骤，包括<strong>计算 key 的哈希值</strong>、<strong>找到在数组中的位置</strong>、<strong>处理哈希冲突</strong>等，且没有同步机制，当多个线程对同一个 key 设置时，常见的问题是后设置的值会覆盖先设置的值，导致数据丢失。如果是在 JDK 1.7 中，多个线程同时 put 并都触发扩容时，扩容同样是一个非原子性的操作，那么新的链表可能出现环形结构，这会导致在 get 时陷入死循环，进而导致 CPU 利用率接近 100%。</p>
 <p>在 JDK 1.8 及以后版本中，红黑树的使用大大降低了死循环出现的概率，但并非为 0，所以在多线程并发时，建议使用 ConcurrentHashMap 或 Hashtable 来保证线程安全，且 ConcurrentHashMap 的性能更高。因为 <u>Hashtable 是对整个哈希表加锁</u>，意味着在任一时刻只有一个线程可以访问 Hashtable，这在高并发环境下会发生锁的争用，导致性能显著下降，只适用于并发级别较低或需要兼容旧代码的场景。而 <u>ConcurrentHashMap 采用了粒度更细的锁机制，它将整个哈希表分为多个段，每个段独立加锁</u>，允许多个线程同时操作不同的段，从而避免了锁竞争，后又进一步<u>引入了无锁的 CAS</u>，这使得在低冲突的情况下可以完全无锁地执行操作，进一步提升了性能。</p>
@@ -635,11 +635,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">

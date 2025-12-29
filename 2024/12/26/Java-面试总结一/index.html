@@ -16,7 +16,7 @@
 <meta property="og:description" content="对技术的好奇心&#x2F;兴趣是一切的基础。没有好奇心，就不愿追本溯源，追求技术的本质；没有好奇心，就难以静下心来，更难以跨过这个行业所带来的种种挑战；没有好奇心，就不愿学习新技术，如果没有对技术的敏感度和前瞻性，一直抱着一套技术架构不变，估计很快就会被淘汰。 以下都是我在真实面试时被问到的问题，当时可能因为知识储备不足或其他原因，没能答上。现在重新整理一下，希望能对今后的面试有所帮助。注意，文中">
 <meta property="og:locale">
 <meta property="article:published_time" content="2024-12-26T03:03:24.000Z">
-<meta property="article:modified_time" content="2025-12-29T14:31:15.743Z">
+<meta property="article:modified_time" content="2025-12-29T14:47:39.527Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -157,12 +157,12 @@
 <p>以下都是我在真实面试时被问到的问题，当时可能因为知识储备不足或其他原因，没能答上。现在重新整理一下，希望能对今后的面试有所帮助。注意，文中的前半部分都是问题，答案统一放在最后，这样便于先在脑海中思考，快速过掉简单的问题，想不出来的再去看参考答案。</p>
 <span id="more"></span>
 
-<h3 id="选择题"><a href="#选择题" class="headerlink" title="选择题"></a>选择题</h3><p><a href="#question10">（1）</a>{:target&#x3D;”_self”}在一台 Linux 服务器上运行一个高并发的在线支付系统时，发现系统性能下降严重，CPU 负载高，支付处理速度变慢。通过使用 vmstat 命令，观察到 si（swap in）和 so（swap out）频繁增加，内存的 free 值很低。此时应该优先采取哪种措施来提升系统性能？<br>A. 增加系统的虚拟内存空间<br>B. 调整 CPU 的运行频率<br>C. 降低系统的进程优先级<br>D. 增加物理内存</p>
-<p><a href="#question20">（2）</a>如果要在多线程 Java 应用程序中保证线程安全，ArrayList 应该怎么做？下面说法正确的是：<br>A. 自己写个包装类，根据业务一般是 add&#x2F;update&#x2F;remove 加锁<br>B. ArrayList 本身就是线程安全的，不用做其他操作<br>C. 使用 Collections.synchronizedList(new ArrayList&lt;&gt;()); 内部使用了 synchronized 加锁<br>D. 使用 CopyOnWriteArrayList&lt;&gt;(); 内部使用了 ReentrantLock 加锁</p>
-<p><a href="#question30">（3）</a>以下关于 Java 垃圾收集的叙述，哪些是对的：<br>A. 开发者必须自己创建一个线程进行内存释放的工作<br>B. 垃圾收集将检查并释放不再使用的内存<br>C. 垃圾收集允许开发者明确指定并立即释放该内存<br>D. 垃圾收集能够在期望的时间释放内存</p>
-<h3 id="问答题"><a href="#问答题" class="headerlink" title="问答题"></a>问答题</h3><p><a href="#question40">（4）</a>有一个日志文件，里面记录了访问过某网站的 IP 地址，现在想找出访问该网站次数最多的 IP 地址，但由于此文件过大而无法直接读取，请你提供统计方法。</p>
-<p><a href="#question50">（5）</a>设计一个抢红包程序。比如：领红包人数 6，总金额 10.00。红包金额分别为：0.42 元、1.95 元、2.03 元、1.71 元、2.16 元、1.73 元（备注：红包精确到分），请回答以下问题：<br>（5.1）简述你的方案和用到的技术&#x2F;组件。<br>（5.2）你如何保证并发抢红包的情况下，大家能够获得正确的红包数字而不会产生问题？<br>（5.3）如果同时有数千个红包，每个红包最多可能一千个人抢，你会如何设计这个系统，为什么？<br>（5.4）还有什么需要注意的细节？</p>
-<h3 id="编程题"><a href="#编程题" class="headerlink" title="编程题"></a>编程题</h3><p><a href="#question60">（6）</a>假设你是一家电商公司的 Java 开发工程师，最近公司的业务量迅速增长，需要开发一个线程安全的商品库存管理系统。系统需要满足以下要求：</p>
+<h3 id="选择题"><a href="#选择题" class="headerlink" title="选择题"></a>选择题</h3><p><a href="#question10" target="_self">（1）</a>在一台 Linux 服务器上运行一个高并发的在线支付系统时，发现系统性能下降严重，CPU 负载高，支付处理速度变慢。通过使用 vmstat 命令，观察到 si（swap in）和 so（swap out）频繁增加，内存的 free 值很低。此时应该优先采取哪种措施来提升系统性能？<br>A. 增加系统的虚拟内存空间<br>B. 调整 CPU 的运行频率<br>C. 降低系统的进程优先级<br>D. 增加物理内存</p>
+<p><a href="#question20" target="_self">（2）</a>如果要在多线程 Java 应用程序中保证线程安全，ArrayList 应该怎么做？下面说法正确的是：<br>A. 自己写个包装类，根据业务一般是 add&#x2F;update&#x2F;remove 加锁<br>B. ArrayList 本身就是线程安全的，不用做其他操作<br>C. 使用 Collections.synchronizedList(new ArrayList&lt;&gt;()); 内部使用了 synchronized 加锁<br>D. 使用 CopyOnWriteArrayList&lt;&gt;(); 内部使用了 ReentrantLock 加锁</p>
+<p><a href="#question30" target="_self">（3）</a>以下关于 Java 垃圾收集的叙述，哪些是对的：<br>A. 开发者必须自己创建一个线程进行内存释放的工作<br>B. 垃圾收集将检查并释放不再使用的内存<br>C. 垃圾收集允许开发者明确指定并立即释放该内存<br>D. 垃圾收集能够在期望的时间释放内存</p>
+<h3 id="问答题"><a href="#问答题" class="headerlink" title="问答题"></a>问答题</h3><p><a href="#question40" target="_self">（4）</a>有一个日志文件，里面记录了访问过某网站的 IP 地址，现在想找出访问该网站次数最多的 IP 地址，但由于此文件过大而无法直接读取，请你提供统计方法。</p>
+<p><a href="#question50" target="_self">（5）</a>设计一个抢红包程序。比如：领红包人数 6，总金额 10.00。红包金额分别为：0.42 元、1.95 元、2.03 元、1.71 元、2.16 元、1.73 元（备注：红包精确到分），请回答以下问题：<br>（5.1）简述你的方案和用到的技术&#x2F;组件。<br>（5.2）你如何保证并发抢红包的情况下，大家能够获得正确的红包数字而不会产生问题？<br>（5.3）如果同时有数千个红包，每个红包最多可能一千个人抢，你会如何设计这个系统，为什么？<br>（5.4）还有什么需要注意的细节？</p>
+<h3 id="编程题"><a href="#编程题" class="headerlink" title="编程题"></a>编程题</h3><p><a href="#question60" target="_self">（6）</a>假设你是一家电商公司的 Java 开发工程师，最近公司的业务量迅速增长，需要开发一个线程安全的商品库存管理系统。系统需要满足以下要求：</p>
 <ul>
 <li>系统能够添加新的商品和对应的库存量；</li>
 <li>可以根据商品 ID 查询商品库存量；</li>
@@ -499,11 +499,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
