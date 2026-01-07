@@ -16,7 +16,7 @@
 <meta property="og:description" content="位运算符可以直接对二进制位进行操作，比使用乘除法的效率更高‌，Java 中常用的移位运算符包括 &lt;&lt;、&gt;&gt;、&gt;&gt;&gt;。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-03-03T09:20:44.000Z">
-<meta property="article:modified_time" content="2025-12-23T15:31:52.620Z">
+<meta property="article:modified_time" content="2026-01-07T15:11:10.143Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -181,6 +181,7 @@
 <p><strong>bytes[0] &amp; 0xFF：将第一个字节的符号位清零，并保留低 8 位。</strong>原因：Java 中的 Byte 类型是 8 位有符号整数（-128 ~ 127），0xFF 的二进制表示为 1111 1111，但它在 Java 中会被视为一个 32 位的整数（int），值为 255。当单字节与 0xFF 进行按位与运算时，单字节也会被提升为 32 位的整数（int），在提升过程中，单字节的符号位会被复制到高位。比如 bytes[0] 为 1000 0001 时：</p>
 <p>bytes[0]（提升后）：11111111 11111111 11111111 10000001<br>0xFF（32 位）：00000000 00000000 00000000 11111111<br>按位与结果：00000000 00000000 00000000 10000001</p>
 <p>也就是将单字节转换成了 8 位的无符号整数（0 ~ 255），避免负数问题。这里有一点需要重申，<u>有符号整数在内存中始终以补码形式存储，但仅在算术运算中才涉及补码的转换（加、减、乘、除、取模、自增、自减）。</u>位运算直接比较二进制位，不涉及数值计算，也不涉及数值的语义（符号、大小、进位），因此不涉及补码的转换，上文中的 1000 0001 可以理解为就是补码形式。</p>
+<p>Java 在设计时为了简化语言，没有提供无符号类型，因此 byte、short、int、long、float、double 都是有符号的（包括它们的包装类型）。若需要无符号数，可通过位运算或 toUnsignedInt() 方法处理。</p>
 <p><strong>bytes[0] &amp; 0xF0（高 4 位保留）</strong>：提取字节的高 4 位（前 4 个二进制位），清零低 4 位。<br><strong>bytes[0] &amp; 0x0F（低 4 位保留）</strong>：提取字节的低 4 位（后 4 个二进制位），清零高 4 位。</p>
 <p>跟 0xF0 &#x2F; 0x0F 按位与不能将有符号整数转换为无符号整数，因为它们在 Java 中不会被视为 32 位的整数（int），而是会被视为一个字节（byte）。举例：</p>
 <p>bytes[0]：1101 0110<br>0xF0：1111 0000<br>按位与结果：1101 0000</p>
@@ -419,15 +420,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
