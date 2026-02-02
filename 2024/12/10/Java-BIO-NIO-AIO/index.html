@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/sigaction.png">
 <meta property="og:image" content="http://yoursite.com/images/2024-12-10/AIO.png">
 <meta property="article:published_time" content="2024-12-10T09:30:39.000Z">
-<meta property="article:modified_time" content="2026-02-01T12:47:22.183Z">
+<meta property="article:modified_time" content="2026-02-02T14:29:41.567Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -277,10 +277,10 @@
 <li><strong>ServerBootstrap 初始化 &#x3D;&gt; Channel 注册到 EventLoop &#x3D;&gt; 事件触发后由 Pipeline 调度 Handler 链式处理</strong>。</li>
 </ul>
 <h5 id="2-5-1-粘包和拆包"><a href="#2-5-1-粘包和拆包" class="headerlink" title="2.5.1 粘包和拆包"></a>2.5.1 粘包和拆包</h5><p>产生粘包和拆包问题的主要原因是，操作系统在发送 TCP 数据的时候，会先放到缓冲区，例如它的大小为 1024 个字节，如果一次请求发送的数据量比较小，未达到缓冲区的大小，则 TCP 会将多个请求合并为一个请求进行发送，如此便形成了粘包问题；如果一次请求发送的数据量比较大，超过了缓冲区的大小，则 TCP 又会将其拆分为多个小包进行多次发送，这就是拆包问题。</p>
-<p>常见的解决方案有三种：<br>（1）<u>固定每个包的长度</u>，比如将客户端发送的消息长度固定为 1024 个字节，不足则填充空格补齐；<br>（2）<u>使用特定的分隔符</u>，比如在每条消息的末尾加上 \r\n，接收方就根据数据中的 \r\n 切分或者合并数据；<br>（3）<u>将一条消息分为头部和消息体，头部包含长度字段（保存头部和消息体的总长度，也可调整为仅保存消息体长度）</u>，接收方先读取头部中的长度字段，然后根据其值精确读取字节数得到完整消息体（Netty 的默认方案）。</p>
+<p>常见的解决方案有三种：<br>（1）<u>固定每个包的长度</u>，比如将客户端发送的消息长度固定为 1024 个字节，不足则填充空格补齐；<br>（2）<u>使用特定的分隔符</u>，比如在每条消息的末尾加上 \r\n，接收方就根据数据中的 \r\n 切分或者合并数据；<br>（3）<u>将一条消息分为头部和消息体，头部包含长度字段</u>（用于保存头部和消息体的总长度，也可调整为仅保存消息体长度），接收方先读取头部中的长度字段，然后根据其值精确读取字节数得到完整消息体（Netty 的默认方案）。</p>
 <h4 id="2-6-Java-文件-IO-流"><a href="#2-6-Java-文件-IO-流" class="headerlink" title="2.6 Java 文件 IO 流"></a>2.6 Java 文件 IO 流</h4><p>数据流是指一组有顺序、有起点和终点的字节集合。根据数据流的流向，Java 将其分为<u>输入流</u>和<u>输出流</u>（输入、输出是针对内存来说的，把内存中的内容写入磁盘为输出，读取磁盘中的内容到内存为输入）；根据数据处理单位的不同，又分为<u>字节流</u>和<u>字符流</u>（字节流每次读取 &#x2F; 写出一个字节，字符流每次读取 &#x2F; 写出两个字节）。</p>
 <p>由此产生 4 个抽象基类：InputStream 字节输入流、OutputStream 字节输出流、Reader 字符输入流、Writer 字符输出流，其他流都是继承于这四大基类。字节流在操作时不会用到缓冲区，一般用来处理图像、视频，以及 PPT、Word 类型的文件；而字符流在操作时会用到缓冲区，一般用于处理纯文本类型的文件。</p>
-<p>把 Java 对象转换为字节序列的过程称为对象的序列化。序列化机制使得对象可以脱离程序而独立存在，这些字节序列可以保存在磁盘上、或通过网络传输，意味着可序列化的对象具有可持久化性。但要注意，序列化只能保存对象的非静态成员变量，且任何用 transient 关键字标明的成员变量，都不会被保存，因此可用 transient 修饰一些需要保密的数据。同一对象序列化多次，只有第一次会序列化为二进制流，后续只是保存序列化编号，不会重复序列化。</p>
+<p>把 Java 对象转换为字节序列的过程称为对象的序列化。序列化机制使得对象可以脱离程序而独立存在，这些字节序列可以保存在磁盘上、或通过网络传输，意味着可序列化的对象具有可持久化性。但要注意，序列化只能保存对象的非静态成员变量，且任何用 transient 关键字修饰的成员变量都不会被保存，因此可把 transient 用在一些需保密的数据上。同一对象序列化多次，只有第一次会真正序列化，后续只是保存序列化编号，不会重复序列化。</p>
 <p>通过字节序列能恢复原来的对象，这一过程被称为反序列化，序列化版本号 serialVersionUID 能保证对象可以被正确地反序列化回来，因为反序列化依赖的 class 文件可能会因为项目升级而出现更改。</p>
 
       
@@ -519,11 +519,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
