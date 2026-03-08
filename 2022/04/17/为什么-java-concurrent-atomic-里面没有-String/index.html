@@ -16,7 +16,7 @@
 <meta property="og:description" content="首先说结论，String 是线程安全的，不会造成多线程读写冲突问题。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-04-17T01:54:10.000Z">
-<meta property="article:modified_time" content="2026-02-03T13:43:59.965Z">
+<meta property="article:modified_time" content="2026-03-08T03:05:18.010Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -175,7 +175,7 @@
 <li>在 Java 中，当方法的局部变量与类的 private 成员变量同名时，使用 this 关键字是必要的，它可以明确区分这两个变量，this 关键字指向的是调用当前方法的对象实例。需要注意的是，不能使用 this 关键字调用静态方法，因为静态方法是属于当前类的（静态变量同理），而 this 是随着对象实例的创建才存在的。</li>
 <li>命名约定：对于不是常量的静态变量（即没有用 final 修饰而是只有 static），通常还是用驼峰法，例如 myStaticVariable；对于常量静态变量（即同时用 static final 修饰），一般要求全用大写字母，单词间用下划线分隔，例如 MAX_VALUE。</li>
 </ul>
-<h3 id="2-不可变对象的优点"><a href="#2-不可变对象的优点" class="headerlink" title="2.不可变对象的优点"></a>2.不可变对象的优点</h3><h4 id="2-1-对并发友好"><a href="#2-1-对并发友好" class="headerlink" title="2.1 对并发友好"></a>2.1 对并发友好</h4><p>提到多线程并发，最让人苦恼的莫过于对共享资源的访问冲突，目前在大多数语言中，对多线程冲突问题常采用同步的方式解决，比如 Java 中的 synchronized 关键字和 Lock 对象等机制，但这个方式有个弊端：冲突能否被解决，取决于程序员对共享资源加锁和解锁的时机对不对。所以还有另一个方向，就是从多线程冲突的原因——共享资源上入手。</p>
+<h3 id="2-不可变对象的优点"><a href="#2-不可变对象的优点" class="headerlink" title="2.不可变对象的优点"></a>2.不可变对象的优点</h3><h4 id="2-1-对并发友好"><a href="#2-1-对并发友好" class="headerlink" title="2.1 对并发友好"></a>2.1 对并发友好</h4><p>提到多线程并发，最让人苦恼的莫过于对共享资源的访问冲突（线程安全：并发执行时，程序依然可以保持数据的一致性和正确性，代码能保证在任何执行顺序下都表现出预期的行为），目前在大多数语言中，对多线程冲突问题常采用同步的方式解决，比如 Java 中的 synchronized 关键字和 Lock 对象等机制，但这个方式有个弊端：冲突能否被解决，取决于程序员对共享资源加锁和解锁的时机对不对。不过还有另一个方向，就是从多线程冲突的原因——共享资源上入手。</p>
 <p>假设程序中完全没有共享资源，那自然就不存在访问冲突了，Java 中的 ThreadLocal 机制就是利用了这一理念，<u>ThreadLocal 就是给每个线程分配一份数据副本，通过将数据存储到线程内的 ThreadLocalMap 来实现线程隔离，每个线程只能访问和修改自己的副本，从而避免多线程竞争</u>。ThreadLocalMap 是默认内置在每个 Java 线程（Thread 类）中的一个类似哈希表的键值对数组，初始值为 null，仅在首次调用 ThreadLocal.set() 或 ThreadLocal.get() 时才会被创建‌，避免不必要的内存占用‌。</p>
 <ul>
 <li>一个 ThreadLocal 实例只能存储一个值，当在一个线程内使用了一个或多个不同的 ThreadLocal 实例时，这些 ThreadLocal 实例的数据副本会被存储在同一个 ThreadLocalMap 中，因此存在哈希冲突的可能，通常用开放地址法（线性探测）解决。<br>键（Key）为 <u>ThreadLocal 实例</u>：弱引用（ThreadLocal 实例本身为强引用，但作为 Key 时会用弱引用包装）。<br>值（Value）为<u>通过 set 方法存储的数据</u>：强引用，<u>一定要记得调用 remove() 方法及时清理旧值（在 finally 块中），否则可能出现内存泄漏</u>；如果使用了线程池，还可能存在线程没销毁就被复用，导致旧数据被新任务误用的问题。</li>
@@ -422,15 +422,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">

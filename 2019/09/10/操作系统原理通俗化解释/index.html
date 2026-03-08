@@ -16,7 +16,7 @@
 <meta property="og:description" content="我们每天都在和操作系统打交道，所以了解一些操作系统的基本知识非常有必要，本文用通俗易懂的语言讲解了一些基本原理，没有晦涩的专业解释，只有一看就懂的大白话。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2019-09-10T13:26:08.000Z">
-<meta property="article:modified_time" content="2026-03-07T03:45:04.881Z">
+<meta property="article:modified_time" content="2026-03-08T04:32:31.544Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Computer">
 <meta name="twitter:card" content="summary">
@@ -171,6 +171,7 @@
 </ul>
 <p><strong>中断的方式其实就是一种异步的、事件驱动的处理思想</strong>。比如 CPU 在运行线程 A 时需要键盘输入字符，那 CPU 就会将线程 A 阻塞，转而执行另一个就绪的线程 B（因为 CPU 的运行速度比 I&#x2F;O 设备快百万倍，CPU 不可能一直等着）。线程 A 的数据都弄好了之后，就往中断控制器发信号，中断控制器通知 CPU 线程 A 准备好了，于是 CPU 保存好线程 B 的数据，切回线程 A 运行。</p>
 <p>在计算机中，中断机制是非常重要的，它用于协调系统对各种外部事件的响应和处理，并且是实现多任务的必要条件。可以这么说，如果没有中断机制，就没有计算机。</p>
+<p>在 Java 中，通过调用 Thread.interrupt() 来中断一个线程，中断标识被设置为 true。interrupted() 和 isInterrupted() 用来检查中断状态，两者的区别是前者会将中断状态的标识清除而后者不会。</p>
 <h3 id="4-RING3-和-RING0-是什么意思"><a href="#4-RING3-和-RING0-是什么意思" class="headerlink" title="4 RING3 和 RING0 是什么意思"></a>4 RING3 和 RING0 是什么意思</h3><p>这得从 CPU 指令系统（用于控制 CPU 完成各种功能的命令）的特权级别说起。在 CPU 的所有指令中，有一些指令是非常危险的，如果错用，将导致整个系统崩溃，比如：清内存、设置时钟等。如果所有的程序都能使用这些指令，那么你的系统一天死机 n 回就不足为奇了。所以，CPU 将指令分为特权指令和非特权指令，对于那些危险的指令，只允许操作系统及其相关模块使用，普通的应用程序只能使用那些不会造成灾难的指令。</p>
 <p>Intel 的 CPU 将特权级别分为 4 个级别：RING0，RING1，RING2，RING3。Windows 只使用其中的两个级别 RING0 和 RING3，RING0 只给操作系统用，RING3 谁都能用。如果普通应用程序企图执行 RING0 指令，则 Windows 会显示「非法指令」错误信息。</p>
 <h3 id="5-什么是多任务"><a href="#5-什么是多任务" class="headerlink" title="5 什么是多任务"></a>5 什么是多任务</h3><p>在同一个时间里，同一个计算机系统中如果允许两个或两个以上的进程处于运行态，这便是多任务。现代的操作系统几乎都是多任务操作系统，能够同时管理多个进程的运行。多任务带来的好处是明显的，比如你可以边听 mp3 边上网，与此同时甚至可以将下载的文档打印出来，而这些任务之间丝毫不会相互干扰。</p>
@@ -428,15 +429,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
