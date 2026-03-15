@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2026-03-15T01:59:45.584Z">
+<meta property="article:modified_time" content="2026-03-15T04:47:50.133Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -216,8 +216,8 @@
 </ul>
 <p>以 <strong>Netty</strong> 为例，它的调优技巧有：<br>（A）线程池：根据应用负载和硬件配置，设置合适的线程池大小，如核心线程数、最大线程数；BossGroup 通常设置为单线程，负责处理连接请求；WorkerGroup 负责处理 I&#x2F;O 操作，可以设置为 CPU 核心数 × 2；使用独立的线程池 EventExecutorGroup 异步执行耗时操作；<br>（B）内存：启用 Netty 的内存池功能，复用内存中的对象，减少内存分配和回收的开销；<br>（C）协议：根据应用场景选择合适的通信协议（如 UDP、WebSocket、TCP 等），对于 TCP 协议，将 TCP_NODELAY 设置为 true，降低延迟；并选择更加高效的序列化框架，比如用 Protobuf 替代 JSON；<br>（D）I&#x2F;O 模型：根据应用场景和操作系统选择合适的 I&#x2F;O 模型，比如在 Linux 系统上用 epoll 会更加高效；<br>（E）编解码器：选择合适的编解码器，比如使用 Netty 自带的工具处理粘包和拆包： LengthFieldBasedFrameDecoder（默认，基于消息头中的长度字段，灵活高效）、DelimiterBasedFrameDecoder（基于特定分隔符，兼容性强，适用于文本协议）；<br>（F）日志：调整日志级别来减少不必要的日志输出，提升性能；<br>（G）使用压缩：大数据量使用 Gzip 压缩，减少数据传输量，提高 I&#x2F;O 性能。</p>
 <p><span id="question40"></span></p>
-<p><span style="background-color:green;"><font color=white>（4）</font></span>线程池通过复用线程，避免频繁创建和销毁线程，减少系统资源的浪费。它的配置项及作用有：<br>（A）核心线程数：<u>始终保持存活的线程数量</u>，即使线程池处于空闲状态，核心线程也不会被回收；<br>（B）最大线程数：<u>允许创建的最大线程数量</u>，任务队列满了之后会创建新的非核心线程，直至达到该值；<br>（C）非核心线程存活时间：<u>非核心线程在空闲时能存活的最长时间</u>，超时后会被回收，与单位（unit）配合使用；<br>（D）任务队列：<u>当任务数量超出核心线程数时，选择合适的队列类型来存放待执行的任务</u>，比如有界队列（ArrayBlockingQueue）、无界队列（LinkedBlockingQueue）或同步队列（SynchronousQueue，是一个不存储任何元素的阻塞队列，更像一种信号机制，比如添加元素时，如果没有线程在等待从这个队列中移除元素，那么添加操作将会阻塞，直到有线程从队列中移除元素，反之亦然）；<br>（E）线程工厂：用于<u>自定义线程创建逻辑</u>，可以设置线程的名称、优先级、是否是守护线程‌等属性‌（守护线程在后台运行，通过调用 setDaemon(true) 设置，其作用是为其他线程提供服务，如垃圾回收、日志记录、监控等，当所有的非守护线程结束时，守护线程会自动结束）；<br>（F）拒绝策略：<u>当任务队列已满且线程池达到最大线程数时，选择合适的策略来处理新提交的任务</u>，比如抛出异常（AbortPolicy，默认策略）、直接丢弃任务（DiscardPolicy，静默丢弃，不抛异常）、由提交任务的线程处理任务（CallerRunsPolicy‌）或通过实现 RejectedExecutionHandler 接口来自定义策略。</p>
-<p>应当避免过度配置，线程数过多会导致频繁上下文切换，降低性能。对于 CPU 密集型任务而言（如计算、压缩、加密），任务主要消耗 CPU 资源，建议使用有界队列，它的<em>核心线程数</em>可设置为：<em>CPU 核心数 + 1</em>，加 1 是用于应对线程因短暂阻塞导致的 CPU 空闲，避免资源浪费。对于 IO 密集型任务而言（如网络请求、数据库查询），任务大部分时间都在等待 IO 操作，CPU 利用率低，增加最大线程数可让更多线程在 IO 等待期间处理其他事情，它的<em>最大线程数</em>可设置为：<em>CPU 核心数 × （1 + 线程等待时间 &#x2F; 线程计算时间）</em>，通常为 2N ~ 10N（N 为 CPU 核心数），任务执行时间和等待时间可通过 APM 工具统计（如 Micrometer）。最大线程数包含核心线程数。</p>
+<p><span style="background-color:green;"><font color=white>（4）</font></span>线程池通过复用线程，避免频繁创建和销毁线程，减少系统资源的浪费。它的配置项及作用有：<br>（A）核心线程数：<u>始终保持存活的线程数量</u>，即使线程池处于空闲状态，核心线程也不会被回收；<br>（B）最大线程数：<u>允许创建的最大线程数量</u>，任务队列满了之后会创建新的非核心线程，直至达到该值；<br>（C）非核心线程存活时间：<u>非核心线程在空闲时能存活的最长时间</u>，超时后会被回收，与单位（unit）配合使用；<br>（D）任务队列：<u>当任务数量超出核心线程数时，选择合适的队列类型来存放待执行的任务</u>，比如有界队列（ArrayBlockingQueue）、无界队列（LinkedBlockingQueue）或同步队列（SynchronousQueue，是一个不存储任何元素的阻塞队列，更像一种信号机制，比如添加元素时，若没有线程在等待从这个队列中移除元素，那么添加操作会阻塞，直到有线程从队列中移除元素，反之亦然）；<br>（E）线程工厂：用于<u>自定义线程创建逻辑</u>，可以设置线程的名称、优先级、是否是守护线程‌等属性‌（守护线程在后台运行，通过调用 setDaemon(true) 设置，其作用是为其他线程提供服务，如垃圾回收、日志记录、监控等，当所有的非守护线程结束时，守护线程会自动结束）；<br>（F）拒绝策略：<u>当任务队列已满且线程池达到最大线程数时，选择合适的策略来处理新提交的任务</u>，比如抛出异常（AbortPolicy，默认策略）、直接丢弃任务（DiscardPolicy，静默丢弃，不抛异常）、由提交任务的线程处理任务（CallerRunsPolicy‌）或通过实现 RejectedExecutionHandler 接口来自定义策略。</p>
+<p>应当避免过度配置，线程数过多会导致频繁上下文切换，降低性能。对于 CPU 密集型任务而言（如计算、压缩、加密），任务主要消耗 CPU 资源，建议使用有界队列，它的<em>核心线程数</em>可设置为：<em>CPU 核心数 + 1</em>，加 1 是用于应对线程因短暂阻塞导致的 CPU 空闲，避免资源浪费。对于 IO 密集型任务而言（如网络请求、数据库查询），任务大部分时间都在等待 IO 操作，CPU 利用率低，增加最大线程数可让更多线程在 IO 等待期间处理其他事情，它的<em>最大线程数</em>可设置为：<em>CPU 核心数 × （（线程等待时间 + 线程 CPU 计算时间） &#x2F; 线程 CPU 计算时间）</em>，通常为 2N ~ 10N（N 为 CPU 核心数），任务执行时间和等待时间可通过 APM 工具统计（如 Micrometer）。最大线程数包含核心线程数。</p>
 <p>创建线程池主要有两种方式：<strong>ThreadPoolExecutor 构造函数（推荐）</strong>和 Executors 工具类（快速但需谨慎使用）。优先使用 ThreadPoolExecutor 来自定义配置参数，以实现粒度更细的控制，用 Executors 工具类创建的线程池可能因默认参数导致资源耗尽（比如使用无界队列导致 OOM）。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ExecutorService</span> <span class="variable">executor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(</span><br><span class="line">    <span class="number">5</span>, <span class="comment">// 核心线程数</span></span><br><span class="line">    <span class="number">16</span>, <span class="comment">// 最大线程数</span></span><br><span class="line">    <span class="number">60L</span>, TimeUnit.SECONDS, <span class="comment">// 非核心线程存活时间</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">100</span>), <span class="comment">// 任务队列</span></span><br><span class="line">    Executors.defaultThreadFactory(), <span class="comment">// 线程工厂</span></span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>.AbortPolicy() <span class="comment">// 拒绝策略</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
@@ -691,11 +691,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
