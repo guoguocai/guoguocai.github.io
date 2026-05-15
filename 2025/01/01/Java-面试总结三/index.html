@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2026-05-11T14:46:13.144Z">
+<meta property="article:modified_time" content="2026-05-15T13:21:44.128Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -354,7 +354,7 @@
 <li><p><strong>AOF 持久化</strong>：<u>以日志的形式记录 Redis 服务器处理过的每一个写操作命令</u>（默认名为 appendonly.aof，且默认的 appendfsync 同步频率为每秒同步一次），然后在 Redis 服务器重启时通过执行该文件中的命令来恢复数据‌。可与 RDB 混合使用，结合 RDB 的快速恢复和 AOF 的数据丢失低风险，兼顾性能与安全。</p>
 </li>
 <li><p><strong>Redis Cluster</strong>：由多组服务器组成，每组服务器包含一个主节点（Master，处理读写）和至少一个从节点（Slave，只读，手动绑定到主节点的命令为 CLUSTER REPLICATE &lt;主节点 ID&gt;），每个主节点负责管理分配给它的一个<u>哈希槽</u>的子集；从节点负责备份对应主节点的数据，提供故障转移能力，即主节点挂掉时，自动从它的从节点中选取一个当作新的主节点（官方要求最小的集群为 3 主 3 从）。</p>
-<p>数据同步由从节点主动发起（从节点向主节点发送 PSYNC 命令，并携带自身的复制 ID 和复制偏移量），分为全量同步和增量同步：全量同步（首次连接或复制偏移量不在主节点的‌复制缓冲区范围内）为主节点生成 RDB 快照文件发给从节点，从节点清空旧数据后加载；增量同步（断线重连且复制偏移量在主节点的‌复制缓冲区范围内）为主节点把复制缓冲区中位于偏移量之后的增量写命令发给从节点执行。</p>
+<p>数据同步由从节点发起（从节点向主节点发送 PSYNC 命令，并携带自身的复制 ID 和复制偏移量），分为全量同步和增量同步：全量同步（首次连接或复制偏移量不在主节点的‌复制缓冲区范围内）为主节点生成 RDB 快照文件发给从节点，从节点清空旧数据后加载；增量同步（断线重连且复制偏移量在主节点的‌复制缓冲区范围内）为主节点把复制缓冲区中位于偏移量之后的增量写命令发给从节点执行。</p>
 <p>故障转移通过节点间的 Gossip 协议和分布式共识‌实现：每个节点每秒发送 ‌PING&#x2F;PONG 消息检测其他节点的状态，若某节点在超时时间内无响应，则被标记为「疑似故障」，但只有主节点拥有投票权‌，只有多数主节点认为该节点失效时（&gt; 50%），该节点状态才升级为「确认故障」。若故障节点为主节点，则它的从节点发起竞选，向其他主节点广播，收到请求的主节点基于‌复制偏移量投票（最新数据优先），获得多数票的从节点晋升为新主节点。</p>
 </li>
 <li><p><strong>哈希槽（Hash Slot）</strong>：共有固定的 16384 个槽，每个主节点分管其中一部分（2^14，槽位过少负载不均、过多开销过大，每个槽内部结构为数组加链表），保存 (key, value) 的时候，对 key 使用 CRC16 算法得到一个整数值，然后再对 16384 求余数（CRC16(key) % 16384），看余数落在哪个槽里，就放到对应的主节点中（即数据分片）。当要添加新的主节点时，就从现有主节点负责的槽中各自分出一些给新的主节点，对应数据也搬过去；查询缓存数据时，客户端可以向任意一个节点发出请求，如果查不到，该节点会告诉我们该去哪个节点查，因为每个节点都保存了槽位与节点的关系映射表 slots_to_nodes（位图 + 节点 ID 列表，仅需 2KB 内存空间，带宽友好），心跳包携带着映射表在节点间同步。</p>
@@ -687,15 +687,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
