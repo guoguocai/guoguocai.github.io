@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2026-06-16T14:29:38.574Z">
+<meta property="article:modified_time" content="2026-06-17T15:21:00.273Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -332,9 +332,9 @@
 <li>DISCARD：放弃事务并清空队列。</li>
 <li>WATCH（乐观锁）：在 MULTI 命令执行之前，可以用 WATCH 指定待监控的 Keys，然后在执行 EXEC 之前，如果被监控的 Keys 发生了修改，则 EXEC 将放弃执行该事务队列中的所有命令。因为 Redis 事务无隔离级别概念，在执行期间其他客户端也可修改键值，因此 WATCH 乐观锁十分重要，可通过它监控账户余额，确保并发安全。</li>
 </ul>
-<p>（I）击穿指的是<strong>缓存中某个热点数据突然失效</strong>（因过期或被淘汰），导致大量请求直接访问数据库，造成数据库压力骤增‌。比如秒杀商品、热点新闻的缓存突然失效，解决方法：<br>（A）<u>使用一个互斥锁</u>（比如 Redis 的 SETNX 或 Redisson 分布式锁），保证失效时仅允许一个线程访问数据库并重建缓存，其他线程等待锁释放后读取新缓存；<br>（B）<u>不设置 key 的过期时间，在 value 中存一个逻辑过期时间</u>，当后台任务发现数据过期时，再异步更新缓存。</p>
+<p>（I）击穿指的是<strong>缓存中某个热点数据突然失效</strong>（因过期或被淘汰），导致大量请求直接访问数据库，造成数据库压力骤增‌。比如秒杀商品、热点新闻的缓存突然失效，解决方法：<br>（A）<u>使用互斥锁</u>（比如 Redis 的 SETNX 或 Redisson 分布式锁），保证失效时仅允许一个线程访问数据库并重建缓存，其他线程等待锁释放后读取新缓存；<br>（B）<u>不设置 key 的过期时间，在 value 中存一个逻辑过期时间</u>，当后台任务发现数据过期时，再异步更新缓存。</p>
 <ul>
-<li><p><strong>Redis 的 SETNX</strong>（SET if Not eXists）：是 Redis 提供的原子性命令，用于在指定键（Key）不存在时设置，若键已存在，则不执行任何操作。当多个客户端并发调用时，它确保仅有一个客户端能成功设置，是分布式锁的基础，为避免死锁（如客户端崩溃未释放锁），需设置键的过期时间。</p>
+<li><p><strong>Redis 的 SETNX</strong>（SET if Not eXists）：Redis 提供的原子命令，意思是在指定键（Key）不存在时设置，若键已存在，则不执行任何操作。当多个客户端并发调用时，它确保仅有一个客户端能成功设置，是分布式锁的基础。为避免死锁（如客户端崩溃未释放锁），需设置键的过期时间。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">基本用法</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 1：键不存在，设置成功</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 0：键已存在，未执行操作</span></span><br><span class="line">SETNX key value</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分布式锁用法：为保证原子性，NX（不存在才设置）和 PX（过期时间，单位：毫秒）必须同时设置</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 1：获取锁成功</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">返回 0：锁已被其他客户端持有</span></span><br><span class="line">SET key value NX PX 30000</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>Redisson 分布式锁</strong>：若直接用 Redis 手动处理原子性、锁续期等操作，则代码复杂且易错，加上传统的并发工具（如 Lock、Semaphore）仅限单机，在分布式场景缺乏开箱即用的等效实现，于是 Redisson 应运而生，<u>它解决了 Java 在分布式系统中的共享资源协调问题（如锁、线程协同等）</u>，让开发者能以操作本地对象的方式处理分布式问题‌，其价值类似于 JDBC 对数据库操作的封装。</p>
@@ -691,11 +691,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
