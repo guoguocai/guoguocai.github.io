@@ -17,7 +17,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="http://yoursite.com/images/2025-01-01/api_life.jpg">
 <meta property="article:published_time" content="2025-01-01T12:12:59.000Z">
-<meta property="article:modified_time" content="2026-06-18T14:22:37.852Z">
+<meta property="article:modified_time" content="2026-06-19T03:08:24.812Z">
 <meta property="article:author" content="guoguocai">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
@@ -370,7 +370,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查找后台运行的程序</span></span><br><span class="line">ps aux | grep java</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">优雅地终止后台程序</span></span><br><span class="line">kill -15 &lt;PID&gt;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">后台启动程序</span></span><br><span class="line">nohup java -jar my.jar &gt; nohup.out 2&gt;&amp;1 &amp;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">&gt; nohup.out：将标准输出写到 nohup.out 文件中</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2&gt;&amp;1：将标准错误输出重定向到标准输出</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">&gt; /dev/null：将标准输出重定向到空设备，意味着输出的内容将被丢弃</span></span><br><span class="line"></span><br><span class="line">ip -br a | grep eth0 | awk &#x27;&#123;print $2&#125;&#x27;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ip -br a：简洁显示所有网络接口状态</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">grep eth0：过滤出 eth0 行</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span>：提取第二列</span></span><br><span class="line"></span><br><span class="line">-rw-r--r-- 1 user group 2048 Jan 1 10:00 filename.txt</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">文件类型|所有者权限|所属组权限|其他用户权限 硬链接计数 所有者 所属组 文件大小 最后修改时间 文件/目录名</span></span><br></pre></td></tr></table></figure>
 
 <p><span id="question100"></span></p>
-<p><span style="background-color:green;"><font color=white>（10）</font></span>RPC（Remote Procedure Call，远程过程调用）是一种用于实现分布式系统中不同节点间通信的技术。实现一个 RPC 框架通常包括以下步骤：<br>（A）<u>设计‌协议</u>：约定好服务端与客户端双方代理的消息格式，包括网络传输协议、序列化协议和消息编码协议；<br>（B）<u>实现‌服务端代理</u>：接收和处理客户端代理的请求，调用对应的本地方法，将结果返回给客户端代理；<br>（C）<u>实现‌客户端代理</u>：发起调用，发送请求给远程服务器，然后接收并处理服务端代理返回的结果；<br>（D）<u>服务注册与发现</u>：将服务提供者的地址和端口等信息注册到注册中心，消费者通过注册中心发现服务；<br>（E）<u>负载均衡与容错机制</u>：实现负载均衡策略来分摊请求，增加容错机制保证调用的稳定性。</p>
+<p><span style="background-color:green;"><font color=white>（10）</font></span>RPC（Remote Procedure Call，远程过程调用）是一种用于实现分布式系统中不同节点间通信的技术。实现一个 RPC 框架通常包括以下步骤：<br>（A）<u>设计‌协议</u>：约定好服务端与客户端双方代理的消息格式，包括网络传输协议、序列化协议和消息编码协议；<br>（B）<u>实现‌服务端代理</u>：接收和处理客户端代理的请求，调用对应的本地方法，将结果返回给客户端代理；<br>（C）<u>实现‌客户端代理</u>：发起调用，发送请求给远程服务器，然后接收并处理服务端代理返回的结果；<br>（D）<u>服务注册与发现</u>：将服务提供者的地址和端口等信息注册到注册中心，消费者通过注册中心发现服务；<br>（E）<u>负载均衡与容错机制</u>：实现负载均衡策略分摊请求，增加容错机制保证调用的稳定性。</p>
 <p>一次完整的 RPC 调用流程如下：</p>
 <ul>
 <li>服务消费者（Client）以本地调用方式调用服务；</li>
@@ -384,7 +384,7 @@
 <p>HTTP&#x2F;3 基于 UDP，延迟低但需额外依赖 QUIC 协议保证可靠性（还在逐步普及），另外它还结合 QUIC 和 TLS 1.3 减少握手次数（0-RTT 或 1-RTT，RTT（Round-Trip Time）指数据从客户端发送到服务器并返回响应所需的时间，首次建立连接或密钥未缓存时 1 次往返，密钥缓存后 0 次往返）。</p>
 <p>实时聊天软件底层使用 UDP，但消息很少丢失，也是因为它在应用层设计可靠性机制‌弥补了 UDP 的不足：<br>（I）UDP 不可靠、会丢包，那就模仿 TCP 的 ACK 确认和超时重传自定义一套重传机制；<br>（II）UDP 会乱序，那就让每条消息携带一个递增的序号，接收方按序号重组消息；<br>（III）在弱网络环境下，丢包率逐渐增长，那就采用指数退避自动降低发送频率，或使用 FEC 冗余‌传输（发送原始数据时携带冗余纠错码，丢失部分可通过算法还原），必要时甚至可直接切换为 TCP 传输，待网络恢复后再还原为 UDP。</p>
 <p><span id="question110"></span></p>
-<p><span style="background-color:green;"><font color=white>（11）</font></span>缓存技术是提高系统性能和响应速度的关键组件，在高并发的场景下尤为重要。它的作用有：<br>（A）<u>减轻数据库压力</u>：通过缓存频繁访问的数据，减少查询数据库的次数，可避免数据库成为性能瓶颈；<br>（B）<u>提高数据读取速度</u>：缓存通常存储在内存中，而内存的访问速度远快于磁盘；<br>（C）<u>降低网络延迟</u>：对于需要从远程服务器获取的数据，缓存可以减少对远程服务器的请求次数。</p>
+<p><span style="background-color:green;"><font color=white>（11）</font></span>缓存技术是提高系统性能和响应速度的关键组件，在高并发的场景下尤为重要。它的作用有：<br>（A）<u>减轻数据库压力</u>：缓存频繁访问的数据，减少查询数据库的次数，避免数据库成为性能瓶颈；<br>（B）<u>提高数据读取速度</u>：缓存通常存储在内存中，而内存的访问速度远快于磁盘；<br>（C）<u>降低网络延迟</u>：对于需要从远程服务器获取的数据，缓存可以减少对远程服务器的请求次数。</p>
 <p>为什么需要缓存（Cache）？加快访问速度，本质原因是速度的不匹配。CPU 的运行速度比内存快百倍，比硬盘快百万倍，缓存技术的核心原理是<strong>将频繁访问的数据存储在读写速度更快的存储介质中（如内存）</strong>，以减少 CPU 对慢速存储介质的访问次数（如磁盘或数据库），那么哪些数据会被频繁访问呢？基于<strong>局部性原理</strong>，最近被访问过的指令或数据很可能在不久之后再次被访问，并且与它相邻的数据也很可能被访问，这个原理用处很大，比如操作系统会把经常需要用到的数据从硬盘取到内存中，CPU 会把经常用到的数据从内存取到寄存器中，有时也会一并读取与之相邻的数据。</p>
 <p>当用户请求数据时，系统会首先检查缓存中是否存在，若存在，则直接返回缓存中的数据，从而大大缩短数据访问时间；若不存在，则查询并添加至缓存。常见的缓存类型有：<br>（I）<u>本地缓存</u>：将数据缓存在进程内存中，如 Caffeine、Guava Cache‌。<br>（II）<u>分布式缓存</u>：Redis、Memcached。<br>（III）<u>CDN 缓存</u>：内容分发网络，是一种通过‌分布式节点服务器‌将图片、视频、网页等内容缓存到全球多个地理位置，使用户能够从离自己最近的节点快速获取资源的技术。<br>（IV）<u>数据库缓存</u>：如 Buffer Pool，它将磁盘上的数据页和索引页缓存到内存中，数据修改时会先更新缓存池中的页而成为脏页，通过后台线程异步刷盘‌解决。在数据库之上的持久层框架也会有缓存，比如 Mybatis 提供了一级缓存和二级缓存机制，一级缓存默认开启且无法关闭，作用域为 SqlSession 级别，即在同一个数据库会话内有效，不同 SqlSession 的缓存相互隔离，它随 SqlSession 的创建而创建，在 SqlSession 关闭或执行 INSERT&#x2F;UPDATE&#x2F;DELETE 操作时失效；二级缓存的作用域为 Mapper &#x2F; namespace 级别，是跨 SqlSession 共享的，需通过 &lt;cache&#x2F;&gt; 标签或注解手动开启，执行同 namespace 下的 INSERT&#x2F;UPDATE&#x2F;DELETE 操作时缓存失效。<br>Spring Cache 是一个缓存抽象层，支持集成上面提到的多种缓存技术，通过注解统一管理（如 @Cacheable、@CachePut），通过 CacheManager 接口切换具体实现。</p>
 <p>缓存技术的缺点：<br>（A）额外的硬件支出：缓存需要额外的磁盘空间和内存空间来存储数据，增加了硬件成本；<br>（B）数据一致性问题：缓存与数据库之间可能存在数据不一致的问题，需要采取额外的措施来保证数据一致性；<br>（C）高并发缓存失效问题‌：在高并发场景下，缓存失效可能会导致数据库访问量瞬间增大，甚至导致数据库崩溃。</p>
@@ -687,15 +687,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CommandLine</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
